@@ -1,0 +1,41 @@
+{
+  "name": "@4350pchris/lyrics-analyzer-core",
+  "version": "1.0.0",
+  "description": "Analyze lyrics",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepublish": "tsc",
+    "build": "tsc",
+    "test": "ava",
+    "test:watch": "ava --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/4350pChris/lyrics-analyzer-core.git"
+  },
+  "keywords": [
+    "lyrics"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/4350pChris/lyrics-analyzer-core/issues"
+  },
+  "homepage": "https://github.com/4350pChris/lyrics-analyzer-core#readme",
+  "devDependencies": {
+    "@ava/typescript": "^4.0.0",
+    "ava": "^5.2.0",
+    "typescript": "^5.0.4"
+  },
+  "type": "module",
+  "ava": {
+    "typescript": {
+      "rewritePaths": {
+        "test/": "dist/test/"
+      },
+      "compile": false
+    }
+  }
+}
