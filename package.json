@@ -8,7 +8,7 @@
   "scripts": {
     "prepublish": "tsc",
     "build": "tsc",
-    "test": "ava",
+    "test": "c8 ava",
     "test:watch": "ava --watch"
   },
   "repository": {
@@ -27,6 +27,7 @@
   "devDependencies": {
     "@ava/typescript": "^4.0.0",
     "ava": "^5.2.0",
+    "c8": "^7.13.0",
     "typescript": "^5.0.4"
   },
   "type": "module",
