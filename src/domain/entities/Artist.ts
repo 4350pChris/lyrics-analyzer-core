@@ -1,6 +1,7 @@
 import type { AggregateRoot } from '../interfaces/AggregateRoot.js';
 import { BaseEntity } from './BaseEntity.js';
 import { Song } from './Song.js';
+import { Stats } from './Stats.js';
 
 export class Artist extends BaseEntity implements AggregateRoot {
   constructor(
@@ -12,7 +13,9 @@ export class Artist extends BaseEntity implements AggregateRoot {
     super();
   }
 
-  public addSong(song: Song): void {
+  // TODO: clarify - should this also update stats?
+  public addSong(name: string, text: string): void {
+    const song = new Song(name, text);
     this.songs.push(song);
   }
 
@@ -25,5 +28,14 @@ export class Artist extends BaseEntity implements AggregateRoot {
       });
       return acc;
     }, {} as Record<string, number>);
+  }
+
+  public calculateStats(): Stats {
+    const wordList = this.getCombinedWordList();
+    const stats = new Stats(wordList);
+    stats.calculateUniqueWords();
+    stats.calculateAverageLengthOfWords();
+    stats.calculateMedianLengthOfWords();
+    return stats;
   }
 }

@@ -1,7 +1,7 @@
 import test from "ava";
 import { Song } from "../../../src/domain/entities/Song.js";
 
-const makeSong = (name: string, text: string) => new Song(1, name, text);
+const makeSong = (name: string, text: string) => new Song(name, text);
 
 test("Create song", (t) => {
   const song = makeSong("name", "text");

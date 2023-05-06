@@ -32,6 +32,9 @@
   },
   "type": "module",
   "ava": {
+    "files": [
+      "test/**/*.ts"
+    ],
     "typescript": {
       "rewritePaths": {
         "test/": "dist/test/"
