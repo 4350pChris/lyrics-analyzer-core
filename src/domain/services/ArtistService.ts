@@ -1,7 +1,7 @@
 import type { IArtistRepository } from '../interfaces/IArtistRepository';
-import type { IStatsService } from '../interfaces/IStatsService';
+import type { IArtistService } from '../interfaces/IArtistService';
 
-export class StatsService implements IStatsService {
+export class ArtistService implements IArtistService {
     constructor(
       private artistRepository: IArtistRepository
     )

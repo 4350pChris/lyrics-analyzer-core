@@ -1,5 +1,5 @@
 import { Stats } from '../entities/Stats';
 
-export interface IStatsService {
+export interface IArtistService {
   getStatsForArtist(artistId: number): Promise<Stats>;
 }

@@ -1,5 +1,5 @@
 import test from 'ava';
-import { StatsService } from '../../../src/domain/services/StatsService.js';
+import { ArtistService } from '../../../src/domain/services/ArtistService.js';
 import { Artist } from '../../../src/domain/entities/Artist.js';
 import { Song } from '../../../src/domain/entities/Song.js';
 import type { IArtistRepository } from '../../../src/domain/interfaces/IArtistRepository.js';
@@ -14,9 +14,9 @@ const artistRepository: IArtistRepository = {
     }
 }
 
-test('StatsService should return the correct stats', async (t) => {
-    const statsService = new StatsService(artistRepository);
-    const stats = await statsService.getStatsForArtist(1);
+test('ArtistService should return the correct stats', async (t) => {
+    const artistService = new ArtistService(artistRepository);
+    const stats = await artistService.getStatsForArtist(1);
     t.is(stats.uniqueWords, 3);
     t.is(stats.averageLength, 5);
     t.is(stats.medianLength, 5);
