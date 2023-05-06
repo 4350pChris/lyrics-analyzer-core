@@ -27,3 +27,15 @@ test("Get average length of words, make sure weights are taken into account", (t
   const averageLength = stats.calculateAverageLengthOfWords();
   t.is(averageLength, 14 / 6);
 });
+
+test("Get median length of words for uneven wordlist", (t) => {
+  const stats = makeStats({ a: 1, bb: 2, ccc: 3 });
+  const medianLength = stats.calculateMedianLengthOfWords();
+  t.is(medianLength, 2);
+});
+
+test("Get median length of words for even wordlist", (t) => {
+  const stats = makeStats({ a: 1, bb: 2, ccc: 3, dddd: 4 });
+  const medianLength = stats.calculateMedianLengthOfWords();
+  t.is(medianLength, 2.5);
+});

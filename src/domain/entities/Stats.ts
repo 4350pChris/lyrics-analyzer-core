@@ -8,6 +8,11 @@ export class Stats extends BaseEntity {
     super();
   }
 
+  private sortedWordList(): [string, number][] {
+    return Object.entries(this.wordList)
+      .sort(([, a], [, b]) => b - a);
+  }
+
   public calculateUniqueWords(): number {
     return Object.keys(this.wordList).length;
   }
@@ -20,9 +25,15 @@ export class Stats extends BaseEntity {
   }
 
   public getTopXWords(x: number): [string, number][] {
-    return Object.entries(this.wordList)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, x);
+    return this.sortedWordList().slice(0, x);
   }
 
+  public calculateMedianLengthOfWords(): number {
+    const sorted = this.sortedWordList()
+    const middle = Math.floor(sorted.length / 2);
+    if (middle % 2 === 0) {
+      return (sorted[middle][0].length + sorted[middle - 1][0].length) / 2;
+    }
+    return sorted[middle][0].length;
+  }
 }
