@@ -3,12 +3,13 @@ import { BaseEntity } from './BaseEntity.js';
 import { Song } from './Song.js';
 import { Stats } from './Stats.js';
 
-export class Artist extends BaseEntity implements IAggregateRoot {
+export class ArtistAggregate extends BaseEntity implements IAggregateRoot {
   constructor(
     public name: string,
     public description: string,
     public imageUrl?: string,
     public songs: Song[] = [],
+    public stats?: Stats
   ) {
     super();
   }
@@ -30,12 +31,12 @@ export class Artist extends BaseEntity implements IAggregateRoot {
     }, {} as Record<string, number>);
   }
 
-  public calculateStats(): Stats {
+  public calculateStats(): void {
     const wordList = this.getCombinedWordList();
     const stats = new Stats(wordList);
     stats.calculateUniqueWords();
     stats.calculateAverageLengthOfWords();
     stats.calculateMedianLengthOfWords();
-    return stats;
+    this.stats = stats;
   }
 }

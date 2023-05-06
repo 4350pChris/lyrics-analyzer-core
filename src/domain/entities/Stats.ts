@@ -1,6 +1,6 @@
 import { BaseEntity } from './BaseEntity.js';
 
-export class Stats extends BaseEntity {
+export class Stats {
   
   private _uniqueWords : number = 0;
   public get uniqueWords() : number {
@@ -19,7 +19,6 @@ export class Stats extends BaseEntity {
     this._averageLength = v;
   }
 
-  
   private _medianLength : number = 0;
   public get medianLength() : number {
     return this._medianLength;
@@ -30,9 +29,8 @@ export class Stats extends BaseEntity {
   
   constructor(
     public wordList: Record<string, number>,
-  ) {
-    super();
-  }
+  )
+  {}
 
   private sortedWordList(): [string, number][] {
     return Object.entries(this.wordList)

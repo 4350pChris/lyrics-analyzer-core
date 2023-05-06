@@ -1,13 +1,11 @@
 import { BaseEntity } from './BaseEntity.js';
 
-export class Song extends BaseEntity {
+export class Song {
 
   constructor(
-  public name: string,
-  public text: string,
-  ) {
-    super();
-  }
+    public name: string,
+    public text: string,
+  ) {}
 
   public getWordList(): Record<string, number> {
     return this.text.split(/\s+/)

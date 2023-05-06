@@ -1,8 +1,8 @@
 import test from "ava";
-import { Artist } from "../../../src/domain/entities/Artist.js";
+import { ArtistAggregate } from "../../../src/domain/entities/ArtistAggregate.js";
 import { Song } from '../../../src/domain/entities/Song.js';
 
-const makeArtist = (name: string, description: string) => new Artist(name, description);
+const makeArtist = (name: string, description: string) => new ArtistAggregate(name, description);
 
 const makeSong = (name: string, text: string) => new Song(name, text);
 
@@ -40,7 +40,8 @@ test("Get stats for artist", (t) => {
     makeSong("song1", "text1"),
     makeSong("song2", "text2"),
   ]);
-  const stats = artist.calculateStats();
-  t.is(stats.uniqueWords, 2);
-  t.is(stats.averageLength, 5);
+  artist.calculateStats();
+  t.not(artist.stats, undefined);
+  t.is(artist.stats!.uniqueWords, 2);
+  t.is(artist.stats!.averageLength, 5);
 });
