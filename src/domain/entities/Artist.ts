@@ -15,4 +15,15 @@ export class Artist extends BaseEntity implements AggregateRoot {
   public addSong(song: Song): void {
     this.songs.push(song);
   }
+
+  public getCombinedWordList(): Record<string, number> {
+    const wordLists = this.songs.map((song) => song.getWordList());
+    return wordLists.reduce((acc, wordList) => {
+      Object.entries(wordList).forEach(([word, count]) => {
+        const currentCount = acc[word] || 0;
+        acc[word] = currentCount + count;
+      });
+      return acc;
+    }, {} as Record<string, number>);
+  }
 }

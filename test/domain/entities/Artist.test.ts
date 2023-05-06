@@ -19,3 +19,13 @@ test("Add songs to artist", (t) => {
   artist.addSong(song2);
   t.deepEqual(artist.songs, [song1, song2]);
 })
+
+test("Get combined word list", (t) => {
+  const artist = makeArtist("name", "description");
+  const song1 = makeSong("song1", "text1");
+  const song2 = makeSong("song2", "text1 text2");
+  artist.addSong(song1);
+  artist.addSong(song2);
+  const wordList = artist.getCombinedWordList();
+  t.deepEqual(wordList, { text1: 2, text2: 1 });
+});
