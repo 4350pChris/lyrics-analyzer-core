@@ -1,9 +1,9 @@
-import type { AggregateRoot } from '../interfaces/AggregateRoot.js';
+import type { IAggregateRoot } from '../interfaces/IAggregateRoot.js';
 import { BaseEntity } from './BaseEntity.js';
 import { Song } from './Song.js';
 import { Stats } from './Stats.js';
 
-export class Artist extends BaseEntity implements AggregateRoot {
+export class Artist extends BaseEntity implements IAggregateRoot {
   constructor(
     public name: string,
     public description: string,
