@@ -1,5 +1,5 @@
 import test from 'ava';
-import {Stats} from '../../../src/domain/entities/stats.value-object.js';
+import {Stats} from '@/domain/entities/stats.value-object.js';
 
 const makeStats = (wordList: Record<string, number>) => new Stats(wordList);
 

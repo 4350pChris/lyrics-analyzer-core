@@ -1,5 +1,5 @@
 import test from 'ava';
-import {Song} from '../../../src/domain/entities/song.value-object.js';
+import {Song} from '@/domain/entities/song.value-object.js';
 
 const makeSong = (name: string, text: string) => new Song(name, text);
 

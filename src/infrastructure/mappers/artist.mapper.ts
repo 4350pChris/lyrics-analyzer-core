@@ -3,8 +3,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type {AnyItem} from 'dynamoose/dist/Item.js';
 import type {Mapper} from '../interfaces/mapper.js';
-import {ArtistAggregate} from '../../domain/entities/artist.aggregate.js';
-import {Song} from '../../domain/entities/song.value-object.js';
+import {ArtistAggregate} from '@/domain/entities/artist.aggregate.js';
+import {Song} from '@/domain/entities/song.value-object.js';
 
 export class ArtistMapper implements Mapper<ArtistAggregate> {
 	toDomain(model: Partial<AnyItem>): ArtistAggregate {

@@ -1,9 +1,9 @@
 import test from 'ava';
 import dynamoose from 'dynamoose';
 import type {AnyItem} from 'dynamoose/dist/Item.js';
-import {DynamooseArtistRepository} from '../../../src/infrastructure/repositories/dynamoose-artist.repository.js';
-import {artistModel} from '../../../src/infrastructure/models/artist.model.js';
-import {ArtistMapper} from '../../../src/infrastructure/mappers/artist.mapper.js';
+import {DynamooseArtistRepository} from '@/infrastructure/repositories/dynamoose-artist.repository.js';
+import {artistModel} from '@/infrastructure/models/artist.model.js';
+import {ArtistMapper} from '@/infrastructure/mappers/artist.mapper.js';
 
 const getDummyArtist = () => ({
 	id: '1',

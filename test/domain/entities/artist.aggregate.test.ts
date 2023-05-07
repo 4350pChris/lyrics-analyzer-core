@@ -1,6 +1,6 @@
 import test from 'ava';
-import {ArtistAggregate} from '../../../src/domain/entities/artist.aggregate.js';
-import {Song} from '../../../src/domain/entities/song.value-object.js';
+import {ArtistAggregate} from '@/domain/entities/artist.aggregate.js';
+import {Song} from '@/domain/entities/song.value-object.js';
 
 const makeArtist = (name: string, description: string) => new ArtistAggregate(name, description);
 
