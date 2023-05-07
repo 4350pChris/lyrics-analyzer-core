@@ -1,12 +1,12 @@
 import type {Mapper} from '../interfaces/mapper';
-import type {artistModel as ArtistModelType} from '../models/artist.model.js';
+import type {getArtistModel as ArtistModelFnType} from '../models/artist.model.js';
 import type {ArtistAggregate} from '@/domain/entities/artist.aggregate.js';
 import type {ArtistRepository} from '@/domain/interfaces/artist.repository.js';
 
 export class DynamooseArtistRepository implements ArtistRepository {
 	constructor(
 		private readonly artistMapper: Mapper<ArtistAggregate>,
-		private readonly artistModel: typeof ArtistModelType,
+		private readonly artistModel: ReturnType<typeof ArtistModelFnType>,
 	) {}
 
 	async getById(id: number): Promise<ArtistAggregate> {

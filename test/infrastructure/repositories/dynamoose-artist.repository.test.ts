@@ -2,7 +2,7 @@ import test from 'ava';
 import dynamoose from 'dynamoose';
 import type {AnyItem} from 'dynamoose/dist/Item.js';
 import {DynamooseArtistRepository} from '@/infrastructure/repositories/dynamoose-artist.repository.js';
-import {artistModel} from '@/infrastructure/models/artist.model.js';
+import {getArtistModel} from '@/infrastructure/models/artist.model.js';
 import {ArtistMapper} from '@/infrastructure/mappers/artist.mapper.js';
 
 const getDummyArtist = () => ({
@@ -18,6 +18,7 @@ const getDummyArtist = () => ({
 } satisfies Partial<AnyItem>);
 
 const mapper = new ArtistMapper();
+const artistModel = getArtistModel('artistTable');
 const repo = new DynamooseArtistRepository(mapper, artistModel);
 
 test.before(() => {

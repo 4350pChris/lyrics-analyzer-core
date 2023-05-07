@@ -3,7 +3,7 @@ import {createContainer, asClass, asValue, asFunction, InjectionMode} from 'awil
 import {DynamooseArtistRepository} from './repositories/dynamoose-artist.repository.js';
 import {GeniusService} from './services/genius.service.js';
 import {ArtistMapper} from './mappers/artist.mapper.js';
-import {artistModel} from './models/artist.model.js';
+import {getArtistModel} from './models/artist.model.js';
 import {createApiClient} from './clients/genius-api.client.js';
 
 export const setupDependencyInjection = () => {
@@ -18,7 +18,8 @@ export const setupDependencyInjection = () => {
 		geniusApiClient: asFunction(createApiClient).singleton(),
 		geniusApiService: asClass(GeniusService).singleton(),
 		artistMapper: asClass(ArtistMapper).singleton(),
-		artistModel: asValue(artistModel),
+		artistTableName: asValue(process.env.ARTIST_TABLE_NAME),
+		artistModel: asFunction(getArtistModel).singleton(),
 	});
 
 	return container;
