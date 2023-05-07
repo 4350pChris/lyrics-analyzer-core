@@ -6,7 +6,6 @@
     "dist"
   ],
   "scripts": {
-    "prepublish": "tsc",
     "build": "tsc && resolve-tspaths",
     "lint": "xo",
     "test": "xo && c8 ava",

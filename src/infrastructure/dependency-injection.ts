@@ -16,7 +16,7 @@ export const setupDependencyInjection = () => {
 		geniusBearerToken: asValue(process.env.GENIUS_ACCESS_TOKEN),
 		geniusBaseUrl: asValue('https://api.genius.com'),
 		geniusApiClient: asFunction(createApiClient).singleton(),
-		geniusApiService: asClass(GeniusService).singleton(),
+		geniusService: asClass(GeniusService).singleton(),
 		artistMapper: asClass(ArtistMapper).singleton(),
 		artistTableName: asValue(process.env.ARTIST_TABLE_NAME),
 		artistModel: asFunction(getArtistModel).singleton(),
