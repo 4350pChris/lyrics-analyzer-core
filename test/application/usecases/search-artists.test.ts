@@ -3,7 +3,7 @@ import test from 'ava';
 import {SearchArtists} from '@/application/usecases/artist/search-artists.usecase.js';
 import type {GeniusApiService} from '@/application/interfaces/genius-api.service.js';
 import type {GeniusSong} from '@/application/interfaces/genius-song.js';
-import {type SearchArtistsDto} from '@/application/dtos/search-artist.dto';
+import type {SearchArtistsDto} from '@/application/dtos/search-artist.dto';
 
 test('should return a list of artists', async t => {
 	const primaryArtist: SearchArtistsDto = {

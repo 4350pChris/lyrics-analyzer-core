@@ -9,9 +9,9 @@ export class DynamooseArtistRepository implements ArtistRepository {
 		private readonly artistModel: ReturnType<typeof ArtistModelFnType>,
 	) {}
 
-	async getById(id: number): Promise<ArtistAggregate> {
-		const result = await this.artistModel.query('id').eq(id.toString()).exec();
-		return this.artistMapper.toDomain(result[0]);
+	async list(): Promise<ArtistAggregate[]> {
+		const result = await this.artistModel.scan().exec();
+		return result.map(item => this.artistMapper.toDomain(item));
 	}
 
 	async save(artist: ArtistAggregate): Promise<ArtistAggregate> {
