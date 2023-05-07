@@ -8,8 +8,9 @@
   "scripts": {
     "prepublish": "tsc",
     "build": "tsc",
-    "test": "c8 ava",
-    "test:watch": "ava --watch"
+    "lint": "xo",
+    "test": "xo && c8 ava",
+    "test:watch": "xo && ava --watch"
   },
   "repository": {
     "type": "git",
@@ -24,11 +25,15 @@
     "url": "https://github.com/4350pChris/lyrics-analyzer-core/issues"
   },
   "homepage": "https://github.com/4350pChris/lyrics-analyzer-core#readme",
+  "dependencies": {
+    "dynamoose": "^3.2.0"
+  },
   "devDependencies": {
     "@ava/typescript": "^4.0.0",
     "ava": "^5.2.0",
     "c8": "^7.13.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "xo": "^0.54.2"
   },
   "type": "module",
   "ava": {
@@ -42,7 +47,9 @@
       "compile": false
     }
   },
-  "dependencies": {
-    "dynamoose": "^3.2.0"
+  "xo": {
+    "rules": {
+      "radix": ["warn", "as-needed"]
+    }
   }
 }

@@ -1,3 +1,3 @@
 export abstract class BaseEntity {
-  public id?: number;
+	public id?: number;
 }
