@@ -49,7 +49,20 @@
   },
   "xo": {
     "rules": {
-      "radix": ["warn", "as-needed"]
+      "radix": [
+        "warn",
+        "as-needed"
+      ]
     }
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "webpack"
+      ]
+    }
+  },
+  "engines": {
+    "node": "18"
   }
 }
