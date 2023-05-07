@@ -18,7 +18,7 @@ const getDummyArtist = () => ({
 } satisfies Partial<AnyItem>);
 
 const mapper = new ArtistMapper();
-const repo = new DynamooseArtistRepository();
+const repo = new DynamooseArtistRepository(mapper, artistModel);
 
 test.before(() => {
 	dynamoose.aws.ddb.local();
