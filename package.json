@@ -26,10 +26,13 @@
   },
   "homepage": "https://github.com/4350pChris/lyrics-analyzer-core#readme",
   "dependencies": {
-    "dynamoose": "^3.2.0"
+    "dotenv": "^16.0.3",
+    "dynamoose": "^3.2.0",
+    "ofetch": "^1.0.1"
   },
   "devDependencies": {
     "@ava/typescript": "^4.0.0",
+    "@types/node": "^18.16.5",
     "ava": "^5.2.0",
     "c8": "^7.13.0",
     "resolve-tspaths": "^0.8.13",
