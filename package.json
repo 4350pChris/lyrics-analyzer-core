@@ -6,7 +6,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc && resolve-tspaths",
+    "build": "rimraf dist && tsc && resolve-tspaths",
     "lint": "xo",
     "test": "xo && c8 ava",
     "test:watch": "xo && ava --watch"
@@ -36,6 +36,7 @@
     "ava": "^5.2.0",
     "c8": "^7.13.0",
     "resolve-tspaths": "^0.8.13",
+    "rimraf": "^5.0.0",
     "tsx": "^3.12.7",
     "typescript": "^5.0.4",
     "xo": "^0.54.2"
