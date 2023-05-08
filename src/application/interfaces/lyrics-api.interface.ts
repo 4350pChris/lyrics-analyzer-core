@@ -1,7 +1,7 @@
-import {type RichSongDto} from '@/application/dtos/rich-song.dto';
-import {type SearchArtistsDto} from '@/application/dtos/search-artist.dto';
+import {type SongDto} from '@/application/dtos/song.dto.js';
+import {type SearchArtistsDto} from '@/application/dtos/search-artist.dto.js';
 
 export type LyricsApiService = {
 	searchArtists: (query: string) => Promise<SearchArtistsDto[]>;
-	retrievePaginatedSongs(artistId: number, page: number): Promise<RichSongDto[]>;
+	retrieveSongsForArtist(artistId: number): Promise<SongDto[]>;
 };

@@ -3,17 +3,13 @@ import test from 'ava';
 import {GeniusService} from '@/infrastructure/services/genius.service.js';
 import type {GeniusApi} from '@/infrastructure/interfaces/genius-api.interface.js';
 import {type SearchResponse} from '@/infrastructure/dtos/search-response.dto.js';
-import {type GeniusSong} from '@/infrastructure/dtos/genius-song.dto';
+import {type GeniusSongDto} from '@/infrastructure/dtos/genius-song.dto';
+import {type LyricsParser} from '@/infrastructure/interfaces/lyrics-parser.interface';
 
-const getMockSong: () => Omit<GeniusSong, 'primary_artist'> = () => ({
+const getMockSong: () => Omit<GeniusSongDto, 'primary_artist'> = () => ({
 	id: 3810,
 	title_with_featured: 'Accordion',
 	url: 'https://genius.com/Madvillain-accordion-lyrics',
-	release_date_components: {
-		year: 2004,
-		month: 3,
-		day: 23,
-	},
 });
 
 test('Search artists should consolidate artists from songs', async t => {
@@ -59,16 +55,22 @@ test('Search artists should consolidate artists from songs', async t => {
 		async getSongsForArtist() {
 			throw new Error('not implemented');
 		},
+		async getSong(url) {
+			throw new Error('not implemented');
+		},
 	};
-	const geniusService = new GeniusService(mockClient);
+	const geniusService = new GeniusService(mockClient, {} as LyricsParser);
 	const artists = await geniusService.searchArtists('MF DOOM');
 	t.is(artists.length, 2);
 });
 
-test('Get paginated songs should return a list of songs', async t => {
+test('Get paginated songs should return a list of songs witht their lyrics', async t => {
 	const mockClient: GeniusApi = {
 		async search() {
 			throw new Error('not implemented');
+		},
+		async getSong(url) {
+			return 'text';
 		},
 		async getSongsForArtist() {
 			return {
@@ -76,6 +78,7 @@ test('Get paginated songs should return a list of songs', async t => {
 					status: 200,
 				},
 				response: {
+					next_page: undefined,
 					songs: [
 						{
 							...getMockSong(),
@@ -84,14 +87,25 @@ test('Get paginated songs should return a list of songs', async t => {
 								name: 'Madvillain',
 							},
 						},
+						{
+							...getMockSong(),
+							primary_artist: {
+								id: 151,
+								name: 'MF DOOM',
+							},
+						},
 					],
 				},
 			};
 		},
 	};
 
-	const geniusService = new GeniusService(mockClient);
+	const geniusService = new GeniusService(mockClient, {
+		parse(html: string) {
+			return html;
+		},
+	} as LyricsParser);
 
-	const songs = await geniusService.retrievePaginatedSongs(150, 1);
+	const songs = await geniusService.retrieveSongsForArtist(150);
 	t.is(songs.length, 1);
 });

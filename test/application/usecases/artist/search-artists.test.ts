@@ -2,7 +2,6 @@
 import test from 'ava';
 import {SearchArtists} from '@/application/usecases/artist/search-artists.usecase.js';
 import type {SearchArtistsDto} from '@/application/dtos/search-artist.dto';
-import {type GeniusSong} from '@/infrastructure/dtos/genius-song.dto';
 import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface.js';
 
 test('should return a list of artists', async t => {
@@ -13,7 +12,7 @@ test('should return a list of artists', async t => {
 
 	const geniusService: LyricsApiService = {
 		searchArtists: async () => [artist],
-		async retrievePaginatedSongs() {
+		retrieveSongsForArtist() {
 			throw new Error('not implemented');
 		},
 	};

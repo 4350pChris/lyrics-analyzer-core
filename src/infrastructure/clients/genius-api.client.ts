@@ -34,4 +34,8 @@ export class GeniusApiClient implements GeniusApi {
 			},
 		});
 	}
+
+	async getSong(url: string): Promise<string> {
+		return this.client<string, 'text'>(url, {responseType: 'text'});
+	}
 }
