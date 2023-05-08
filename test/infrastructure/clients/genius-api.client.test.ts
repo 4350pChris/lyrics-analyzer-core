@@ -40,7 +40,7 @@ test('get songs for artist', async t => {
 });
 
 test('get song', async t => {
-	const html = await client.getSong('https://genius.com/Madvillain-accordion-lyrics');
+	const html = await client.getSong(new URL('https://genius.com/Madvillain-accordion-lyrics'));
 
 	t.regex(html, /<html/);
 });

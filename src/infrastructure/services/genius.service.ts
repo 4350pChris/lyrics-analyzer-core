@@ -1,7 +1,6 @@
 import type {GeniusApi} from '../interfaces/genius-api.interface.js';
 import type {LyricsParser} from '../interfaces/lyrics-parser.interface.js';
-import type {GeniusSongDto} from '../dtos/genius-song.dto.js';
-import {GeniusLyricsParser} from './genius/genius-lyrics-parser.service.js';
+import {GeniusLyricsParser} from './genius-lyrics-parser.service.js';
 import type {SongDto} from '@/application/dtos/song.dto.js';
 import type {SearchArtistsDto} from '@/application/dtos/search-artist.dto.js';
 import type {LyricsApiService} from '@/application/interfaces/lyrics-api.interface.js';
@@ -36,7 +35,7 @@ export class GeniusService implements LyricsApiService {
 	}
 
 	async retrieveSongsForArtist(artistId: number): Promise<SongDto[]> {
-		const parsingPromises: Array<Promise<readonly [GeniusSongDto, string]>> = [];
+		const songs: SongDto[] = [];
 		let page: number | undefined = 1;
 
 		// Consume all pages
@@ -44,26 +43,22 @@ export class GeniusService implements LyricsApiService {
 			// eslint-disable-next-line no-await-in-loop
 			const {response} = await this.geniusApiClient.getSongsForArtist(artistId, page);
 			// Evict songs where the artist is not the primary one
-			const primaryArtistSongs = response.songs.filter(song => song.primary_artist.id === artistId);
-			parsingPromises.push(...primaryArtistSongs.map(
-				async song => this.parseLyrics(song),
-			));
+			const byArtist = response.songs.filter(song => song.primary_artist.id === artistId);
+			const dtos: SongDto[] = byArtist.map(song => ({
+				id: song.id,
+				title: song.title_with_featured,
+				url: song.url,
+			}));
+			songs.push(...dtos);
 			page = response.next_page;
 		}
 
-		const parsedSongs = await Promise.all(parsingPromises);
-		return parsedSongs.map(
-			([song, lyrics]) => ({
-				id: song.id,
-				title: song.title_with_featured,
-				text: lyrics,
-			}),
-		);
+		return songs;
 	}
 
-	private async parseLyrics(song: GeniusSongDto): Promise<[GeniusSongDto, string]> {
-		const html = await this.geniusApiClient.getSong(song.url);
+	async parseLyrics(url: URL): Promise<string> {
+		const html = await this.geniusApiClient.getSong(url);
 		const lyrics = this.parser.parse(html);
-		return [song, lyrics];
+		return lyrics;
 	}
 }

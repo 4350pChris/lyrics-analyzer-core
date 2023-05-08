@@ -6,4 +6,5 @@ export type LyricsApiService = {
 	searchArtists(query: string): Promise<SearchArtistsDto[]>;
 	getArtist(artistId: number): Promise<ArtistDetailDto>;
 	retrieveSongsForArtist(artistId: number): Promise<SongDto[]>;
+	parseLyrics(url: URL): Promise<string>;
 };

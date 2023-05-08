@@ -2,7 +2,7 @@ import {readFileSync} from 'node:fs';
 import {join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import test from 'ava';
-import {GeniusLyricsParser} from '@/infrastructure/services/genius/genius-lyrics-parser.service';
+import {GeniusLyricsParser} from '@/infrastructure/services/genius-lyrics-parser.service';
 
 const parser = new GeniusLyricsParser();
 

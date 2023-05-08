@@ -18,6 +18,9 @@ test('should return a list of artists', async t => {
 		getArtist(artistId) {
 			throw new Error('Not implemented');
 		},
+		parseLyrics(url) {
+			throw new Error('Not implemented');
+		},
 	};
 	const usecase = new SearchArtists(geniusService);
 
