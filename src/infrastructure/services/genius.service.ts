@@ -57,6 +57,8 @@ export class GeniusService implements LyricsApiService {
 
 	private async parseLyrics(song: GeniusSongDto): Promise<[GeniusSongDto, string]> {
 		const html = await this.geniusApiClient.getSong(song.url);
-		return [song, this.parser.parse(html)];
+		const lyrics = this.parser.parse(html);
+		const sanitizedLyrics = this.parser.sanitize(song.primary_artist.name, lyrics);
+		return [song, sanitizedLyrics];
 	}
 }
