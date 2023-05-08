@@ -18,4 +18,15 @@ export class SongChunk extends BaseEntity {
 		const song = new Song(id, title, '', url);
 		this.songs.push(song);
 	}
+
+	serialize() {
+		return JSON.stringify({
+			id: this.id,
+			songs: this.songs.map(song => ({
+				id: song.id,
+				name: song.name,
+				url: song.url,
+			})),
+		});
+	}
 }

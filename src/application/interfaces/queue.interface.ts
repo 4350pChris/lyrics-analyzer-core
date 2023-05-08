@@ -1,3 +1,3 @@
 export type Queue = {
-	publish(message: any): Promise<void>;
+	publish(message: string): Promise<void>;
 };

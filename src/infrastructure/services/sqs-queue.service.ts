@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type {SQS} from 'aws-sdk';
-import {type Queue} from '@/application/interfaces/queue.interface';
+import {type Queue} from '@/application/interfaces/queue.interface.js';
 
 export class SqsQueueService implements Queue {
 	constructor(
@@ -8,9 +8,9 @@ export class SqsQueueService implements Queue {
 		private readonly queueName: string,
 	) {}
 
-	async publish(message: any): Promise<void> {
+	async publish(message: string): Promise<void> {
 		const parameters = {
-			MessageBody: JSON.stringify(message),
+			MessageBody: message,
 			QueueUrl: this.queueName,
 		};
 		await this.sqs.sendMessage(parameters).promise();
