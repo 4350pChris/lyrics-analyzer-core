@@ -4,11 +4,11 @@
 import type {AnyItem} from 'dynamoose/dist/Item.js';
 import type {Mapper} from '../interfaces/mapper.interface.js';
 import {ArtistAggregate} from '@/domain/entities/artist.aggregate.js';
-import {Song} from '@/domain/entities/song.value-object.js';
+import {Song} from '@/domain/entities/song.entity.js';
 
 export class ArtistMapper implements Mapper<ArtistAggregate> {
 	toDomain(model: Partial<AnyItem>): ArtistAggregate {
-		const songs = model.songs.map((s: any) => new Song(s.name, s.text));
+		const songs = model.songs.map((s: any) => new Song(s.id, s.name, s.text, s.url));
 		const artist = new ArtistAggregate(model.name, model.description, model.imageUrl, songs);
 		artist.id = Number.parseInt(model.id);
 		return artist;

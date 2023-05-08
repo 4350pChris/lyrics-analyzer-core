@@ -1,15 +1,15 @@
 import test from 'ava';
 import {ArtistAggregate} from '@/domain/entities/artist.aggregate.js';
-import {Song} from '@/domain/entities/song.value-object.js';
+import {Song} from '@/domain/entities/song.entity.js';
 
 const makeArtist = (name: string, description: string) => new ArtistAggregate(name, description);
 
-const makeSong = (name: string, text: string) => new Song(name, text);
+const makeSong = (name: string, text: string) => new Song(1, name, text, 'url');
 
 const makeArtistWithSongs = (name: string, description: string, songs: Song[]) => {
 	const artist = makeArtist(name, description);
 	for (const song of songs) {
-		artist.addSong(song.name, song.text);
+		artist.addSong(song.id, song.name, song.text, song.url);
 	}
 
 	return [artist, songs] as const;

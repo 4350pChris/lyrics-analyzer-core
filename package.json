@@ -26,6 +26,7 @@
   "homepage": "https://github.com/4350pChris/lyrics-analyzer-core#readme",
   "dependencies": {
     "awilix": "^8.0.1",
+    "aws-sdk": "^2.1374.0",
     "dotenv": "^16.0.3",
     "dynamoose": "^3.2.0",
     "htmlparser2": "^8.0.2",

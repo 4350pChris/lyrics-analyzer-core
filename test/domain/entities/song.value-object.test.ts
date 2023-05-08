@@ -1,7 +1,7 @@
 import test from 'ava';
-import {Song} from '@/domain/entities/song.value-object.js';
+import {Song} from '@/domain/entities/song.entity.js';
 
-const makeSong = (name: string, text: string) => new Song(name, text);
+const makeSong = (name: string, text: string) => new Song(1, name, text, 'url');
 
 test('Create song', t => {
 	const song = makeSong('name', 'text');

@@ -1,6 +1,6 @@
 import type {AggregateRoot} from '../interfaces/aggregate-root.interface.js';
 import {BaseEntity} from './base.entity.js';
-import {Song} from './song.value-object.js';
+import {Song} from './song.entity.js';
 import {Stats} from './stats.value-object.js';
 
 export class ArtistAggregate extends BaseEntity implements AggregateRoot {
@@ -14,9 +14,8 @@ export class ArtistAggregate extends BaseEntity implements AggregateRoot {
 		super();
 	}
 
-	// TODO: clarify - should this also update stats?
-	public addSong(name: string, text: string): void {
-		const song = new Song(name, text);
+	public addSong(id: number, name: string, text: string, url: string): void {
+		const song = new Song(id, name, text, url);
 		this.songs.push(song);
 	}
 

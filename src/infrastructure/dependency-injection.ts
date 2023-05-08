@@ -1,5 +1,6 @@
 import process from 'node:process';
 import {createContainer, asClass, asValue, asFunction, InjectionMode} from 'awilix';
+import {SQS} from 'aws-sdk';
 import {DynamooseArtistRepository} from './repositories/dynamoose-artist.repository.js';
 import {GeniusService} from './services/genius.service.js';
 import {ArtistMapper} from './mappers/artist.mapper.js';
@@ -20,6 +21,7 @@ export const setupDependencyInjection = () => {
 		artistMapper: asClass(ArtistMapper).singleton(),
 		artistTableName: asValue(process.env.ARTIST_TABLE_NAME),
 		artistModel: asFunction(getArtistModel).singleton(),
+		sqs: asFunction(() => new SQS()),
 	});
 
 	return container;
