@@ -5,12 +5,18 @@ import {GeniusLyricsParser} from './genius/genius-lyrics-parser.service.js';
 import type {SongDto} from '@/application/dtos/song.dto.js';
 import type {SearchArtistsDto} from '@/application/dtos/search-artist.dto.js';
 import type {LyricsApiService} from '@/application/interfaces/lyrics-api.interface.js';
+import {type ArtistDetailDto} from '@/application/dtos/artist-detail.dto.js';
 
 export class GeniusService implements LyricsApiService {
 	constructor(
 		private readonly geniusApiClient: GeniusApi,
 		private readonly parser: LyricsParser = new GeniusLyricsParser(),
 	) {}
+
+	async getArtist(artistId: number): Promise<ArtistDetailDto> {
+		const {response} = await this.geniusApiClient.getArtist(artistId);
+		return response.artist;
+	}
 
 	async searchArtists(query: string): Promise<SearchArtistsDto[]> {
 		const {response} = await this.geniusApiClient.search(query);
