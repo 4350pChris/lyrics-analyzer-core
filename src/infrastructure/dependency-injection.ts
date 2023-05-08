@@ -4,7 +4,7 @@ import {DynamooseArtistRepository} from './repositories/dynamoose-artist.reposit
 import {GeniusService} from './services/genius.service.js';
 import {ArtistMapper} from './mappers/artist.mapper.js';
 import {getArtistModel} from './models/artist.model.js';
-import {createApiClient} from './clients/genius-api.client.js';
+import {GeniusApiClient} from './clients/genius-api.client.js';
 
 export const setupDependencyInjection = () => {
 	const container = createContainer({
@@ -15,8 +15,8 @@ export const setupDependencyInjection = () => {
 		artistRepository: asClass(DynamooseArtistRepository).singleton(),
 		geniusBearerToken: asValue(process.env.GENIUS_ACCESS_TOKEN),
 		geniusBaseUrl: asValue('https://api.genius.com'),
-		geniusApiClient: asFunction(createApiClient).singleton(),
-		geniusService: asClass(GeniusService).singleton(),
+		geniusApiClient: asClass(GeniusApiClient).singleton(),
+		lyricsApiService: asClass(GeniusService).singleton(),
 		artistMapper: asClass(ArtistMapper).singleton(),
 		artistTableName: asValue(process.env.ARTIST_TABLE_NAME),
 		artistModel: asFunction(getArtistModel).singleton(),

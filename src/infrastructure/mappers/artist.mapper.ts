@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type {AnyItem} from 'dynamoose/dist/Item.js';
-import type {Mapper} from '../interfaces/mapper.js';
+import type {Mapper} from '../interfaces/mapper.interface.js';
 import {ArtistAggregate} from '@/domain/entities/artist.aggregate.js';
 import {Song} from '@/domain/entities/song.value-object.js';
 

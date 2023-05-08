@@ -1,4 +1,4 @@
-import type {AggregateRoot} from '../interfaces/aggregate-root.js';
+import type {AggregateRoot} from '../interfaces/aggregate-root.interface.js';
 import {BaseEntity} from './base.entity.js';
 import {Song} from './song.value-object.js';
 import {Stats} from './stats.value-object.js';
