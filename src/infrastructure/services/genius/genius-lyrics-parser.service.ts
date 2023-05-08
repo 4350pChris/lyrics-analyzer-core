@@ -2,7 +2,12 @@ import {DomUtils, parseDocument} from 'htmlparser2';
 import {type LyricsParser} from '@/infrastructure/interfaces/lyrics-parser.interface';
 
 export class GeniusLyricsParser implements LyricsParser {
-	parse(html: string) {
+	parse(artist: string, html: string) {
+		const lyrics = this.getLyricsBlock(html);
+		return this.sanitize(artist, lyrics);
+	}
+
+	getLyricsBlock(html: string) {
 		const dom = parseDocument(html);
 		const found = DomUtils.findOne(
 			element =>

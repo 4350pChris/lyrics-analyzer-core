@@ -124,13 +124,10 @@ test('Get paginated songs should return a list of songs with their lyrics', asyn
 	});
 
 	const geniusService = new GeniusService(mockClient, {
-		parse(html: string) {
+		parse(artist: string, html: string) {
 			return html;
 		},
-		sanitize(artist, text) {
-			return text;
-		},
-	} as LyricsParser);
+	});
 
 	const songs = await geniusService.retrieveSongsForArtist(150);
 	t.is(songs.length, 1);
