@@ -14,6 +14,9 @@ test('should return a list of artists', async t => {
 		async save() {
 			throw new Error('Not implemented');
 		},
+		getById(artistId) {
+			throw new Error('Not implemented');
+		},
 	});
 	const result = await usecase.execute();
 	t.deepEqual(result, artists);

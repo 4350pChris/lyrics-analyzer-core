@@ -56,7 +56,24 @@ test.serial('List all', async t => {
 
 test.serial('Save artist', async t => {
 	const dummy = getDummyArtist();
-	const artist = await repo.save(mapper.toDomain(dummy));
+	await repo.save(mapper.toDomain(dummy));
 	savedArtists.push(dummy.id);
 	t.pass();
+});
+
+test.serial('Get artist by id', async t => {
+	const expected = getDummyArtist();
+	const artists = [
+		expected,
+		getDummyArtist(),
+		getDummyArtist(),
+		getDummyArtist(),
+	];
+
+	await artistModel.batchPut(artists);
+	savedArtists.push(...artists.map(artist => artist.id));
+
+	const result = await repo.getById(Number.parseInt(expected.id));
+
+	t.deepEqual(result, mapper.toDomain(expected));
 });

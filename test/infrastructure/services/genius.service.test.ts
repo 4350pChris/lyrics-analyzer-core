@@ -14,6 +14,9 @@ const getMockSong: () => Omit<GeniusSongDto, 'primary_artist'> = () => ({
 
 test('Search artists should consolidate artists from songs', async t => {
 	const mockClient: GeniusApi = {
+		getArtist(artistId) {
+			throw new Error('Not implemented');
+		},
 		async search(query) {
 			return {
 				meta: {
@@ -66,6 +69,9 @@ test('Search artists should consolidate artists from songs', async t => {
 
 test('Get paginated songs should return a list of songs witht their lyrics', async t => {
 	const mockClient: GeniusApi = {
+		getArtist(artistId) {
+			throw new Error('Not implemented');
+		},
 		async search() {
 			throw new Error('not implemented');
 		},

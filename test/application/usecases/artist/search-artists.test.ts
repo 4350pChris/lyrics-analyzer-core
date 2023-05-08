@@ -13,7 +13,10 @@ test('should return a list of artists', async t => {
 	const geniusService: LyricsApiService = {
 		searchArtists: async () => [artist],
 		retrieveSongsForArtist() {
-			throw new Error('not implemented');
+			throw new Error('Not implemented');
+		},
+		getArtist(artistId) {
+			throw new Error('Not implemented');
 		},
 	};
 	const usecase = new SearchArtists(geniusService);
