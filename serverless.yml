@@ -1,0 +1,71 @@
+org: 4350pchris
+app: lyrics-backend
+service: lyrics-backend
+frameworkVersion: "3"
+useDotenv: true
+
+plugins:
+  - serverless-lift
+  - serverless-esbuild
+
+package:
+  individually: true
+
+custom:
+  esbuild:
+    bundle: true
+    minify: true
+    sourcemap: true
+    target: node18
+    platform: node
+    exclude:
+      - "aws-sdk"
+
+provider:
+  name: aws
+  deploymentMethod: direct
+  runtime: nodejs18.x
+  environment:
+    GENIUS_ACCESS_TOKEN: ${env:GENIUS_ACCESS_TOKEN}
+    ARTIST_TABLE_NAME: ${self:service}-Artist-${sls:stage}
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "dynamodb:PutItem"
+            - "dynamodb:Get*"
+            - "dynamodb:Scan*"
+            - "dynamodb:UpdateItem"
+            - "dynamodb:DeleteItem"
+          Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-Artist-${sls:stage}
+
+resources:
+  Resources:
+    ArtistTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        BillingMode: PAY_PER_REQUEST
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        TableName: ${self:service}-Artist-${sls:stage}
+
+constructs:
+  song-chunk-queue:
+    type: queue
+    worker:
+      handler: dist/src/presentation/sqs/parse-lyrics.handler.ts
+
+functions:
+  analyze-lyrics:
+    handler: dist/src/presentation/http/analyze-lyrics.handler
+    events:
+      - httpApi:
+          path: /analyze-lyrics
+          method: POST
+    environment:
+      QUEUE_URL: ${construct:song-chunk-queue.queueUrl}

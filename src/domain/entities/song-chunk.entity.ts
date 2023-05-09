@@ -3,6 +3,16 @@ import {BaseEntity} from './base.entity.js';
 import {Song} from './song.entity.js';
 
 export class SongChunk extends BaseEntity {
+	static unserialize(s: string) {
+		const data = JSON.parse(s) as {id: string; songs: Array<{id: number; name: string; url: string}>};
+		const chunk = new SongChunk(data.id);
+		for (const song of data.songs) {
+			chunk.addSong(song.id, song.name, song.url);
+		}
+
+		return chunk;
+	}
+
 	public readonly songs: Song[] = [];
 
 	constructor(

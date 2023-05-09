@@ -5,13 +5,13 @@ import {type Queue} from '@/application/interfaces/queue.interface.js';
 export class SqsQueueService implements Queue {
 	constructor(
 		private readonly sqs: SQS,
-		private readonly queueName: string,
+		private readonly queueUrl: string,
 	) {}
 
 	async publish(message: string): Promise<void> {
 		const parameters = {
 			MessageBody: message,
-			QueueUrl: this.queueName,
+			QueueUrl: this.queueUrl,
 		};
 		await this.sqs.sendMessage(parameters).promise();
 	}
