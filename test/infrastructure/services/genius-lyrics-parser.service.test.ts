@@ -7,7 +7,7 @@ const parser = new GeniusLyricsParser();
 
 // Load lyrics.html from this directory
 const loadLyricsFile = () => {
-	const path = fileURLToPath(new URL('lyrics.html', __dirname));
+	const path = fileURLToPath(new URL('lyrics.html', import.meta.url));
 	const html = readFileSync(path, 'utf8');
 	return html;
 };

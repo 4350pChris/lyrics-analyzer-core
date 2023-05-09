@@ -20,8 +20,8 @@
   "scripts": {
     "build": "rimraf dist && tsc",
     "lint": "xo",
-    "test": "xo && c8 ava",
-    "test:watch": "xo && ava --watch"
+    "test": "xo && NODE_OPTIONS='--loader=tsx --no-warnings' c8 ava",
+    "test:watch": "xo && NODE_OPTIONS='--loader=tsx --no-warnings' ava --watch"
   },
   "dependencies": {
     "@middy/core": "^4.4.0",
@@ -33,7 +33,6 @@
     "ofetch": "^1.0.1"
   },
   "devDependencies": {
-    "@ava/typescript": "^4.0.0",
     "@serverless/typescript": "^3.29.0",
     "@types/aws-lambda": "^8.10.115",
     "@types/node": "^18.16.5",
@@ -58,10 +57,7 @@
     ],
     "extensions": {
       "ts": "module"
-    },
-    "nodeArguments": [
-      "--loader=tsx"
-    ]
+    }
   },
   "xo": {
     "rules": {
