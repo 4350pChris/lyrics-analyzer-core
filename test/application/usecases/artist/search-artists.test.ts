@@ -1,8 +1,8 @@
 
 import test from 'ava';
-import {SearchArtists} from '@/application/usecases/artist/search-artists.usecase.js';
+import {SearchArtists} from '@/application/usecases/artist/search-artists.usecase';
 import type {SearchArtistsDto} from '@/application/dtos/search-artist.dto';
-import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface.js';
+import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface';
 
 test('should return a list of artists', async t => {
 	const artist: SearchArtistsDto = {

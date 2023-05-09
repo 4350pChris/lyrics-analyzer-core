@@ -1,5 +1,4 @@
 import {readFileSync} from 'node:fs';
-import {join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import test from 'ava';
 import {GeniusLyricsParser} from '@/infrastructure/services/genius-lyrics-parser.service';
@@ -8,7 +7,7 @@ const parser = new GeniusLyricsParser();
 
 // Load lyrics.html from this directory
 const loadLyricsFile = () => {
-	const path = fileURLToPath(new URL('lyrics.html', import.meta.url));
+	const path = fileURLToPath(new URL('lyrics.html', __dirname));
 	const html = readFileSync(path, 'utf8');
 	return html;
 };

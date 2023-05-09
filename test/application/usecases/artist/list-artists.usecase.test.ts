@@ -1,5 +1,5 @@
 import test from 'ava';
-import {ListArtists} from '@/application/usecases/artist/list-artists.usecase.js';
+import {ListArtists} from '@/application/usecases/artist/list-artists.usecase';
 import {ArtistAggregate} from '@/domain/entities/artist.aggregate';
 
 test('should return a list of artists', async t => {

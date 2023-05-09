@@ -1,7 +1,7 @@
-import type {AggregateRoot} from '../interfaces/aggregate-root.interface.js';
-import {BaseEntity} from './base.entity.js';
-import {Song} from './song.entity.js';
-import {Stats} from './stats.value-object.js';
+import type {AggregateRoot} from '../interfaces/aggregate-root.interface';
+import {BaseEntity} from './base.entity';
+import {Song} from './song.entity';
+import {Stats} from './stats.value-object';
 
 export class ArtistAggregate extends BaseEntity implements AggregateRoot {
 	constructor(

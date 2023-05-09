@@ -1,8 +1,8 @@
 import {type $Fetch, ofetch} from 'ofetch';
-import {type GeniusApi} from '../interfaces/genius-api.interface.js';
-import {type ArtistSongsResponse} from '../dtos/artist-songs-response.dto.js';
-import {type SearchResponse} from '../dtos/search-response.dto.js';
-import {type ArtistDetailResponse} from '../dtos/artist-detail-response.dto.js';
+import {type GeniusApi} from '../interfaces/genius-api.interface';
+import {type ArtistSongsResponse} from '../dtos/artist-songs-response.dto';
+import {type SearchResponse} from '../dtos/search-response.dto';
+import {type ArtistDetailResponse} from '../dtos/artist-detail-response.dto';
 
 export class GeniusApiClient implements GeniusApi {
 	private readonly client: $Fetch;

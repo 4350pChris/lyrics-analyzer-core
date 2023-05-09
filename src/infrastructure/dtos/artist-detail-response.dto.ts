@@ -1,4 +1,4 @@
-import {type GeniusResponse} from './genius-response.dto.js';
+import {type GeniusResponse} from './genius-response.dto';
 
 export type ArtistDetailResponse = GeniusResponse<{
 	artist: {

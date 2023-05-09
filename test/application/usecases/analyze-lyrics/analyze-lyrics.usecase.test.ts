@@ -1,7 +1,7 @@
 import test from 'ava';
-import {AnalyzeLyrics} from '@/application/usecases/analyze-lyrics/analyze-lyrics.usecase.js';
+import {AnalyzeLyrics} from '@/application/usecases/analyze-lyrics/analyze-lyrics.usecase';
 import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface';
-import {ArtistAggregate} from '@/domain/entities/artist.aggregate.js';
+import {ArtistAggregate} from '@/domain/entities/artist.aggregate';
 import {type SongDto} from '@/application/dtos/song.dto';
 import {SongChunk} from '@/domain/entities/song-chunk.entity';
 

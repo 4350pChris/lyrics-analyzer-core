@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import type {AnyItem} from 'dynamoose/dist/Item.js';
-import type {Mapper} from '../interfaces/mapper.interface.js';
-import {ArtistAggregate} from '@/domain/entities/artist.aggregate.js';
-import {Song} from '@/domain/entities/song.entity.js';
+import type {AnyItem} from 'dynamoose/dist/Item';
+import type {Mapper} from '../interfaces/mapper.interface';
+import {ArtistAggregate} from '@/domain/entities/artist.aggregate';
+import {Song} from '@/domain/entities/song.entity';
 
 export class ArtistMapper implements Mapper<ArtistAggregate> {
 	toDomain(model: Partial<AnyItem>): ArtistAggregate {

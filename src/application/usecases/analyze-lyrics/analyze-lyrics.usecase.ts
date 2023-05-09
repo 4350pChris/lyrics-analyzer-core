@@ -1,8 +1,8 @@
-import type {UseCase} from '../usecase.js';
-import {type SongDto} from '@/application/dtos/song.dto.js';
-import type {LyricsApiService} from '@/application/interfaces/lyrics-api.interface.js';
-import {type Queue} from '@/application/interfaces/queue.interface.js';
-import {SongChunk} from '@/domain/entities/song-chunk.entity.js';
+import type {UseCase} from '../usecase';
+import {type SongDto} from '@/application/dtos/song.dto';
+import type {LyricsApiService} from '@/application/interfaces/lyrics-api.interface';
+import {type Queue} from '@/application/interfaces/queue.interface';
+import {SongChunk} from '@/domain/entities/song-chunk.entity';
 
 export class AnalyzeLyrics implements UseCase {
 	constructor(
@@ -12,11 +12,11 @@ export class AnalyzeLyrics implements UseCase {
 
 	async execute(artistId: number): Promise<void> {
 		const songs = await this.lyricsApiService.retrieveSongsForArtist(artistId);
-		const chunks = await this.getSongsInChunks(songs);
+		const chunks = this.getSongsInChunks(songs);
 		await Promise.all(chunks.map(async chunk => this.queue.publish(chunk.serialize())));
 	}
 
-	async getSongsInChunks(songs: SongDto[], chunkSize = 10) {
+	getSongsInChunks(songs: SongDto[], chunkSize = 10) {
 		// Chunk into buckets of 10 songs
 		const chunks: SongChunk[] = [];
 

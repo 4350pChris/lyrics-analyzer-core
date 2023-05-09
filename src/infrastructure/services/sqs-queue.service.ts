@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import type {SQS} from 'aws-sdk';
-import {type Queue} from '@/application/interfaces/queue.interface.js';
+import {type Queue} from '@/application/interfaces/queue.interface';
 
 export class SqsQueueService implements Queue {
 	constructor(

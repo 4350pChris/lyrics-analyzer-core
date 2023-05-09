@@ -1,7 +1,7 @@
 import process from 'node:process';
 // Easy setup for local access token
 // eslint-disable-next-line import/no-unassigned-import
-import 'dotenv/config.js';
+import 'dotenv/config';
 import test from 'ava';
 import {GeniusApiClient} from '@/infrastructure/clients/genius-api.client';
 import {type GeniusApi} from '@/infrastructure/interfaces/genius-api.interface';

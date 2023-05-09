@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import test from 'ava';
-import {GeniusService} from '@/infrastructure/services/genius.service.js';
-import type {GeniusApi} from '@/infrastructure/interfaces/genius-api.interface.js';
-import {type SearchResponse} from '@/infrastructure/dtos/search-response.dto.js';
+import {GeniusService} from '@/infrastructure/services/genius.service';
+import type {GeniusApi} from '@/infrastructure/interfaces/genius-api.interface';
+import {type SearchResponse} from '@/infrastructure/dtos/search-response.dto';
 import {type GeniusSongDto} from '@/infrastructure/dtos/genius-song.dto';
 import {type LyricsParser} from '@/infrastructure/interfaces/lyrics-parser.interface';
 import {type ArtistDetailResponse} from '@/infrastructure/dtos/artist-detail-response.dto';

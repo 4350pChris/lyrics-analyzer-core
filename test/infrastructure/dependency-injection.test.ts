@@ -1,6 +1,6 @@
 import test from 'ava';
-import {setupDependencyInjection} from '@/infrastructure/dependency-injection.js';
-import {type ArtistRepository} from '@/domain/interfaces/artist-repository.interface.js';
+import {setupDependencyInjection} from '@/presentation/libs/dependency-injection';
+import {type ArtistRepository} from '@/domain/interfaces/artist-repository.interface';
 
 test('should setup dependency injection and not fail', t => {
 	setupDependencyInjection();

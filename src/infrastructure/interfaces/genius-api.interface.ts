@@ -1,6 +1,6 @@
-import type {ArtistDetailResponse} from '../dtos/artist-detail-response.dto.js';
-import type {ArtistSongsResponse} from '../dtos/artist-songs-response.dto.js';
-import type {SearchResponse} from '../dtos/search-response.dto.js';
+import type {ArtistDetailResponse} from '../dtos/artist-detail-response.dto';
+import type {ArtistSongsResponse} from '../dtos/artist-songs-response.dto';
+import type {SearchResponse} from '../dtos/search-response.dto';
 
 export type GeniusApi = {
 	search(query: string): Promise<SearchResponse>;

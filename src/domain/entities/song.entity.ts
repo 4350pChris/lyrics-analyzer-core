@@ -1,4 +1,4 @@
-import {BaseEntity} from './base.entity.js';
+import {BaseEntity} from './base.entity';
 
 export class Song extends BaseEntity {
 	constructor(

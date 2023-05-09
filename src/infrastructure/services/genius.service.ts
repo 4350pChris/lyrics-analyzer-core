@@ -1,10 +1,10 @@
-import type {GeniusApi} from '../interfaces/genius-api.interface.js';
-import type {LyricsParser} from '../interfaces/lyrics-parser.interface.js';
-import {GeniusLyricsParser} from './genius-lyrics-parser.service.js';
-import type {SongDto} from '@/application/dtos/song.dto.js';
-import type {SearchArtistsDto} from '@/application/dtos/search-artist.dto.js';
-import type {LyricsApiService} from '@/application/interfaces/lyrics-api.interface.js';
-import {type ArtistDetailDto} from '@/application/dtos/artist-detail.dto.js';
+import type {GeniusApi} from '../interfaces/genius-api.interface';
+import type {LyricsParser} from '../interfaces/lyrics-parser.interface';
+import {GeniusLyricsParser} from './genius-lyrics-parser.service';
+import type {SongDto} from '@/application/dtos/song.dto';
+import type {SearchArtistsDto} from '@/application/dtos/search-artist.dto';
+import type {LyricsApiService} from '@/application/interfaces/lyrics-api.interface';
+import {type ArtistDetailDto} from '@/application/dtos/artist-detail.dto';
 
 export class GeniusService implements LyricsApiService {
 	constructor(

@@ -1,11 +1,11 @@
 import process from 'node:process';
 import {createContainer, asClass, asValue, asFunction, InjectionMode} from 'awilix';
 import {SQS} from 'aws-sdk';
-import {DynamooseArtistRepository} from './repositories/dynamoose-artist.repository.js';
-import {GeniusService} from './services/genius.service.js';
-import {ArtistMapper} from './mappers/artist.mapper.js';
-import {getArtistModel} from './models/artist.model.js';
-import {GeniusApiClient} from './clients/genius-api.client.js';
+import {DynamooseArtistRepository} from '@/infrastructure/repositories/dynamoose-artist.repository';
+import {GeniusService} from '@/infrastructure/services/genius.service';
+import {ArtistMapper} from '@/infrastructure/mappers/artist.mapper';
+import {getArtistModel} from '@/infrastructure/models/artist.model';
+import {GeniusApiClient} from '@/infrastructure/clients/genius-api.client';
 
 export const setupDependencyInjection = () => {
 	const container = createContainer({
@@ -14,7 +14,7 @@ export const setupDependencyInjection = () => {
 
 	container.register({
 		artistRepository: asClass(DynamooseArtistRepository).singleton(),
-		geniusBearerToken: asValue(process.env.GENIUS_ACCESS_TOKEN),
+		geniusAccessToken: asValue(process.env.GENIUS_ACCESS_TOKEN),
 		geniusBaseUrl: asValue('https://api.genius.com'),
 		geniusApiClient: asClass(GeniusApiClient).singleton(),
 		lyricsApiService: asClass(GeniusService).singleton(),

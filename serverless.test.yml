@@ -1,0 +1,7 @@
+- name: analyze-lyrics returns 200
+  endpoint:
+    function: analyzeLyrics
+  response: true
+  request:
+    body:
+      artistId: 150

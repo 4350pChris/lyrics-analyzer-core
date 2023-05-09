@@ -1,6 +1,6 @@
 import {randomUUID} from 'node:crypto';
-import {BaseEntity} from './base.entity.js';
-import {Song} from './song.entity.js';
+import {BaseEntity} from './base.entity';
+import {Song} from './song.entity';
 
 export class SongChunk extends BaseEntity {
 	static unserialize(s: string) {

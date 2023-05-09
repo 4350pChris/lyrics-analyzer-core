@@ -1,7 +1,7 @@
 import type {SQSEvent} from 'aws-lambda';
-import {SongChunk} from '@/domain/entities/song-chunk.entity.js';
-import {setupDependencyInjection} from '@/infrastructure/dependency-injection.js';
-import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface.js';
+import {setupDependencyInjection} from '../../libs/dependency-injection';
+import {SongChunk} from '@/domain/entities/song-chunk.entity';
+import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface';
 
 export const handler = async (event: SQSEvent) => {
 	const container = setupDependencyInjection();

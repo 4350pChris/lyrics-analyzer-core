@@ -1,5 +1,5 @@
 import test from 'ava';
-import {Song} from '@/domain/entities/song.entity.js';
+import {Song} from '@/domain/entities/song.entity';
 
 const makeSong = (name: string, text: string) => new Song(1, name, text, 'url');
 
