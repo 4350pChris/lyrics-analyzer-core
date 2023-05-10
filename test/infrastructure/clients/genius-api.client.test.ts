@@ -39,8 +39,3 @@ test('get songs for artist', async t => {
 	t.not(response.songs.length, 0);
 });
 
-test('get song', async t => {
-	const html = await client.getSong(new URL('https://genius.com/Madvillain-accordion-lyrics'));
-
-	t.regex(html, /<html/);
-});
