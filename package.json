@@ -20,8 +20,8 @@
   "scripts": {
     "build": "rimraf dist && tsc",
     "lint": "xo",
-    "test": "xo && NODE_OPTIONS='--loader=tsx --no-warnings' c8 ava",
-    "test:watch": "xo && NODE_OPTIONS='--loader=tsx --no-warnings' ava --watch"
+    "test": "xo && c8 ava",
+    "test:watch": "xo && ava --watch"
   },
   "dependencies": {
     "@middy/core": "^4.4.0",
@@ -49,7 +49,6 @@
     "testdouble": "^3.18.0",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
-    "tsx": "^3.12.7",
     "typescript": "^5.0.4",
     "xo": "^0.54.2"
   },
@@ -57,9 +56,15 @@
     "files": [
       "test/**/*.ts"
     ],
-    "extensions": {
-      "ts": "module"
-    }
+    "extensions": [
+      "ts"
+    ],
+    "environmentVariables": {
+      "TS_NODE_LOG_ERROR": "true"
+    },
+    "require": [
+      "ts-node/register"
+    ]
   },
   "xo": {
     "rules": {
