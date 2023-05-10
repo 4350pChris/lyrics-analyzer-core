@@ -1,20 +1,22 @@
 import test from 'ava';
+import td from 'testdouble';
 import {ParseLyrics} from '@/application/usecases/analyze-lyrics/parse-lyrics.usecase';
-import {type ParsedSongsDto} from '@/application/dtos/parsed-songs.dto';
 import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface';
+import {type ProcessTracker} from '@/application/interfaces/process-tracker.interface';
+import {type Queue} from '@/application/interfaces/queue.interface';
+
+const setupMocks = () => ({
+	lyricsApiService: td.object<LyricsApiService>(),
+	queue: td.object<Queue>(),
+	processTracker: td.object<ProcessTracker>(),
+});
 
 test('Should parse lyrics and push the result to a queue', async t => {
-	const parseLyrics = new ParseLyrics({
-		async parseLyrics() {
-			return 'lyrics';
-		},
-	} as unknown as LyricsApiService, {
-		async publish(value: string) {
-			const {artistId, songs} = JSON.parse(value) as ParsedSongsDto;
-			t.is(songs[0].text, 'lyrics');
-			t.is(artistId, '1');
-		},
-	});
+	const {lyricsApiService, queue, processTracker} = setupMocks();
+	const parseLyrics = new ParseLyrics(lyricsApiService, queue, processTracker);
+
+	td.when(lyricsApiService.parseLyrics(td.matchers.argThat((url: URL) => url.pathname === '/1') as URL)).thenResolve('lyrics');
+	td.when(queue.publish(td.matchers.isA(String) as string)).thenResolve();
 
 	await parseLyrics.execute({
 		artistId: '1',
@@ -22,8 +24,16 @@ test('Should parse lyrics and push the result to a queue', async t => {
 			id: 1,
 			title: 'title',
 			url: 'https://genius.com/1',
+		}, {
+			id: 2,
+			title: 'title',
+			url: 'https://genius.com/2',
 		}],
 	});
+
+	t.is(td.explain(lyricsApiService.parseLyrics).callCount, 2);
+	t.is(td.explain(queue.publish).callCount, 1);
+	t.is(td.explain(processTracker.progress).callCount, 1);
 
 	t.pass();
 });

@@ -1,6 +1,6 @@
 export type ProcessTracker = {
-	start(): Promise<void>;
-	progress(): Promise<void>;
-	isRunning(): Promise<boolean>;
-	isFinished(): Promise<boolean>;
+	start(processId: number | string, total: number): Promise<void>;
+	progress(processId: number | string, current: number): Promise<void>;
+	isRunning(processId: number | string,): Promise<boolean>;
+	isFinished(processId: number | string,): Promise<boolean>;
 };
