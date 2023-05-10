@@ -1,8 +1,9 @@
+import middy from '@middy/core';
+import httpJsonBodyParser from '@middy/http-json-body-parser';
 import {type ValidatedEventAPIGatewayProxyEvent, formatJSONResponse} from '../../libs/api-gateway';
 import type schema from './schema';
 import {withDependencies} from '@/presentation/libs/with-dependencies';
 import {type AnalyzeLyrics} from '@/application/usecases/analyze-lyrics/analyze-lyrics.usecase';
-import {middyfy} from '@/presentation/libs/lambda';
 
 const handler = withDependencies<ValidatedEventAPIGatewayProxyEvent<typeof schema>>((
 	analyzeLyricsUseCase: AnalyzeLyrics,
@@ -14,5 +15,5 @@ const handler = withDependencies<ValidatedEventAPIGatewayProxyEvent<typeof schem
 	});
 });
 
-export const main = middyfy(handler);
+export const main = middy(handler).use(httpJsonBodyParser());
 

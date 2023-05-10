@@ -1,14 +1,16 @@
-import type {SQSHandler} from 'aws-lambda';
+import middy from '@middy/core';
+import sqsJsonBodyParser from '@middy/sqs-json-body-parser';
+import type schema from './schema';
 import {type ParseLyrics} from '@/application/usecases/analyze-lyrics/parse-lyrics.usecase';
-import {type ParsedSongsDto} from '@/application/dtos/parsed-songs.dto';
 import {withDependencies} from '@/presentation/libs/with-dependencies';
+import {type ValidatedEventSQSEvent} from '@/presentation/libs/sqs';
 
-export const main = withDependencies<SQSHandler>((
+const handler = withDependencies<ValidatedEventSQSEvent<typeof schema>>((
 	parseLyricsUseCase: ParseLyrics,
 ) => async event => {
-	const parsedDtos = event.Records.map(({body}) => JSON.parse(body) as ParsedSongsDto);
-
-	const jobs = parsedDtos.map(async record => parseLyricsUseCase.execute(record));
+	const jobs = event.Records.map(async ({body}) => parseLyricsUseCase.execute(body));
 
 	await Promise.all(jobs);
 });
+
+export const main = middy(handler).use(sqsJsonBodyParser());

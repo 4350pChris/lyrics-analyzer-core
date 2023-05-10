@@ -7,11 +7,11 @@ export class DynamooseProcessRepository implements ProcessTableRepository {
 	) {}
 
 	async save(processId: string, total: number): Promise<void> {
-		await this.processModel.create({processId, total});
+		await this.processModel.create({id: processId, total});
 	}
 
 	async update(processId: string, current: number): Promise<void> {
-		await this.processModel.update({processId}, {total: current});
+		await this.processModel.update({id: processId}, {total: current});
 	}
 
 	async get(processId: string): Promise<number> {

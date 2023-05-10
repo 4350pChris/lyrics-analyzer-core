@@ -7,5 +7,6 @@
   },
   "[typescript]": {
     "editor.defaultFormatter": "samverschueren.linter-xo"
-  }
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

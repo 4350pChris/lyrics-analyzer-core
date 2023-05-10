@@ -28,6 +28,7 @@ const serverlessConfiguration: AWS & Lift = {
 			NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
 			GENIUS_ACCESS_TOKEN: '${env:GENIUS_ACCESS_TOKEN}',
 			ARTIST_TABLE_NAME: '${self:service}-Artist-${sls:stage}',
+			PROCESS_TABLE_NAME: '${self:service}-Process-${sls:stage}',
 		},
 		iam: {
 			role: {
@@ -35,7 +36,7 @@ const serverlessConfiguration: AWS & Lift = {
 					{
 						Effect: 'Allow',
 						Action: ['dynamodb:PutItem', 'dynamodb:Get*', 'dynamodb:Scan*', 'dynamodb:UpdateItem', 'dynamodb:DeleteItem'],
-						Resource: 'arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-Artist-${sls:stage}',
+						Resource: 'arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-*-${sls:stage}',
 					},
 				],
 			},
@@ -47,6 +48,25 @@ const serverlessConfiguration: AWS & Lift = {
 				Type: 'AWS::DynamoDB::Table',
 				Properties: {
 					TableName: '${self:service}-Artist-${sls:stage}',
+					BillingMode: 'PAY_PER_REQUEST',
+					AttributeDefinitions: [
+						{
+							AttributeName: 'id',
+							AttributeType: 'S',
+						},
+					],
+					KeySchema: [
+						{
+							AttributeName: 'id',
+							KeyType: 'HASH',
+						},
+					],
+				},
+			},
+			ProcessTable: {
+				Type: 'AWS::DynamoDB::Table',
+				Properties: {
+					TableName: '${self:service}-Process-${sls:stage}',
 					BillingMode: 'PAY_PER_REQUEST',
 					AttributeDefinitions: [
 						{
@@ -91,6 +111,7 @@ const serverlessConfiguration: AWS & Lift = {
 			environment: {
 				QUEUE_URL: '${construct:fetch-songs-queue.queueUrl}',
 			},
+			memorySize: 512,
 		},
 	},
 	package: {individually: true},

@@ -7,12 +7,15 @@ dependencies:
   '@middy/http-json-body-parser':
     specifier: ^4.4.0
     version: 4.4.0
+  '@middy/sqs-json-body-parser':
+    specifier: ^2.5.7
+    version: 2.5.7
   awilix:
     specifier: ^8.0.1
     version: 8.0.1
   aws-sdk:
-    specifier: ^2.1374.0
-    version: 2.1374.0
+    specifier: ^2.1376.0
+    version: 2.1376.0
   dynamoose:
     specifier: ^3.2.0
     version: 3.2.0
@@ -25,8 +28,8 @@ dependencies:
 
 devDependencies:
   '@serverless/typescript':
-    specifier: ^3.29.0
-    version: 3.29.0
+    specifier: ^3.30.1
+    version: 3.30.1
   '@types/aws-lambda':
     specifier: ^8.10.115
     version: 8.10.115
@@ -2128,6 +2131,18 @@ packages:
       '@middy/util': 4.4.0
     dev: false
 
+  /@middy/sqs-json-body-parser@2.5.7:
+    resolution: {integrity: sha512-w2DHG667BQtFBr36p699VFhyNdTovfKcUvMT6vTsU2vFmEX7tQmgePvdQr4sP0IRjJAXCn/t8QOpd9FNwMgg3g==}
+    engines: {node: '>=12'}
+    dependencies:
+      '@middy/util': 2.5.7
+    dev: false
+
+  /@middy/util@2.5.7:
+    resolution: {integrity: sha512-4CwEVfUyvF0n1qtEzrcrV56L7iQYyt6zChYQ9N5/uvQgAhdExLzOinW6ki1ZjTMgaMypqdHNUyDAEiAuNJLRUw==}
+    engines: {node: '>=12'}
+    dev: false
+
   /@middy/util@4.4.0:
     resolution: {integrity: sha512-aIfBlw2ydpp4vh1907j8LP96ulVJrdlx5RWlFKTQOVxPDocziMWDDN3zct8FU4D4YMR6UIYj83sIXWVeCzw4ew==}
     engines: {node: '>=16'}
@@ -2223,8 +2238,8 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@serverless/typescript@3.29.0:
-    resolution: {integrity: sha512-q0D+nNZI1zwebAN9m/6rQij+FdampYCY1bs712UNZTJ2yd8tkASHZqRhcwf+gmtquUWsg1Ws7l73cv3fzSDtzg==}
+  /@serverless/typescript@3.30.1:
+    resolution: {integrity: sha512-P14spozEjEhfqPdCi7h0kzlmv0CH4fVPMQKMBaAEKlWT9Qq6gqDOzRP8RNLojliAXt+bKnO1Ns5Z7+HrcuRK4Q==}
     dev: true
 
   /@serverless/utils@6.11.1:
@@ -2882,8 +2897,8 @@ packages:
       - table
       - yaml
 
-  /aws-sdk@2.1374.0:
-    resolution: {integrity: sha512-Q7TExvBskRM23GfE1iy0GRxpUF+d9LY7ggmdHvL+2gX/QTzxSYaHHRPa8MNzFtzZLz+BDcDIgAcMjYKsrm18Rw==}
+  /aws-sdk@2.1376.0:
+    resolution: {integrity: sha512-ja/Xnft8BDcDEz786VJFPrWpuWpOgsA+QzBAwzsjYeIolQ/vEs/bbXkoS085fOoeAPEhYWQh9wog7cVvrQPJFQ==}
     engines: {node: '>= 10.0.0'}
     dependencies:
       buffer: 4.9.2
@@ -7346,7 +7361,7 @@ packages:
       ajv: 8.12.0
       ajv-formats: 2.1.1(ajv@8.12.0)
       archiver: 5.3.1
-      aws-sdk: 2.1374.0
+      aws-sdk: 2.1376.0
       bluebird: 3.7.2
       cachedir: 2.3.0
       chalk: 4.1.2
