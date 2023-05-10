@@ -16,7 +16,7 @@ export class ArtistProcessTracker implements ProcessTracker {
 
 	async isRunning(processId: number | string): Promise<boolean> {
 		const left = await this.processRepository.get(processId.toString());
-		return left > 0;
+		return Boolean(left && left > 0);
 	}
 
 	async isFinished(processId: number | string): Promise<boolean> {

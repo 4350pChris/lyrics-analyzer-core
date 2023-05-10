@@ -1,4 +1,5 @@
 import dynamoose from 'dynamoose';
+import {Item} from 'dynamoose/dist/Item';
 
 const processSchema = new dynamoose.Schema(
 	{
@@ -16,6 +17,12 @@ const processSchema = new dynamoose.Schema(
 	},
 );
 
-export const getProcessModel = (processTableName: string) => dynamoose.model('Process', processSchema, {
-	tableName: processTableName,
+export class ProcessModelItem extends Item {
+	id!: string;
+	total!: number;
+}
+
+export const getProcessModel = (processTableName: string) => dynamoose.model<ProcessModelItem>(processTableName, processSchema, {
+	create: false,
+	waitForActive: false,
 });

@@ -42,6 +42,7 @@ const artistSchema = new dynamoose.Schema(
 	},
 );
 
-export const getArtistModel = (artistTableName: string) => dynamoose.model('Artist', artistSchema, {
-	tableName: artistTableName,
+export const getArtistModel = (artistTableName: string) => dynamoose.model(artistTableName, artistSchema, {
+	create: false,
+	waitForActive: false,
 });

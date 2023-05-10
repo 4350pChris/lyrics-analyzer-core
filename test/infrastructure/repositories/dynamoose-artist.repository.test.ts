@@ -1,79 +1,59 @@
 
 import test from 'ava';
-import dynamoose from 'dynamoose';
+import td from 'testdouble';
 import type {AnyItem} from 'dynamoose/dist/Item';
+import {type ScanResponse} from 'dynamoose/dist/ItemRetriever';
 import {DynamooseArtistRepository} from '@/infrastructure/repositories/dynamoose-artist.repository';
-import {getArtistModel} from '@/infrastructure/models/artist.model';
+import {type getArtistModel} from '@/infrastructure/models/artist.model';
 import {ArtistMapper} from '@/infrastructure/mappers/artist.mapper';
+import {type ArtistAggregate} from '@/domain/entities/artist.aggregate';
 
-const genId = ((i = 0) => () => `${++i}`)();
-
-const getDummyArtist = () => ({
-	id: genId(),
-	name: 'name',
-	description: 'description',
-	songs: [
-		{
-			name: 'song name',
-			text: 'song text',
-		},
-	],
-} satisfies Partial<AnyItem>);
-
-const mapper = new ArtistMapper();
-const artistModel = getArtistModel('artistTable');
-const repo = new DynamooseArtistRepository(mapper, artistModel);
-
-let savedArtists: string[] = [];
-
-test.before(() => {
-	dynamoose.aws.ddb.local();
+const setupMocks = () => ({
+	artistModel: td.object<ReturnType<typeof getArtistModel>>(),
+	mapper: td.instance(ArtistMapper),
 });
 
-test.afterEach.always(async () => {
-	if (savedArtists.length === 0) {
-		return;
-	}
+test('List all', async t => {
+	const {artistModel, mapper} = setupMocks();
+	const repo = new DynamooseArtistRepository(mapper, artistModel);
 
-	await artistModel.batchDelete(savedArtists);
-	savedArtists = [];
+	td.when(artistModel.scan()).thenReturn({
+		exec: async () => [1, 2, 3] as unknown as ScanResponse<AnyItem>,
+	});
+
+	td.when(mapper.toDomain(td.matchers.anything() as AnyItem)).thenReturn(td.object<ArtistAggregate>());
+
+	await repo.list();
+
+	t.is(td.explain(artistModel.scan).callCount, 1);
+	t.is(td.explain(mapper.toDomain).callCount, 3);
 });
 
-test.serial('List all', async t => {
-	const artists = [
-		getDummyArtist(),
-		getDummyArtist(),
-		getDummyArtist(),
-	];
+test('Save artist', async t => {
+	const {artistModel, mapper} = setupMocks();
+	const repo = new DynamooseArtistRepository(mapper, artistModel);
 
-	await artistModel.batchPut(artists);
+	td.when(artistModel.create(td.matchers.anything() as Partial<AnyItem>)).thenResolve(td.object<AnyItem>());
+	td.when(mapper.toModel(td.matchers.anything() as ArtistAggregate)).thenReturn(td.object<AnyItem>());
+	td.when(mapper.toDomain(td.matchers.anything() as AnyItem)).thenReturn(td.object<ArtistAggregate>());
 
-	savedArtists.push(...artists.map(artist => artist.id));
+	await repo.save(td.object());
 
-	const listedArtists = await repo.list();
-	t.is(listedArtists.length, artists.length);
+	t.is(td.explain(artistModel.create).callCount, 1);
+	t.is(td.explain(mapper.toModel).callCount, 1);
+	t.is(td.explain(mapper.toDomain).callCount, 1);
 });
 
-test.serial('Save artist', async t => {
-	const dummy = getDummyArtist();
-	await repo.save(mapper.toDomain(dummy));
-	savedArtists.push(dummy.id);
-	t.pass();
-});
+test('Get artist by id', async t => {
+	const {artistModel, mapper} = setupMocks();
+	const repo = new DynamooseArtistRepository(mapper, artistModel);
 
-test.serial('Get artist by id', async t => {
-	const expected = getDummyArtist();
-	const artists = [
-		expected,
-		getDummyArtist(),
-		getDummyArtist(),
-		getDummyArtist(),
-	];
+	td.when(artistModel.get('1')).thenResolve(td.object<AnyItem>());
+	td.when(mapper.toDomain(td.matchers.anything() as AnyItem)).thenReturn(td.object<ArtistAggregate>());
 
-	await artistModel.batchPut(artists);
-	savedArtists.push(...artists.map(artist => artist.id));
+	await repo.getById(1);
 
-	const result = await repo.getById(Number.parseInt(expected.id));
-
-	t.deepEqual(result, mapper.toDomain(expected));
+	t.is(td.explain(artistModel.get).callCount, 1);
+	t.is(td.explain(artistModel.get).calls[0].args[0], '1');
+	t.is(td.explain(mapper.toDomain).callCount, 1);
 });

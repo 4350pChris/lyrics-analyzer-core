@@ -1,9 +1,10 @@
-import {type getProcessModel} from '../models/process.model';
+import {type ModelType} from 'dynamoose/dist/General';
+import {type ProcessModelItem} from '../models/process.model';
 import {type ProcessTableRepository} from '@/application/interfaces/process-tracker-repository.interface';
 
 export class DynamooseProcessRepository implements ProcessTableRepository {
 	constructor(
-		private readonly processModel: ReturnType<typeof getProcessModel>,
+		private readonly processModel: ModelType<ProcessModelItem>,
 	) {}
 
 	async save(processId: string, total: number): Promise<void> {
@@ -14,8 +15,8 @@ export class DynamooseProcessRepository implements ProcessTableRepository {
 		await this.processModel.update({id: processId}, {total: current});
 	}
 
-	async get(processId: string): Promise<number> {
-		const result = await this.processModel.get(processId);
-		return result.total as number;
+	async get(processId: string): Promise<number | undefined> {
+		const item = await this.processModel.get(processId);
+		return item?.total;
 	}
 }
