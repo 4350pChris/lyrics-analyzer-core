@@ -21,9 +21,7 @@ jobs:
           node-version: "18.x"
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-      - run: pnpm test -- test/domain
-      - run: pnpm test -- test/infrastructure
-      - run: pnpm test -- test/application
+      - run: pnpm test
 
   deploy:
     runs-on: ubuntu-latest
