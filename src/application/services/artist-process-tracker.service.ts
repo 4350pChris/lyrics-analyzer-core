@@ -10,8 +10,13 @@ export class ArtistProcessTracker implements ProcessTracker {
 		await this.processRepository.save(processId.toString(), total);
 	}
 
-	async progress(processId: number | string, current: number): Promise<void> {
-		await this.processRepository.update(processId.toString(), current);
+	async decrement(processId: number | string, value: number): Promise<void> {
+		const oldValue = await this.processRepository.get(processId.toString());
+		if (!oldValue) {
+			throw new Error('Process not found');
+		}
+
+		await this.processRepository.update(processId.toString(), oldValue - value);
 	}
 
 	async isRunning(processId: number | string): Promise<boolean> {

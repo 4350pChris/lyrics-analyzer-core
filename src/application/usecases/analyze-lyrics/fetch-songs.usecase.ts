@@ -34,6 +34,8 @@ export class FetchSongs implements UseCase {
 			return this.queueService.publish(JSON.stringify(dto));
 		}));
 
+		await this.processTracker.start(artistId, songs.length);
+
 		console.info(`Saving artist ${artistId} to database`);
 
 		const apiArtist = await this.lyricsApiService.getArtist(artistId);

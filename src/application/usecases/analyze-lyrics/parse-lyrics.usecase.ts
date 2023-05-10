@@ -28,6 +28,6 @@ export class ParseLyrics implements UseCase {
 		const dto: ParsedSongsDto = {artistId, songs: successfulSongs};
 		await this.queueService.publish(JSON.stringify(dto));
 
-		await this.processTracker.progress(artistId, songs.length);
+		await this.processTracker.decrement(artistId, songs.length);
 	}
 }
