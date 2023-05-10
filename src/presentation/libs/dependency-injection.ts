@@ -6,6 +6,10 @@ import {GeniusService} from '@/infrastructure/services/genius.service';
 import {ArtistMapper} from '@/infrastructure/mappers/artist.mapper';
 import {getArtistModel} from '@/infrastructure/models/artist.model';
 import {GeniusApiClient} from '@/infrastructure/clients/genius-api.client';
+import {SqsQueueService} from '@/infrastructure/services/sqs-queue.service';
+import {ArtistProcessTracker} from '@/application/services/artist-process-tracker.service';
+import {DynamooseProcessRepository} from '@/infrastructure/repositories/dynamoose-process.repository';
+import {getProcessModel} from '@/infrastructure/models/process.model';
 
 export const setupDependencyInjection = () => {
 	const container = createContainer({
@@ -22,6 +26,11 @@ export const setupDependencyInjection = () => {
 		artistTableName: asValue(process.env.ARTIST_TABLE_NAME),
 		artistModel: asFunction(getArtistModel).singleton(),
 		sqs: asFunction(() => new SQS()),
+		queueService: asClass(SqsQueueService),
+		processTableName: asValue(process.env.PROCESS_TABLE_NAME),
+		processModel: asFunction(getProcessModel).singleton(),
+		processRepository: asClass(DynamooseProcessRepository),
+		processTracker: asClass(ArtistProcessTracker),
 	});
 
 	return container;

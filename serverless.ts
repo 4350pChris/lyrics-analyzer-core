@@ -2,7 +2,7 @@
 /* eslint-disable no-template-curly-in-string */
 import type {AWS} from '@serverless/typescript';
 import type {Lift} from 'serverless-lift';
-import {analyzeLyrics, parseLyrics} from './src/presentation/functions/index';
+import {analyzeLyrics, parseLyrics, fetchSongs} from './src/presentation/functions/index';
 
 const serverlessConfiguration: AWS & Lift = {
 	org: '4350pchris',
@@ -65,9 +65,23 @@ const serverlessConfiguration: AWS & Lift = {
 		},
 	},
 	constructs: {
-		'song-chunk-queue': {
+		'fetch-songs-queue': {
 			type: 'queue',
-			worker: parseLyrics,
+			worker: {
+				handler: fetchSongs.handler,
+				environment: {
+					QUEUE_URL: '${construct:parse-songs-queue.queueUrl}}',
+				},
+			},
+		},
+		'parse-songs-queue': {
+			type: 'queue',
+			worker: {
+				handler: parseLyrics.handler,
+				environment: {
+					QUEUE_URL: '${construct:parse-songs-queue.queueUrl}}',
+				},
+			},
 		},
 	},
 	// Import the function via paths
@@ -75,7 +89,7 @@ const serverlessConfiguration: AWS & Lift = {
 		analyzeLyrics: {
 			...analyzeLyrics,
 			environment: {
-				QUEUE_URL: '${construct:song-chunk-queue.queueUrl}',
+				QUEUE_URL: '${construct:fetch-songs-queue.queueUrl}',
 			},
 		},
 	},
