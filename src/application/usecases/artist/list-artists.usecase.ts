@@ -8,7 +8,7 @@ export class ListArtists implements UseCase {
 	) {}
 
 	async execute(): Promise<ArtistAggregate[]> {
-		const artists = this.artistRepository.list();
+		const artists = await this.artistRepository.list();
 		return artists;
 	}
 }

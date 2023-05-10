@@ -34,6 +34,4 @@ test('Should parse lyrics and push the result to a queue', async t => {
 	t.is(td.explain(lyricsApiService.parseLyrics).callCount, 2);
 	t.is(td.explain(queueService.publish).callCount, 1);
 	t.is(td.explain(processTracker.progress).callCount, 1);
-
-	t.pass();
 });
