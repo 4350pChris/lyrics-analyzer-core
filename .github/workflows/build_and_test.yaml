@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: pnpm/action-setup@0609f0983b7a228f052f81ef4c3d6510cae254ad
         with:
-          version: 8.4.0
+          version: 8.5.0
       - uses: actions/setup-node@v3
         with:
           node-version: "18.x"
@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: pnpm/action-setup@0609f0983b7a228f052f81ef4c3d6510cae254ad
         with:
-          version: 8.4.0
+          version: 8.5.0
       - uses: actions/setup-node@v3
         with:
           node-version: "18.x"
