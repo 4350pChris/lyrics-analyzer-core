@@ -27,6 +27,11 @@ const services = [
 	'processModel',
 	'processRepository',
 	'processTracker',
+	'searchArtistsUseCase',
+	'listArtistsUseCase',
+	'analyzeLyricsUseCase',
+	'fetchSongsUseCase',
+	'parseLyricsUseCase',
 ];
 
 for (const service of services) {
