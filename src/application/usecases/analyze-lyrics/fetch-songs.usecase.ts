@@ -25,7 +25,6 @@ export class FetchSongs implements UseCase {
 		console.info(`Fetching songs for artist ${artistId}`);
 
 		const songs = await this.lyricsApiService.retrieveSongsForArtist(artistId);
-		const apiArtist = await this.lyricsApiService.getArtist(artistId);
 		const chunks = this.chunkSongs(songs);
 
 		console.info(`Sending ${chunks.length} chunks to queue ${process.env.QUEUE_URL!}`);
@@ -36,6 +35,8 @@ export class FetchSongs implements UseCase {
 		}));
 
 		console.info(`Saving artist ${artistId} to database`);
+
+		const apiArtist = await this.lyricsApiService.getArtist(artistId);
 
 		const artist = new ArtistAggregate(apiArtist.name, apiArtist.description, apiArtist.imageUrl);
 		artist.id = artistId;

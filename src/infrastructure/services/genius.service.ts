@@ -14,7 +14,12 @@ export class GeniusService implements LyricsApiService {
 
 	async getArtist(artistId: number): Promise<ArtistDetailDto> {
 		const {response} = await this.geniusApiClient.getArtist(artistId);
-		return response.artist;
+		const artist: ArtistDetailDto = {
+			name: response.artist.name,
+			imageUrl: response.artist.image_url,
+			description: response.artist.description.plain,
+		};
+		return artist;
 	}
 
 	async searchArtists(query: string): Promise<SearchArtistsDto[]> {

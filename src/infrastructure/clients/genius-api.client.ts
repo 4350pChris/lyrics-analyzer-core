@@ -21,7 +21,12 @@ export class GeniusApiClient implements GeniusApi {
 	}
 
 	async getArtist(artistId: number): Promise<ArtistDetailResponse> {
-		return this.client<ArtistDetailResponse>(`/artists/${artistId}`);
+		return this.client<ArtistDetailResponse>(`/artists/${artistId}`, {
+			params: {
+				// eslint-disable-next-line @typescript-eslint/naming-convention
+				text_format: 'plain',
+			},
+		});
 	}
 
 	async search(query: string): Promise<SearchResponse> {

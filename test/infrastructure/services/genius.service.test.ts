@@ -6,8 +6,6 @@ import type {GeniusApi} from '@/infrastructure/interfaces/genius-api.interface';
 import {type SearchResponse} from '@/infrastructure/dtos/search-response.dto';
 import {type GeniusSongDto} from '@/infrastructure/dtos/genius-song.dto';
 import {type LyricsParser} from '@/infrastructure/interfaces/lyrics-parser.interface';
-import {type ArtistDetailResponse} from '@/infrastructure/dtos/artist-detail-response.dto';
-import {type ArtistSongsResponse} from '@/infrastructure/dtos/artist-songs-response.dto';
 
 const getMockSong: () => Omit<GeniusSongDto, 'primary_artist'> = () => ({
 	id: 3810,
@@ -24,7 +22,7 @@ test('get artist should return artist from response', async t => {
 	const artist = {
 		id: 151,
 		name: 'MF DOOM',
-		description: 'ALL CAPS',
+		description: {plain: 'ALL CAPS'},
 		image_url: 'url',
 	};
 	const {client, lyricsParser} = setupMocks();
@@ -41,7 +39,11 @@ test('get artist should return artist from response', async t => {
 
 	const responseArtist = await geniusService.getArtist(150);
 
-	t.like(responseArtist, artist);
+	t.deepEqual(responseArtist, {
+		name: artist.name,
+		description: artist.description.plain,
+		imageUrl: artist.image_url,
+	});
 });
 
 test('Search artists should consolidate artists from songs', async t => {
