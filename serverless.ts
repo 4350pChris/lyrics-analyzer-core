@@ -93,6 +93,7 @@ const serverlessConfiguration: AWS & Lift = {
 					QUEUE_URL: '${construct:parse-songs-queue.queueUrl}',
 				},
 				timeout: 30,
+				logRetentionInDays: 14,
 			},
 		},
 		'parse-songs-queue': {
@@ -103,6 +104,7 @@ const serverlessConfiguration: AWS & Lift = {
 					QUEUE_URL: '${construct:parse-songs-queue.queueUrl}',
 				},
 				timeout: 30,
+				logRetentionInDays: 14,
 			},
 		},
 	},
@@ -114,6 +116,7 @@ const serverlessConfiguration: AWS & Lift = {
 				QUEUE_URL: '${construct:fetch-songs-queue.queueUrl}',
 			},
 			memorySize: 512,
+			logRetentionInDays: 14,
 		},
 	},
 	package: {individually: true},
