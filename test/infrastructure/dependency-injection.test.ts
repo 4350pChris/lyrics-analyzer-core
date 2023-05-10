@@ -1,14 +1,34 @@
-import test from 'ava';
+import test, {type Macro, type ExecutionContext} from 'ava';
 import {setupDependencyInjection} from '@/presentation/libs/dependency-injection';
-import {type ArtistRepository} from '@/domain/interfaces/artist-repository.interface';
 
 test('should setup dependency injection and not fail', t => {
 	setupDependencyInjection();
 	t.pass();
 });
 
-test('should setup dependency injection and resolve services', t => {
-	const container = setupDependencyInjection();
-	const artistRepository = container.resolve<ArtistRepository>('artistRepository');
-	t.truthy(artistRepository);
-});
+const resolvingMacro: Macro<[string]> = {
+	exec(t: ExecutionContext, service: string) {
+		const container = setupDependencyInjection();
+		const resolved = container.resolve<unknown>(service);
+		t.truthy(resolved);
+	},
+	title: (_: string | undefined, service: string) => `should resolve ${service}`,
+};
+
+const services = [
+	'artistRepository',
+	'geniusBaseUrl',
+	'geniusApiClient',
+	'lyricsApiService',
+	'artistMapper',
+	'artistModel',
+	'sqs',
+	'queueService',
+	'processModel',
+	'processRepository',
+	'processTracker',
+];
+
+for (const service of services) {
+	test(resolvingMacro, service);
+}

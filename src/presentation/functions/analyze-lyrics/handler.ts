@@ -1,5 +1,3 @@
-import process from 'node:process';
-import {asValue} from 'awilix';
 import {type ValidatedEventAPIGatewayProxyEvent, formatJSONResponse} from '../../libs/api-gateway';
 import {setupDependencyInjection} from '../../libs/dependency-injection';
 import type schema from './schema';
@@ -8,13 +6,7 @@ import {middyfy} from '@/presentation/libs/lambda';
 import {type Queue} from '@/application/interfaces/queue.interface';
 
 const handler: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async event => {
-	const queueUrl = process.env.QUEUE_URL;
-	if (!queueUrl) {
-		throw new Error('QUEUE_URL environment variable is required, check serverless config');
-	}
-
 	const container = setupDependencyInjection();
-	container.register('queueUrl', asValue(queueUrl));
 	const queue = container.resolve<Queue>('queueService');
 
 	const analyzeLyrics = new AnalyzeLyrics(queue);

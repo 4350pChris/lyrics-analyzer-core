@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import test from 'ava';
+import td from 'testdouble';
 import {GeniusService} from '@/infrastructure/services/genius.service';
 import type {GeniusApi} from '@/infrastructure/interfaces/genius-api.interface';
 import {type SearchResponse} from '@/infrastructure/dtos/search-response.dto';
@@ -14,19 +15,9 @@ const getMockSong: () => Omit<GeniusSongDto, 'primary_artist'> = () => ({
 	url: 'https://genius.com/Madvillain-accordion-lyrics',
 });
 
-const createMockClient: () => GeniusApi = () => ({
-	async search(query: string): Promise<SearchResponse> {
-		throw new Error('Function not implemented.');
-	},
-	async getSongsForArtist(artistId: number, page: number): Promise<ArtistSongsResponse> {
-		throw new Error('Function not implemented.');
-	},
-	async getSong(url: URL): Promise<string> {
-		throw new Error('Function not implemented.');
-	},
-	async getArtist(artistId: number): Promise<ArtistDetailResponse> {
-		throw new Error('Function not implemented.');
-	},
+const setupMocks = () => ({
+	client: td.object<GeniusApi>(),
+	lyricsParser: td.object<LyricsParser>(),
 });
 
 test('get artist should return artist from response', async t => {
@@ -36,8 +27,8 @@ test('get artist should return artist from response', async t => {
 		description: 'ALL CAPS',
 		image_url: 'url',
 	};
-	const mockClient = createMockClient();
-	mockClient.getArtist = async artistId => ({
+	const {client, lyricsParser} = setupMocks();
+	td.when(client.getArtist(td.matchers.isA(Number) as number)).thenResolve({
 		meta: {
 			status: 200,
 		},
@@ -45,7 +36,8 @@ test('get artist should return artist from response', async t => {
 			artist,
 		},
 	});
-	const geniusService = new GeniusService(mockClient, {} as LyricsParser);
+
+	const geniusService = new GeniusService(client, lyricsParser);
 
 	const responseArtist = await geniusService.getArtist(150);
 
@@ -53,8 +45,8 @@ test('get artist should return artist from response', async t => {
 });
 
 test('Search artists should consolidate artists from songs', async t => {
-	const mockClient = createMockClient();
-	mockClient.search = async query => ({
+	const {client, lyricsParser} = setupMocks();
+	td.when(client.search('MF DOOM')).thenResolve({
 		meta: {
 			status: 200,
 		},
@@ -90,14 +82,14 @@ test('Search artists should consolidate artists from songs', async t => {
 			],
 		},
 	} satisfies SearchResponse);
-	const geniusService = new GeniusService(mockClient, {} as LyricsParser);
+	const geniusService = new GeniusService(client, lyricsParser);
 	const artists = await geniusService.searchArtists('MF DOOM');
 	t.is(artists.length, 2);
 });
 
 test('Get paginated songs should return a list of songs for parsing', async t => {
-	const mockClient = createMockClient();
-	mockClient.getSongsForArtist = async (artistId, page) => ({
+	const {client, lyricsParser} = setupMocks();
+	td.when(client.getSongsForArtist(150, 1)).thenResolve({
 		meta: {
 			status: 200,
 		},
@@ -122,19 +114,19 @@ test('Get paginated songs should return a list of songs for parsing', async t =>
 		},
 	});
 
-	const geniusService = new GeniusService(mockClient, {} as LyricsParser);
+	const geniusService = new GeniusService(client, lyricsParser);
 
 	const songs = await geniusService.retrieveSongsForArtist(150);
 	t.is(songs.length, 1);
 });
 
 test('Parse lyrics should return lyrics from parser', async t => {
-	const mockClient = createMockClient();
-	mockClient.getSong = async () => 'text';
-	const mockParser = {
-		parse: () => 'parsed',
-	};
-	const geniusService = new GeniusService(mockClient, mockParser as LyricsParser);
+	const {client, lyricsParser} = setupMocks();
+
+	td.when(client.getSong(td.matchers.isA(URL) as URL)).thenResolve('html');
+	td.when(lyricsParser.parse('html')).thenResolve('parsed');
+
+	const geniusService = new GeniusService(client, lyricsParser);
 	const parsed = await geniusService.parseLyrics(new URL('http://localhost'));
 
 	t.is(parsed, 'parsed');

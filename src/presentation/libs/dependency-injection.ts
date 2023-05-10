@@ -26,6 +26,7 @@ export const setupDependencyInjection = () => {
 		artistTableName: asValue(process.env.ARTIST_TABLE_NAME),
 		artistModel: asFunction(getArtistModel).singleton(),
 		sqs: asFunction(() => new SQS()),
+		queueUrl: asValue(process.env.QUEUE_URL),
 		queueService: asClass(SqsQueueService),
 		processTableName: asValue(process.env.PROCESS_TABLE_NAME),
 		processModel: asFunction(getProcessModel).singleton(),
