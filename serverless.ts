@@ -90,8 +90,9 @@ const serverlessConfiguration: AWS & Lift = {
 			worker: {
 				handler: fetchSongs.handler,
 				environment: {
-					QUEUE_URL: '${construct:parse-songs-queue.queueUrl}}',
+					QUEUE_URL: '${construct:parse-songs-queue.queueUrl}',
 				},
+				timeout: 30,
 			},
 		},
 		'parse-songs-queue': {
@@ -99,8 +100,9 @@ const serverlessConfiguration: AWS & Lift = {
 			worker: {
 				handler: parseLyrics.handler,
 				environment: {
-					QUEUE_URL: '${construct:parse-songs-queue.queueUrl}}',
+					QUEUE_URL: '${construct:parse-songs-queue.queueUrl}',
 				},
+				timeout: 30,
 			},
 		},
 	},
