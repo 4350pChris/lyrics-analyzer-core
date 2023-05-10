@@ -4,11 +4,11 @@ import {type Queue} from '@/application/interfaces/queue.interface';
 
 export class AnalyzeLyrics implements UseCase {
 	constructor(
-		private readonly queue: Queue,
+		private readonly queueService: Queue,
 	) {}
 
 	async execute(artistId: string): Promise<void> {
 		const dto: AnalyzeLyricsDto = {artistId};
-		await this.queue.publish(JSON.stringify(dto));
+		await this.queueService.publish(JSON.stringify(dto));
 	}
 }

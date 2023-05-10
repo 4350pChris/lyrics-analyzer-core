@@ -7,16 +7,16 @@ import {type Queue} from '@/application/interfaces/queue.interface';
 
 const setupMocks = () => ({
 	lyricsApiService: td.object<LyricsApiService>(),
-	queue: td.object<Queue>(),
+	queueService: td.object<Queue>(),
 	processTracker: td.object<ProcessTracker>(),
 });
 
 test('Should parse lyrics and push the result to a queue', async t => {
-	const {lyricsApiService, queue, processTracker} = setupMocks();
-	const parseLyrics = new ParseLyrics(lyricsApiService, queue, processTracker);
+	const {lyricsApiService, queueService, processTracker} = setupMocks();
+	const parseLyrics = new ParseLyrics(lyricsApiService, queueService, processTracker);
 
 	td.when(lyricsApiService.parseLyrics(td.matchers.argThat((url: URL) => url.pathname === '/1') as URL)).thenResolve('lyrics');
-	td.when(queue.publish(td.matchers.isA(String) as string)).thenResolve();
+	td.when(queueService.publish(td.matchers.isA(String) as string)).thenResolve();
 
 	await parseLyrics.execute({
 		artistId: '1',
@@ -32,7 +32,7 @@ test('Should parse lyrics and push the result to a queue', async t => {
 	});
 
 	t.is(td.explain(lyricsApiService.parseLyrics).callCount, 2);
-	t.is(td.explain(queue.publish).callCount, 1);
+	t.is(td.explain(queueService.publish).callCount, 1);
 	t.is(td.explain(processTracker.progress).callCount, 1);
 
 	t.pass();

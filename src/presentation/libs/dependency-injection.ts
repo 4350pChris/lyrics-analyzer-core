@@ -41,7 +41,6 @@ export const setupDependencyInjection = () => {
 		sqs: asFunction(() => new SQS()).singleton(),
 		queueService: asClass(SqsQueueService),
 		processTracker: asClass(ArtistProcessTracker),
-		queue: asClass(SqsQueueService),
 		// Use cases
 		searchArtistsUseCase: asClass(SearchArtists),
 		listArtistsUseCase: asClass(ListArtists),
