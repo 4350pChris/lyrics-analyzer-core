@@ -21,6 +21,7 @@
     "build": "rimraf dist && tsc",
     "lint": "xo",
     "test": "xo && c8 ava",
+    "test:ci": "xo && c8 --reporter lcov ava",
     "test:watch": "xo && ava --watch"
   },
   "dependencies": {
