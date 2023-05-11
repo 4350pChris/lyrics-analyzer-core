@@ -1,14 +1,12 @@
-import process from 'node:process';
-import {type UseCase} from '../../interfaces/usecase';
 import {type FetchSongsDto} from '@/application/dtos/fetch-songs.dto';
 import {type SongDto} from '@/application/dtos/song.dto';
 import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface';
 import {type Queue} from '@/application/interfaces/queue.interface';
 import {ArtistAggregate} from '@/domain/entities/artist.aggregate';
-import {type ArtistRepository} from '@/domain/interfaces/artist-repository.interface';
+import {type ArtistRepository} from '@/application/interfaces/artist-repository.interface';
 import {type ProcessTrackerRepository} from '@/application/interfaces/process-tracker.repository.interface';
 
-export class FetchSongs implements UseCase {
+export class FetchSongs {
 	constructor(
 		private readonly lyricsApiService: LyricsApiService,
 		private readonly artistRepository: ArtistRepository,
@@ -33,8 +31,12 @@ export class FetchSongs implements UseCase {
 
 		const apiArtist = await this.lyricsApiService.getArtist(artistId);
 
-		const artist = new ArtistAggregate(apiArtist.name, apiArtist.description, apiArtist.imageUrl);
-		artist.id = artistId;
+		const artist = new ArtistAggregate({
+			id: artistId,
+			name: apiArtist.name,
+			description: apiArtist.description,
+			imageUrl: apiArtist.imageUrl,
+		});
 		await this.artistRepository.save(artist);
 	}
 

@@ -1,8 +1,7 @@
-import type {UseCase} from '../../interfaces/usecase';
 import {type WorkflowTriggerDto} from '../../dtos/workflow-trigger.dto';
 import {type Queue} from '@/application/interfaces/queue.interface';
 
-export class TriggerWorkflow implements UseCase {
+export class TriggerWorkflow {
 	constructor(
 		private readonly queueService: Queue,
 	) {}

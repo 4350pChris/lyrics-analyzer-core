@@ -1,43 +1,41 @@
-import type {AggregateRoot} from '../interfaces/aggregate-root.interface';
-import {BaseEntity} from './base.entity';
-import {Song} from './song.entity';
-import {Stats} from './stats.value-object';
+type ArtistAggregateProps = {
+	id: number;
+	name: string;
+	description: string;
+	songs?: number[];
+	imageUrl?: string;
+	stats?: number[];
+};
 
-export class ArtistAggregate extends BaseEntity implements AggregateRoot {
-	constructor(
-		public name: string,
-		public description: string,
-		public imageUrl?: string,
-		public songs: Song[] = [],
-		public stats?: Stats,
-	) {
-		super();
+export class ArtistAggregate {
+	public readonly id: number;
+	public readonly name: string;
+	public readonly description: string;
+	public readonly songs: number[];
+	public readonly imageUrl?: string;
+	public readonly stats: number[];
+
+	constructor({
+		id,
+		name,
+		description,
+		songs,
+		imageUrl,
+		stats,
+	}: ArtistAggregateProps) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.songs = songs ?? [];
+		this.imageUrl = imageUrl;
+		this.stats = stats ?? [];
 	}
 
-	public addSong(id: number, name: string, text: string, url: string): void {
-		const song = new Song(id, name, text, url);
-		this.songs.push(song);
+	addSong(songId: number): void {
+		this.songs.push(songId);
 	}
 
-	public getCombinedWordList(): Record<string, number> {
-		const wordList: Record<string, number> = {};
-		for (const song of this.songs) {
-			const split = song.text.split(/\s+/);
-			for (const word of split) {
-				const currentCount = wordList[word] || 0;
-				wordList[word] = currentCount + 1;
-			}
-		}
-
-		return wordList;
-	}
-
-	public calculateStats(): void {
-		const wordList = this.getCombinedWordList();
-		const stats = new Stats(wordList);
-		stats.calculateUniqueWords();
-		stats.calculateAverageLengthOfWords();
-		stats.calculateMedianLengthOfWords();
-		this.stats = stats;
+	addStats(statsId: number): void {
+		this.stats.push(statsId);
 	}
 }

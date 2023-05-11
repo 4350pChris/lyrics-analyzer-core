@@ -1,4 +1,5 @@
 import dynamoose from 'dynamoose';
+import {Item} from 'dynamoose/dist/Item';
 
 const artistSchema = new dynamoose.Schema(
 	{
@@ -19,22 +20,11 @@ const artistSchema = new dynamoose.Schema(
 		},
 		songs: {
 			type: Array,
-			schema: [{
-				type: Object,
-				schema: {
-					id: {
-						type: String,
-					},
-					name: {
-						type: String,
-						// Required: true,
-					},
-					text: {
-						type: String,
-						// Required: true,
-					},
-				},
-			}],
+			schema: [Number],
+		},
+		stats: {
+			type: Array,
+			schema: [Number],
 		},
 	},
 	{
@@ -42,7 +32,18 @@ const artistSchema = new dynamoose.Schema(
 	},
 );
 
-export const getArtistModel = (artistTableName: string) => dynamoose.model(artistTableName, artistSchema, {
+export class ArtistModelItem extends Item {
+	id!: string;
+	name!: string;
+	description!: string;
+	imageUrl!: string;
+	songs!: number[];
+	stats!: number[];
+	createdAt!: string;
+	updatedAt!: string;
+}
+
+export const getArtistModel = (artistTableName: string) => dynamoose.model<ArtistModelItem>(artistTableName, artistSchema, {
 	create: false,
 	waitForActive: false,
 });
