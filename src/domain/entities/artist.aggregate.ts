@@ -1,7 +1,8 @@
 import type {AggregateRoot} from '../interfaces/aggregate-root.interface';
 import {type ArtistProps} from '../interfaces/artist-props.interface';
+import {type StatisticsCalculator} from '../interfaces/statistics-calculator.interface';
 import {Song} from './song.entity';
-import {Stats} from './stats.value-object';
+import {type Stats} from './stats.value-object';
 
 export class ArtistAggregate implements AggregateRoot {
 	readonly id!: number;
@@ -9,13 +10,14 @@ export class ArtistAggregate implements AggregateRoot {
 	readonly description!: string;
 	readonly imageUrl?: string;
 	readonly songs!: Song[];
+	statisticsCalculator?: StatisticsCalculator;
 
-	private _stats !: Stats;
-	get stats(): Stats {
+	private _stats: Stats | undefined;
+	get stats(): Stats | undefined {
 		return this._stats;
 	}
 
-	private set stats(v: Stats) {
+	private set stats(v: Stats | undefined) {
 		this._stats = v;
 	}
 
@@ -28,25 +30,11 @@ export class ArtistAggregate implements AggregateRoot {
 		this.songs.push(song);
 	}
 
-	getCombinedWordList(): Record<string, number> {
-		const wordList: Record<string, number> = {};
-		for (const song of this.songs) {
-			const split = song.text.split(/\s+/);
-			for (const word of split) {
-				const currentCount = wordList[word] || 0;
-				wordList[word] = currentCount + 1;
-			}
+	calculateStats(): void {
+		if (!this.statisticsCalculator) {
+			throw new Error('No statistics calculator set');
 		}
 
-		return wordList;
-	}
-
-	calculateStats(): void {
-		const wordList = this.getCombinedWordList();
-		const stats = new Stats(wordList);
-		stats.calculateUniqueWords();
-		stats.calculateAverageLengthOfWords();
-		stats.calculateMedianLengthOfWords();
-		this.stats = stats;
+		this.stats = this.statisticsCalculator.calculateStats(this.songs);
 	}
 }

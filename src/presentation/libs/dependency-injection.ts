@@ -14,6 +14,7 @@ import {FetchSongs} from '@/application/usecases/analyze-lyrics/fetch-songs.usec
 import {ParseLyrics} from '@/application/usecases/analyze-lyrics/parse-lyrics.usecase';
 import {ListArtists} from '@/application/usecases/artist/list-artists.usecase';
 import {TriggerWorkflow} from '@/application/usecases/analyze-lyrics/trigger-workflow.usecase';
+import {ConcreteArtistFactory} from '@/domain/factories/artist.factory';
 
 export const setupDependencyInjection = () => {
 	const container = createContainer({
@@ -30,7 +31,10 @@ export const setupDependencyInjection = () => {
 		// Models
 		artistModel: asFunction(getArtistModel).singleton(),
 		processModel: asFunction(getProcessModel).singleton(),
-		artistMapper: asClass(ArtistMapper).singleton(),
+		// Mappers
+		artistMapper: asClass(ArtistMapper),
+		// Factories
+		artistFactory: asClass(ConcreteArtistFactory),
 		// Repositories
 		artistRepository: asClass(DynamooseArtistRepository),
 		processTrackerRepository: asClass(DynamooseProcessRepository),

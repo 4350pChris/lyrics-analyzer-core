@@ -1,6 +1,9 @@
 import test from 'ava';
+import td from 'testdouble';
 import {ArtistAggregate} from '@/domain/entities/artist.aggregate';
 import {Song} from '@/domain/entities/song.entity';
+import {type StatisticsCalculator} from '@/domain/interfaces/statistics-calculator.interface';
+import {type Stats} from '@/domain/entities/stats.value-object';
 
 const makeSong = (name: string, text: string) => new Song(1, name, text, 'url');
 
@@ -20,26 +23,27 @@ test('Create artist', t => {
 
 test('Add songs to artist', t => {
 	const songs = [makeSong('song1', 'text1'), makeSong('song2', 'text2')];
-	const artist = makeArtist(songs);
+	const artist = makeArtist();
+	for (const song of songs) {
+		artist.addSong(song.id, song.name, song.text, song.url);
+	}
+
 	t.deepEqual(artist.songs, songs);
 });
 
-test('Get combined word list', t => {
-	const artist = makeArtist([
-		makeSong('song1', 'text1'),
-		makeSong('song2', 'text1 text2'),
-	]);
-	const wordList = artist.getCombinedWordList();
-	t.deepEqual(wordList, {text1: 2, text2: 1});
-});
+test('Get stats for artist calls on statistics calculator', t => {
+	const artist = makeArtist();
+	artist.statisticsCalculator = td.object<StatisticsCalculator>();
 
-test('Get stats for artist', t => {
-	const artist = makeArtist([
-		makeSong('song1', 'text1'),
-		makeSong('song2', 'text2'),
-	]);
+	const expectedStats: Stats = {
+		averageLength: 1,
+		uniqueWords: 2,
+		medianLength: 3,
+		wordList: {text: 1},
+	};
+
+	td.when(artist.statisticsCalculator.calculateStats(artist.songs)).thenReturn(expectedStats);
 	artist.calculateStats();
-	t.not(artist.stats, undefined);
-	t.is(artist.stats.uniqueWords, 2);
-	t.is(artist.stats.averageLength, 5);
+
+	t.deepEqual(artist.stats, expectedStats);
 });

@@ -5,12 +5,16 @@ import type {AnyItem} from 'dynamoose/dist/Item';
 import type {Mapper} from '../interfaces/mapper.interface';
 import {type ArtistAggregate} from '@/domain/entities/artist.aggregate';
 import {Song} from '@/domain/entities/song.entity';
-import {createArtist} from '@/domain/factories/artist.factory';
+import {type ArtistFactory} from '@/domain/interfaces/concrete-artist.factory.interface';
 
 export class ArtistMapper implements Mapper<ArtistAggregate> {
+	constructor(
+		private readonly artistFactory: ArtistFactory,
+	) {}
+
 	toDomain(model: Partial<AnyItem>): ArtistAggregate {
 		const songs = model.songs.map((s: any) => new Song(s.id, s.name, s.text, s.url));
-		const artist = createArtist({
+		const artist = this.artistFactory.createArtist({
 			id: model.id,
 			name: model.name,
 			description: model.description,
