@@ -3,14 +3,21 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type {AnyItem} from 'dynamoose/dist/Item';
 import type {Mapper} from '../interfaces/mapper.interface';
-import {ArtistAggregate} from '@/domain/entities/artist.aggregate';
+import {type ArtistAggregate} from '@/domain/entities/artist.aggregate';
 import {Song} from '@/domain/entities/song.entity';
+import {createArtist} from '@/domain/factories/artist.factory';
 
 export class ArtistMapper implements Mapper<ArtistAggregate> {
 	toDomain(model: Partial<AnyItem>): ArtistAggregate {
 		const songs = model.songs.map((s: any) => new Song(s.id, s.name, s.text, s.url));
-		const artist = new ArtistAggregate(model.name, model.description, model.imageUrl, songs);
-		artist.id = Number.parseInt(model.id);
+		const artist = createArtist({
+			id: model.id,
+			name: model.name,
+			description: model.description,
+			imageUrl: model.imageUrl,
+			songs,
+			stats: model.stats,
+		});
 		return artist;
 	}
 

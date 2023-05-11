@@ -8,10 +8,18 @@ const setupMocks = () => ({
 	artistRepository: td.object<ArtistRepository>(),
 });
 
+const makeArtist = (id: number) => new ArtistAggregate({
+	id,
+	name: `name ${id}`,
+	description: `description ${id}`,
+	imageUrl: `imageUrl ${id}`,
+	songs: [],
+});
+
 test('should return a list of artists', async t => {
 	const artists = [
-		new ArtistAggregate('name 1', 'description 1'),
-		new ArtistAggregate('name 2', 'description 2'),
+		makeArtist(1),
+		makeArtist(2),
 	];
 
 	const {artistRepository} = setupMocks();
