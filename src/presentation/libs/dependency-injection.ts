@@ -10,10 +10,10 @@ import {SqsQueueService} from '@/infrastructure/services/sqs-queue.service';
 import {DynamooseProcessRepository} from '@/infrastructure/repositories/dynamoose-process.repository';
 import {getProcessModel} from '@/infrastructure/models/process.model';
 import {SearchArtists} from '@/application/usecases/artist/search-artists.usecase';
-import {AnalyzeLyrics} from '@/application/usecases/analyze-lyrics/analyze-lyrics.usecase';
 import {FetchSongs} from '@/application/usecases/analyze-lyrics/fetch-songs.usecase';
 import {ParseLyrics} from '@/application/usecases/analyze-lyrics/parse-lyrics.usecase';
 import {ListArtists} from '@/application/usecases/artist/list-artists.usecase';
+import {TriggerWorkflow} from '@/application/usecases/analyze-lyrics/trigger-workflow.usecase';
 
 export const setupDependencyInjection = () => {
 	const container = createContainer({
@@ -42,7 +42,7 @@ export const setupDependencyInjection = () => {
 		// Use cases
 		searchArtistsUseCase: asClass(SearchArtists),
 		listArtistsUseCase: asClass(ListArtists),
-		analyzeLyricsUseCase: asClass(AnalyzeLyrics),
+		triggerWorkflowUseCase: asClass(TriggerWorkflow),
 		fetchSongsUseCase: asClass(FetchSongs),
 		parseLyricsUseCase: asClass(ParseLyrics),
 	});

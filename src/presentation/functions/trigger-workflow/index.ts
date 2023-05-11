@@ -7,7 +7,7 @@ const functionObject = {
 		{
 			http: {
 				method: 'post',
-				path: 'analyze-lyrics',
+				path: 'trigger-workflow',
 				request: {
 					schemas: {
 						// eslint-disable-next-line @typescript-eslint/naming-convention

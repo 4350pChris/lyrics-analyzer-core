@@ -1,6 +1,6 @@
-- name: analyze-lyrics returns 200
+- name: triggerWorkflow returns 200
   endpoint:
-    function: analyzeLyrics
+    function: triggerWorkflow
   response: true
   request:
     body:

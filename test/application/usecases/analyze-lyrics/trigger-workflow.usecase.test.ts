@@ -1,6 +1,6 @@
 import test from 'ava';
 import td from 'testdouble';
-import {AnalyzeLyrics} from '@/application/usecases/analyze-lyrics/analyze-lyrics.usecase';
+import {TriggerWorkflow} from '@/application/usecases/analyze-lyrics/trigger-workflow.usecase';
 import {type Queue} from '@/application/interfaces/queue.interface';
 
 const setupMocks = () => ({
@@ -12,7 +12,7 @@ test('Should trigger workflow by pushing artist id to SQS queue', async t => {
 
 	td.when(queueService.publish(td.matchers.isA(String) as string)).thenResolve();
 
-	const usecase = new AnalyzeLyrics(queueService);
+	const usecase = new TriggerWorkflow(queueService);
 
 	await usecase.execute('123');
 

@@ -2,7 +2,7 @@
 /* eslint-disable no-template-curly-in-string */
 import type {AWS} from '@serverless/typescript';
 import type {Lift} from 'serverless-lift';
-import {analyzeLyrics, parseLyrics, fetchSongs} from './src/presentation/functions/index';
+import {triggerWorkflow, parseLyrics, fetchSongs} from './src/presentation/functions/index';
 
 const serverlessConfiguration: AWS & Lift = {
 	org: '4350pchris',
@@ -110,8 +110,8 @@ const serverlessConfiguration: AWS & Lift = {
 	},
 	// Import the function via paths
 	functions: {
-		analyzeLyrics: {
-			...analyzeLyrics,
+		triggerWorkflow: {
+			...triggerWorkflow,
 			environment: {
 				QUEUE_URL: '${construct:fetch-songs-queue.queueUrl}',
 			},
