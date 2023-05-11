@@ -47,3 +47,10 @@ test('Get stats for artist calls on statistics calculator', t => {
 
 	t.deepEqual(artist.stats, expectedStats);
 });
+
+test('Should throw when trying to calculate stats with no service', t => {
+	const artist = makeArtist();
+	t.throws(() => {
+		artist.calculateStats();
+	});
+});
