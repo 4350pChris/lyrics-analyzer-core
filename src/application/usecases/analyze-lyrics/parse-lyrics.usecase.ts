@@ -3,13 +3,13 @@ import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interfa
 import {type FetchSongsDto} from '@/application/dtos/fetch-songs.dto';
 import {type ParsedSongsDto} from '@/application/dtos/parsed-songs.dto';
 import {type Queue} from '@/application/interfaces/queue.interface';
-import {type ProcessTracker} from '@/application/interfaces/process-tracker.interface';
+import {type ProcessTrackerRepository} from '@/application/interfaces/process-tracker.repository.interface';
 
 export class ParseLyrics implements UseCase {
 	constructor(
 		private readonly lyricsApiService: LyricsApiService,
 		private readonly queueService: Queue,
-		private readonly processTracker: ProcessTracker,
+		private readonly processTrackerRepository: ProcessTrackerRepository,
 	) {}
 
 	async execute({artistId, songs}: FetchSongsDto) {
@@ -28,6 +28,6 @@ export class ParseLyrics implements UseCase {
 		const dto: ParsedSongsDto = {artistId, songs: successfulSongs};
 		await this.queueService.publish(JSON.stringify(dto));
 
-		await this.processTracker.decrement(artistId, songs.length);
+		await this.processTrackerRepository.decrement(artistId, songs.length);
 	}
 }

@@ -7,7 +7,6 @@ import {ArtistMapper} from '@/infrastructure/mappers/artist.mapper';
 import {getArtistModel} from '@/infrastructure/models/artist.model';
 import {GeniusApiClient} from '@/infrastructure/clients/genius-api.client';
 import {SqsQueueService} from '@/infrastructure/services/sqs-queue.service';
-import {ArtistProcessTracker} from '@/application/services/artist-process-tracker.service';
 import {DynamooseProcessRepository} from '@/infrastructure/repositories/dynamoose-process.repository';
 import {getProcessModel} from '@/infrastructure/models/process.model';
 import {SearchArtists} from '@/application/usecases/artist/search-artists.usecase';
@@ -34,13 +33,12 @@ export const setupDependencyInjection = () => {
 		artistMapper: asClass(ArtistMapper).singleton(),
 		// Repositories
 		artistRepository: asClass(DynamooseArtistRepository),
-		processRepository: asClass(DynamooseProcessRepository),
+		processTrackerRepository: asClass(DynamooseProcessRepository),
 		// Services
 		geniusApiClient: asClass(GeniusApiClient),
 		lyricsApiService: asClass(GeniusService),
 		sqs: asClass(SQS),
 		queueService: asClass(SqsQueueService),
-		processTracker: asClass(ArtistProcessTracker),
 		// Use cases
 		searchArtistsUseCase: asClass(SearchArtists),
 		listArtistsUseCase: asClass(ListArtists),
