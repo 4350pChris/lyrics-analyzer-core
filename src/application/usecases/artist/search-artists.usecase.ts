@@ -1,4 +1,4 @@
-import type {UseCase} from '../usecase';
+import type {UseCase} from '../../interfaces/usecase';
 import type {SearchArtistsDto} from '@/application/dtos/search-artist.dto';
 import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface';
 

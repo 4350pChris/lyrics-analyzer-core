@@ -1,4 +1,4 @@
-import {type UseCase} from '../usecase';
+import {type UseCase} from '../../interfaces/usecase';
 import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface';
 import {type FetchSongsDto} from '@/application/dtos/fetch-songs.dto';
 import {type ParsedSongsDto} from '@/application/dtos/parsed-songs.dto';

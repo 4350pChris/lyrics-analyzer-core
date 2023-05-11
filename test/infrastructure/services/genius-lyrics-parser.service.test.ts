@@ -27,6 +27,12 @@ test('Should get lyrics block from html', t => {
 	t.truthy(lyrics);
 });
 
+test('Should throw error if lyrics block is not found', t => {
+	const html = '<html></html>';
+
+	t.throws(() => parser.getLyricsBlock(html));
+});
+
 test('Should remove multiline spaces and [Verse] blocks', t => {
 	const lyricsBlock = `[Verse 1]
 

@@ -31,14 +31,14 @@ export const setupDependencyInjection = () => {
 		// Models
 		artistModel: asFunction(getArtistModel).singleton(),
 		processModel: asFunction(getProcessModel).singleton(),
+		artistMapper: asClass(ArtistMapper).singleton(),
 		// Repositories
-		artistRepository: asClass(DynamooseArtistRepository).singleton(),
+		artistRepository: asClass(DynamooseArtistRepository),
 		processRepository: asClass(DynamooseProcessRepository),
 		// Services
-		geniusApiClient: asClass(GeniusApiClient).singleton(),
-		lyricsApiService: asClass(GeniusService).singleton(),
-		artistMapper: asClass(ArtistMapper).singleton(),
-		sqs: asFunction(() => new SQS()).singleton(),
+		geniusApiClient: asClass(GeniusApiClient),
+		lyricsApiService: asClass(GeniusService),
+		sqs: asClass(SQS),
 		queueService: asClass(SqsQueueService),
 		processTracker: asClass(ArtistProcessTracker),
 		// Use cases

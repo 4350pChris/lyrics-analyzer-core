@@ -1,5 +1,5 @@
 import process from 'node:process';
-import {type UseCase} from '../usecase';
+import {type UseCase} from '../../interfaces/usecase';
 import {type FetchSongsDto} from '@/application/dtos/fetch-songs.dto';
 import {type SongDto} from '@/application/dtos/song.dto';
 import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface';
@@ -17,17 +17,12 @@ export class FetchSongs implements UseCase {
 	) {}
 
 	async execute(artistId: number): Promise<void> {
-		console.info(`Checking if artist ${artistId} is currently being processed`);
 		if (await this.processTracker.isRunning(artistId)) {
 			throw new Error('Artist is currently being processed');
 		}
 
-		console.info(`Fetching songs for artist ${artistId}`);
-
 		const songs = await this.lyricsApiService.retrieveSongsForArtist(artistId);
 		const chunks = this.chunkSongs(songs);
-
-		console.info(`Sending ${chunks.length} chunks to queue ${process.env.QUEUE_URL!}`);
 
 		await Promise.all(chunks.map(async chunk => {
 			const dto: FetchSongsDto = {artistId: artistId.toString(), songs: chunk};
@@ -35,8 +30,6 @@ export class FetchSongs implements UseCase {
 		}));
 
 		await this.processTracker.start(artistId, songs.length);
-
-		console.info(`Saving artist ${artistId} to database`);
 
 		const apiArtist = await this.lyricsApiService.getArtist(artistId);
 

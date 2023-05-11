@@ -1,0 +1,14 @@
+{
+  "all": true,
+  "exclude": [
+    "{dist,test,coverage}/**",
+    "src/presentation/**",
+    "src/{application,domain,infrastructure}/{interfaces,dtos,models}/**",
+    "*.d.*(c|m)ts",
+    "serverless.ts"
+  ],
+  "reporter": [
+    "lcov",
+    "text-summary"
+  ]
+}

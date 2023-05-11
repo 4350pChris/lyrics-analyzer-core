@@ -1,4 +1,4 @@
-import type {UseCase} from '../usecase';
+import type {UseCase} from '../../interfaces/usecase';
 import {type AnalyzeLyricsDto} from '../../dtos/analyze-lyrics.dto';
 import {type Queue} from '@/application/interfaces/queue.interface';
 

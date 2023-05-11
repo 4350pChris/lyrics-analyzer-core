@@ -1,4 +1,4 @@
-import type {UseCase} from '../usecase';
+import type {UseCase} from '../../interfaces/usecase';
 import type {ArtistAggregate} from '@/domain/entities/artist.aggregate';
 import type {ArtistRepository} from '@/domain/interfaces/artist-repository.interface';
 
