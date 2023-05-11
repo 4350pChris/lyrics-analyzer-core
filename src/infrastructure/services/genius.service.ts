@@ -44,7 +44,7 @@ export class GeniusService implements LyricsApiService {
 		let page: number | undefined = 1;
 
 		// Consume all pages
-		while (page) {
+		while (page && page < 5) {
 			// eslint-disable-next-line no-await-in-loop
 			const {response} = await this.geniusApiClient.getSongsForArtist(artistId, page);
 			// Evict songs where the artist is not the primary one
