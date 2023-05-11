@@ -13,9 +13,9 @@ export class ArtistMapper implements Mapper<ArtistAggregate> {
 	) {}
 
 	toDomain(model: Partial<AnyItem>): ArtistAggregate {
-		const songs = model.songs.map((s: any) => new Song(s.id, s.name, s.text, s.url));
+		const songs = model.songs.map((s: any) => new Song(s.id, s.name, s.text));
 		const artist = this.artistFactory.createArtist({
-			id: model.id,
+			id: Number.parseInt(model.id),
 			name: model.name,
 			description: model.description,
 			imageUrl: model.imageUrl,
@@ -26,9 +26,9 @@ export class ArtistMapper implements Mapper<ArtistAggregate> {
 	}
 
 	toModel(artist: ArtistAggregate): Partial<AnyItem> {
-		const songs = artist.songs.map(s => ({name: s.name, text: s.text}));
+		const songs = artist.songs.map(s => ({id: s.id, name: s.name, text: s.text}));
 		return {
-			id: artist.id?.toString(),
+			id: artist.id.toString(),
 			name: artist.name,
 			description: artist.description,
 			imageUrl: artist.imageUrl,

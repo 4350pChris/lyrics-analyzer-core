@@ -25,8 +25,8 @@ export class ArtistAggregate implements AggregateRoot {
 		Object.assign(this, props);
 	}
 
-	addSong(id: number, name: string, text: string, url: string): void {
-		const song = new Song(id, name, text, url);
+	addSong(id: number, name: string, text: string): void {
+		const song = new Song(id, name, text);
 		this.songs.push(song);
 	}
 

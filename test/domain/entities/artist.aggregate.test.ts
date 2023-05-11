@@ -5,7 +5,7 @@ import {Song} from '@/domain/entities/song.entity';
 import {type StatisticsCalculator} from '@/domain/interfaces/statistics-calculator.interface';
 import {type Stats} from '@/domain/entities/stats.value-object';
 
-const makeSong = (name: string, text: string) => new Song(1, name, text, 'url');
+const makeSong = (name: string, text: string) => new Song(1, name, text);
 
 const makeArtist = (songs: Song[] = []) =>
 	new ArtistAggregate({
@@ -25,7 +25,7 @@ test('Add songs to artist', t => {
 	const songs = [makeSong('song1', 'text1'), makeSong('song2', 'text2')];
 	const artist = makeArtist();
 	for (const song of songs) {
-		artist.addSong(song.id, song.name, song.text, song.url);
+		artist.addSong(song.id, song.name, song.text);
 	}
 
 	t.deepEqual(artist.songs, songs);

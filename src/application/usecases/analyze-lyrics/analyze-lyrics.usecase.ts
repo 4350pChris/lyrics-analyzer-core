@@ -17,7 +17,7 @@ export class AnalyzeLyrics implements UseCase {
 		}
 
 		for (const song of songs) {
-			artist.addSong(song.id, song.title, song.text, song.url);
+			artist.addSong(song.id, song.title, song.text);
 		}
 
 		artist.calculateStats();

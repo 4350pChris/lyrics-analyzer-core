@@ -7,7 +7,6 @@ const makeSong = (text: string) => {
 	const song = td.object<Song>({
 		id: 1,
 		name: 'song',
-		url: 'test',
 		text,
 	});
 
