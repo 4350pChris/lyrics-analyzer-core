@@ -1,7 +1,6 @@
-import {setupDependencyInjection} from './dependency-injection';
+import {container} from '@/application/dependency-injection';
 
 export function withDependencies<T = any>(factory: (...args: any[]) => T): T {
-	const container = setupDependencyInjection();
 	return container.build(factory);
 }
 
