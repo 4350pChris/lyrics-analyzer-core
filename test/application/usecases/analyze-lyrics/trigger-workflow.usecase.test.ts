@@ -27,9 +27,10 @@ test('Should trigger workflow by pushing artist id to SQS queue', async t => {
 	t.deepEqual(td.explain(queueService.sendToFetchQueue).calls[0].args[0], {artistId: '123'});
 });
 
-test('Should create artist from API', async t => {
+test('Should create artist from API if it is not found', async t => {
 	const {queueService, artistRepository, artistFactory, lyricsApiService} = setupMocks();
 
+	td.when(artistRepository.getById(td.matchers.anything() as number)).thenReject('Artist does not exist');
 	td.when(artistRepository.save(td.matchers.anything() as ArtistAggregate)).thenResolve({});
 
 	const usecase = new TriggerWorkflow(queueService, artistRepository, artistFactory, lyricsApiService);
@@ -37,4 +38,16 @@ test('Should create artist from API', async t => {
 	await usecase.execute(123);
 
 	t.is(td.explain(artistRepository.save).calls.length, 1);
+});
+
+test('Should not create artist if already exists', async t => {
+	const {queueService, artistRepository, artistFactory, lyricsApiService} = setupMocks();
+
+	td.when(artistRepository.getById(td.matchers.anything() as number)).thenResolve({} as ArtistAggregate);
+
+	const usecase = new TriggerWorkflow(queueService, artistRepository, artistFactory, lyricsApiService);
+
+	await usecase.execute(123);
+
+	t.is(td.explain(artistRepository.save).calls.length, 0);
 });
