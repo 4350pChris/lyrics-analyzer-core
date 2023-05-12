@@ -13,7 +13,7 @@ export class DynamooseProcessRepository implements ProcessTrackerRepository {
 
 	async decrement(processId: string, value: number): Promise<void> {
 		// @ts-expect-error - dynamoose types are not up to date
-		await this.processModel.update({id: processId}, {$ADD: {total: -value}}); // eslint-disable-line @typescript-eslint/naming-convention
+		await (this.processModel.update({id: processId}, {$ADD: {total: -value}}) as Promise<void>); // eslint-disable-line @typescript-eslint/naming-convention
 	}
 
 	async get(processId: string): Promise<number | undefined> {
@@ -21,7 +21,7 @@ export class DynamooseProcessRepository implements ProcessTrackerRepository {
 		return item?.total;
 	}
 
-	async isRunning(processId: number | string): Promise<boolean> {
+	async isRunning(processId: string): Promise<boolean> {
 		const left = await this.get(processId.toString());
 		return Boolean(left && left > 0);
 	}
