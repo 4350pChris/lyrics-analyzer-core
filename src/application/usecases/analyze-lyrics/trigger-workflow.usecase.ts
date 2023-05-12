@@ -18,6 +18,15 @@ export class TriggerWorkflow implements UseCase {
 	}
 
 	private async createArtistFromApi(artistId: number): Promise<void> {
+		try {
+			const artist = await this.artistRepository.getById(artistId);
+			if (artist) {
+				return;
+			}
+		} catch {
+			// Do nothing, artist does not exist and we will create it
+		}
+
 		const apiArtist = await this.lyricsApiService.getArtist(artistId);
 
 		const artist = this.artistFactory.createArtist({id: artistId, ...apiArtist, songs: []});
