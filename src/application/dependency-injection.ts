@@ -1,6 +1,6 @@
 import process from 'node:process';
 import {createContainer, asClass, asValue, asFunction, InjectionMode} from 'awilix';
-import {SQS} from 'aws-sdk';
+import {SQSClient} from '@aws-sdk/client-sqs';
 import {AnalyzeLyrics} from './usecases/analyze-lyrics/analyze-lyrics.usecase';
 import {DynamooseArtistRepository} from '@/infrastructure/repositories/dynamoose-artist.repository';
 import {GeniusService} from '@/infrastructure/services/genius.service';
@@ -18,11 +18,13 @@ import {TriggerWorkflow} from '@/application/usecases/analyze-lyrics/trigger-wor
 import {ConcreteArtistFactory} from '@/domain/factories/artist.factory';
 import {ConcreteStatisticsCalculator} from '@/domain/services/concrete-statistics-calculator.service';
 
+type Queues = 'fetchSongsQueueUrl' | 'parseLyricsQueueUrl';
+
 export type Cradle = {
-	geniusAccessToken?: string;
-	artistTableName?: string;
-	processTableName?: string;
-	queueUrl?: string;
+	geniusAccessToken: string;
+	artistTableName: string;
+	processTableName: string;
+	queueUrls: Record<Queues, string>;
 	geniusBaseUrl?: string;
 	// Models
 	artistModel: ReturnType<typeof getArtistModel>;
@@ -38,7 +40,7 @@ export type Cradle = {
 	statisticsCalculator: ConcreteStatisticsCalculator;
 	geniusApiClient: GeniusApiClient;
 	lyricsApiService: GeniusService;
-	sqs: SQS;
+	sqs: SQSClient;
 	queueService: SqsQueueService;
 	// Use cases
 	searchArtistsUseCase: SearchArtists;
@@ -53,12 +55,24 @@ const container = createContainer<Cradle>({
 	injectionMode: InjectionMode.CLASSIC,
 });
 
+const getEnv = (key: string) => {
+	const value = process.env[key];
+	if (value === undefined) {
+		throw new Error(`Environment variable ${key} is not defined`);
+	}
+
+	return value;
+};
+
 container.register({
 	// Environment variables
-	geniusAccessToken: asValue(process.env.GENIUS_ACCESS_TOKEN),
-	artistTableName: asValue(process.env.ARTIST_TABLE_NAME),
-	processTableName: asValue(process.env.PROCESS_TABLE_NAME),
-	queueUrl: asValue(process.env.QUEUE_URL),
+	geniusAccessToken: asValue(getEnv('GENIUS_ACCESS_TOKEN')),
+	artistTableName: asValue(getEnv('ARTIST_TABLE_NAME')),
+	processTableName: asValue(getEnv('PROCESS_TABLE_NAME')),
+	queueUrls: asValue<Record<Queues, string>>({
+		fetchSongsQueueUrl: getEnv('FETCH_SONGS_QUEUE_URL'),
+		parseLyricsQueueUrl: getEnv('PARSE_LYRICS_QUEUE_URL'),
+	}),
 	geniusBaseUrl: asValue('https://api.genius.com'),
 	// Models
 	artistModel: asFunction(getArtistModel).singleton(),
@@ -74,7 +88,7 @@ container.register({
 	statisticsCalculator: asClass(ConcreteStatisticsCalculator),
 	geniusApiClient: asClass(GeniusApiClient),
 	lyricsApiService: asClass(GeniusService),
-	sqs: asClass(SQS),
+	sqs: asClass(SQSClient),
 	queueService: asClass(SqsQueueService),
 	// Use cases
 	searchArtistsUseCase: asClass(SearchArtists),

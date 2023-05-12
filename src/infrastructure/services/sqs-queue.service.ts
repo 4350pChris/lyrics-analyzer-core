@@ -1,18 +1,29 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import type {SQS} from 'aws-sdk';
-import {type Queue} from '@/application/interfaces/queue.interface';
+import {type SQSClient, SendMessageCommand} from '@aws-sdk/client-sqs';
+import {type QueueService} from '@/application/interfaces/queue.service.interface';
+import {type FetchSongsDto} from '@/application/dtos/fetch-songs.dto';
+import {type WorkflowTriggerDto} from '@/application/dtos/workflow-trigger.dto';
 
-export class SqsQueueService implements Queue {
+export class SqsQueueService implements QueueService {
 	constructor(
-		private readonly sqs: SQS,
-		private readonly queueUrl: string,
+		private readonly sqs: SQSClient,
+		private readonly fetchSongsQueueUrl: string,
+		private readonly parseLyricsQueueUrl: string,
 	) {}
 
-	async publish(message: string): Promise<void> {
-		const parameters = {
+	async sendToFetchQueue(dto: WorkflowTriggerDto): Promise<void> {
+		await this.publish(this.fetchSongsQueueUrl, JSON.stringify(dto));
+	}
+
+	async sendToParseQueue(dto: FetchSongsDto): Promise<void> {
+		await this.publish(this.parseLyricsQueueUrl, JSON.stringify(dto));
+	}
+
+	private async publish(queueUrl: string, message: string): Promise<void> {
+		const cmd = new SendMessageCommand({
 			MessageBody: message,
-			QueueUrl: this.queueUrl,
-		};
-		await this.sqs.sendMessage(parameters).promise();
+			QueueUrl: queueUrl,
+		});
+		await this.sqs.send(cmd);
 	}
 }

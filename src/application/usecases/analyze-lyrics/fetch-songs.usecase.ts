@@ -1,14 +1,13 @@
 import {type UseCase} from '../../interfaces/usecase';
-import {type FetchSongsDto} from '@/application/dtos/fetch-songs.dto';
 import {type SongDto} from '@/application/dtos/song.dto';
 import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface';
-import {type Queue} from '@/application/interfaces/queue.interface';
+import {type QueueService} from '@/application/interfaces/queue.service.interface';
 import {type ProcessTrackerRepository} from '@/application/interfaces/process-tracker.repository.interface';
 
 export class FetchSongs implements UseCase {
 	constructor(
 		private readonly lyricsApiService: LyricsApiService,
-		private readonly queueService: Queue,
+		private readonly queueService: QueueService,
 		private readonly processTrackerRepository: ProcessTrackerRepository,
 	) {}
 
@@ -26,10 +25,7 @@ export class FetchSongs implements UseCase {
 	}
 
 	private async publishChunks(artistId: string, chunks: SongDto[][]): Promise<void[]> {
-		return Promise.all(chunks.map(async chunk => {
-			const dto: FetchSongsDto = {artistId, songs: chunk};
-			return this.queueService.publish(JSON.stringify(dto));
-		}));
+		return Promise.all(chunks.map(async chunk => this.queueService.sendToParseQueue({artistId, songs: chunk})));
 	}
 
 	private chunkSongs(songs: SongDto[], chunkSize = 10): SongDto[][] {

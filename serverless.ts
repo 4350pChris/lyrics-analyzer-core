@@ -29,6 +29,8 @@ const serverlessConfiguration: AWS & Lift = {
 			GENIUS_ACCESS_TOKEN: '${env:GENIUS_ACCESS_TOKEN}',
 			ARTIST_TABLE_NAME: '${self:service}-Artist-${sls:stage}',
 			PROCESS_TABLE_NAME: '${self:service}-Process-${sls:stage}',
+			FETCH_SONGS_QUEUE_URL: '${construct:fetchSongsQueue.queueUrl}',
+			PARSE_LYRICS_QUEUE_URL: '${construct:parseLyricsQueue.queueUrl}',
 		},
 		iam: {
 			role: {
@@ -85,24 +87,18 @@ const serverlessConfiguration: AWS & Lift = {
 		},
 	},
 	constructs: {
-		'fetch-songs-queue': {
+		fetchSongsQueue: {
 			type: 'queue',
 			worker: {
 				handler: fetchSongs.handler,
-				environment: {
-					QUEUE_URL: '${construct:parse-songs-queue.queueUrl}',
-				},
 				timeout: 30,
 				logRetentionInDays: 14,
 			},
 		},
-		'parse-songs-queue': {
+		parseLyricsQueue: {
 			type: 'queue',
 			worker: {
 				handler: parseLyrics.handler,
-				environment: {
-					QUEUE_URL: '${construct:parse-songs-queue.queueUrl}',
-				},
 				timeout: 30,
 				logRetentionInDays: 14,
 			},
@@ -112,9 +108,6 @@ const serverlessConfiguration: AWS & Lift = {
 	functions: {
 		triggerWorkflow: {
 			...triggerWorkflow,
-			environment: {
-				QUEUE_URL: '${construct:fetch-songs-queue.queueUrl}',
-			},
 			memorySize: 512,
 			logRetentionInDays: 14,
 		},
@@ -128,8 +121,6 @@ const serverlessConfiguration: AWS & Lift = {
 			platform: 'node',
 			concurrency: 10,
 			packager: 'pnpm',
-			// By default aws-sdk is excluded, but we need it
-			exclude: [],
 			watch: {
 				patterns: ['src/**/*.ts'],
 				ignore: ['test/**/*', 'dist/**/*'],

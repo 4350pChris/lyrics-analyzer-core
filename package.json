@@ -24,11 +24,11 @@
     "test:watch": "xo && ava --watch"
   },
   "dependencies": {
+    "@aws-sdk/client-sqs": "^3.332.0",
     "@middy/core": "^4.4.0",
     "@middy/http-json-body-parser": "^4.4.0",
     "@middy/sqs-json-body-parser": "^2.5.7",
     "awilix": "^8.0.1",
-    "aws-sdk": "^2.1376.0",
     "dynamoose": "^3.2.0",
     "htmlparser2": "^8.0.2",
     "ofetch": "^1.0.1"

@@ -1,26 +1,21 @@
-import test from 'ava';
+import test, {type ExecutionContext} from 'ava';
 import td from 'testdouble';
-import {SQS} from 'aws-sdk';
+import {SQSClient, type SendMessageCommand} from '@aws-sdk/client-sqs';
 import {SqsQueueService} from '@/infrastructure/services/sqs-queue.service';
 
-const setupMocks = () => ({
-	sqs: td.object(new SQS()),
-	queueUrl: 'https://sqs.us-east-1.amazonaws.com/123456789012/queue-name',
-});
+const macro = async <T extends keyof SqsQueueService> (t: ExecutionContext, method: T, dto: Parameters<SqsQueueService[T]>['0']) => {
+	const sqs = td.instance(SQSClient);
+	const queueService = new SqsQueueService(sqs, 'fetchqueue', 'parsequeue');
 
-test('publish', async t => {
-	const {sqs, queueUrl} = setupMocks();
-	const queueService = new SqsQueueService(sqs, queueUrl);
-	const message = 'message';
+	td.when(sqs.send(td.matchers.anything() as SendMessageCommand)).thenResolve({});
 
-	const innerPromise = td.func();
-	td.when(innerPromise()).thenResolve({});
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+	await queueService[method](dto as any);
 
-	td.when(sqs.sendMessage(td.matchers.anything() as SQS.SendMessageRequest)).thenReturn({
-		promise: innerPromise as () => Promise<any>,
-	});
+	t.is(td.explain(sqs.send).calls.length, 1);
+};
 
-	await queueService.publish(message);
+macro.title = (title: string | undefined, method: string) => `${title ?? 'sqs-queue-service'} ${method}`;
 
-	t.is(td.explain(innerPromise).callCount, 1);
-});
+test('publish to fetch queue', macro, 'sendToFetchQueue', {artistId: '1'});
+test('publish to parse queue', macro, 'sendToParseQueue', {artistId: '1', songs: []});

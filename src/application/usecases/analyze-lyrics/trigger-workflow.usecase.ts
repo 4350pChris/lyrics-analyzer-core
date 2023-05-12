@@ -1,13 +1,12 @@
 import type {UseCase} from '../../interfaces/usecase';
-import {type WorkflowTriggerDto} from '../../dtos/workflow-trigger.dto';
-import {type Queue} from '@/application/interfaces/queue.interface';
+import {type QueueService} from '@/application/interfaces/queue.service.interface';
 import {type ArtistRepository} from '@/domain/interfaces/artist-repository.interface';
 import {type ArtistFactory} from '@/domain/interfaces/concrete-artist.factory.interface';
 import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface';
 
 export class TriggerWorkflow implements UseCase {
 	constructor(
-		private readonly queueService: Queue,
+		private readonly queueService: QueueService,
 		private readonly artistRepository: ArtistRepository,
 		private readonly artistFactory: ArtistFactory,
 		private readonly lyricsApiService: LyricsApiService,
@@ -15,8 +14,7 @@ export class TriggerWorkflow implements UseCase {
 
 	async execute(artistId: number): Promise<void> {
 		await this.createArtistFromApi(artistId);
-		const dto: WorkflowTriggerDto = {artistId: artistId.toString()};
-		await this.queueService.publish(JSON.stringify(dto));
+		await this.queueService.sendToFetchQueue({artistId: artistId.toString()});
 	}
 
 	private async createArtistFromApi(artistId: number): Promise<void> {
