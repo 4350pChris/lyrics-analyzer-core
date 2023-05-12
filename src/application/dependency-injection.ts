@@ -18,7 +18,7 @@ import {TriggerWorkflow} from '@/application/usecases/analyze-lyrics/trigger-wor
 import {ConcreteArtistFactory} from '@/domain/factories/artist.factory';
 import {ConcreteStatisticsCalculator} from '@/domain/services/concrete-statistics-calculator.service';
 
-type Queues = 'fetchSongsQueueUrl' | 'parseLyricsQueueUrl' | 'analysisQueueUrl';
+export type Queues = 'fetchSongsQueueUrl' | 'parseLyricsQueueUrl' | 'analysisQueueUrl';
 
 export type Cradle = {
 	geniusAccessToken: string;
@@ -89,7 +89,7 @@ container.register({
 	statisticsCalculator: asClass(ConcreteStatisticsCalculator),
 	geniusApiClient: asClass(GeniusApiClient),
 	lyricsApiService: asClass(GeniusService),
-	sqs: asClass(SQSClient),
+	sqs: asFunction(() => new SQSClient({})),
 	queueService: asClass(SqsQueueService),
 	// Use cases
 	searchArtistsUseCase: asClass(SearchArtists),
