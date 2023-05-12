@@ -2,7 +2,7 @@
 /* eslint-disable no-template-curly-in-string */
 import type {AWS} from '@serverless/typescript';
 import type {Lift} from 'serverless-lift';
-import {triggerWorkflow, parseLyrics, fetchSongs} from './src/presentation/functions/index';
+import {triggerWorkflow, parseLyrics, fetchSongs, analyzeLyrics} from './src/presentation/functions/index';
 
 const serverlessConfiguration: AWS & Lift = {
 	org: '4350pchris',
@@ -31,6 +31,7 @@ const serverlessConfiguration: AWS & Lift = {
 			PROCESS_TABLE_NAME: '${self:service}-Process-${sls:stage}',
 			FETCH_SONGS_QUEUE_URL: '${construct:fetchSongsQueue.queueUrl}',
 			PARSE_LYRICS_QUEUE_URL: '${construct:parseLyricsQueue.queueUrl}',
+			ANALYSIS_QUEUE_URL: '${construct:analysisQueue.queueUrl}',
 		},
 		iam: {
 			role: {
@@ -100,6 +101,13 @@ const serverlessConfiguration: AWS & Lift = {
 			worker: {
 				handler: parseLyrics.handler,
 				timeout: 30,
+				logRetentionInDays: 14,
+			},
+		},
+		analysisQueue: {
+			type: 'queue',
+			worker: {
+				handler: analyzeLyrics.handler,
 				logRetentionInDays: 14,
 			},
 		},

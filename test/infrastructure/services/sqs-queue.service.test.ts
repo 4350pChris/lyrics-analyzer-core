@@ -5,7 +5,7 @@ import {SqsQueueService} from '@/infrastructure/services/sqs-queue.service';
 
 const macro = async <T extends keyof SqsQueueService> (t: ExecutionContext, method: T, dto: Parameters<SqsQueueService[T]>['0']) => {
 	const sqs = td.instance(SQSClient);
-	const queueService = new SqsQueueService(sqs, 'fetchqueue', 'parsequeue');
+	const queueService = new SqsQueueService(sqs, 'fetchqueue', 'parsequeue', 'analysisqueue');
 
 	td.when(sqs.send(td.matchers.anything() as SendMessageCommand)).thenResolve({});
 
