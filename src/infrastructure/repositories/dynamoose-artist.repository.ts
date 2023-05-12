@@ -1,7 +1,7 @@
 import type {Mapper} from '../interfaces/mapper.interface';
 import type {getArtistModel as ArtistModelFnType} from '../models/artist.model';
 import type {ArtistAggregate} from '@/domain/entities/artist.aggregate';
-import type {ArtistRepository} from '@/domain/interfaces/artist-repository.interface';
+import type {ArtistRepository} from '@/application/interfaces/artist-repository.interface';
 
 export class DynamooseArtistRepository implements ArtistRepository {
 	constructor(

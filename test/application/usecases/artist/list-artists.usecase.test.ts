@@ -2,7 +2,7 @@ import test from 'ava';
 import td from 'testdouble';
 import {ListArtists} from '@/application/usecases/artist/list-artists.usecase';
 import {ArtistAggregate} from '@/domain/entities/artist.aggregate';
-import {type ArtistRepository} from '@/domain/interfaces/artist-repository.interface';
+import {type ArtistRepository} from '@/application/interfaces/artist-repository.interface';
 
 const setupMocks = () => ({
 	artistRepository: td.object<ArtistRepository>(),

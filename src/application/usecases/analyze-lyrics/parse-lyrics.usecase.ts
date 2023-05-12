@@ -3,7 +3,7 @@ import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interfa
 import {type FetchSongsDto} from '@/application/dtos/fetch-songs.dto';
 import {type QueueService} from '@/application/interfaces/queue.service.interface';
 import {type ProcessTrackerRepository} from '@/application/interfaces/process-tracker.repository.interface';
-import {type ArtistRepository} from '@/domain/interfaces/artist-repository.interface';
+import {type ArtistRepository} from '@/application/interfaces/artist-repository.interface';
 import {type SongDto} from '@/application/dtos/song.dto';
 
 export class ParseLyrics implements UseCase {

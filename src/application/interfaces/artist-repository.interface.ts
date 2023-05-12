@@ -1,4 +1,4 @@
-import type {ArtistAggregate} from '../entities/artist.aggregate';
+import type {ArtistAggregate} from '../../domain/entities/artist.aggregate';
 
 export type ArtistRepository = {
 	list(): Promise<ArtistAggregate[]>;

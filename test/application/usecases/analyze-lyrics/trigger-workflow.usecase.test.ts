@@ -2,7 +2,7 @@ import test from 'ava';
 import td from 'testdouble';
 import {TriggerWorkflow} from '@/application/usecases/analyze-lyrics/trigger-workflow.usecase';
 import {type QueueService} from '@/application/interfaces/queue.service.interface';
-import {type ArtistRepository} from '@/domain/interfaces/artist-repository.interface';
+import {type ArtistRepository} from '@/application/interfaces/artist-repository.interface';
 import {type ArtistFactory} from '@/domain/interfaces/concrete-artist.factory.interface';
 import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface';
 import {type ArtistAggregate} from '@/domain/entities/artist.aggregate';

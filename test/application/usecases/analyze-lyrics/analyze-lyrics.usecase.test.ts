@@ -1,7 +1,7 @@
 import test from 'ava';
 import td from 'testdouble';
 import {AnalyzeLyrics} from '@/application/usecases/analyze-lyrics/analyze-lyrics.usecase';
-import {type ArtistRepository} from '@/domain/interfaces/artist-repository.interface';
+import {type ArtistRepository} from '@/application/interfaces/artist-repository.interface';
 
 const setupMocks = () => ({
 	artistRepository: td.object<ArtistRepository>(),

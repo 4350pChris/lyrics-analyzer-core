@@ -3,7 +3,7 @@ import td from 'testdouble';
 import {ParseLyrics} from '@/application/usecases/analyze-lyrics/parse-lyrics.usecase';
 import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface';
 import {type ProcessTrackerRepository} from '@/application/interfaces/process-tracker.repository.interface';
-import {type ArtistRepository} from '@/domain/interfaces/artist-repository.interface';
+import {type ArtistRepository} from '@/application/interfaces/artist-repository.interface';
 import {type SqsQueueService} from '@/infrastructure/services/sqs-queue.service';
 import {type ArtistAggregate} from '@/domain/entities/artist.aggregate';
 

@@ -1,6 +1,6 @@
 import type {UseCase} from '../../interfaces/usecase';
 import type {ArtistAggregate} from '@/domain/entities/artist.aggregate';
-import type {ArtistRepository} from '@/domain/interfaces/artist-repository.interface';
+import type {ArtistRepository} from '@/application/interfaces/artist-repository.interface';
 
 export class ListArtists implements UseCase {
 	constructor(
