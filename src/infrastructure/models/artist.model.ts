@@ -36,8 +36,12 @@ const artistSchema = new dynamoose.Schema(
 				},
 			}],
 		},
+		stats: Object,
 	},
 	{
+		saveUnknown: [
+			'stats.**',
+		],
 		timestamps: true,
 	},
 );
