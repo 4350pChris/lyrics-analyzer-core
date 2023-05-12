@@ -16,14 +16,18 @@ export class DynamooseProcessRepository implements ProcessTrackerRepository {
 		await (this.processModel.update({id: processId}, {$ADD: {total: -value}}) as Promise<void>); // eslint-disable-line @typescript-eslint/naming-convention
 	}
 
-	async get(processId: string): Promise<number | undefined> {
+	async get(processId: string): Promise<number> {
 		const item = await this.processModel.get(processId);
 		return item?.total;
 	}
 
 	async isRunning(processId: string): Promise<boolean> {
-		const left = await this.get(processId.toString());
-		return Boolean(left && left > 0);
+		try {
+			const left = await this.get(processId.toString());
+			return left > 0;
+		} catch {
+			return false;
+		}
 	}
 }
 
