@@ -23,3 +23,4 @@ macro.title = (title: string | undefined, method: string) => `${title ?? 'sqs-qu
 
 test('publish to fetch queue', macro, 'sendToFetchQueue', {artistId: '1'});
 test('publish to parse queue', macro, 'sendToParseQueue', {artistId: '1', songs: []});
+test('publish to analysis queue', macro, 'sendToAnalysisQueue', {artistId: '1'});
