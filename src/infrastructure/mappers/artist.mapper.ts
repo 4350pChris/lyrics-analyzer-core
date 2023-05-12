@@ -26,7 +26,7 @@ export class ArtistMapper implements Mapper<ArtistAggregate> {
 	}
 
 	toModel(artist: ArtistAggregate): Partial<AnyItem> {
-		const songs = artist.songs.map(s => ({id: s.id, name: s.name, text: s.text}));
+		const songs = artist.songs.map(s => ({id: s.id.toString(), name: s.name, text: s.text}));
 		return {
 			id: artist.id.toString(),
 			name: artist.name,

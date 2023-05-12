@@ -25,8 +25,8 @@ const makeModel = () => ({
 	description: 'description1',
 	name: 'artist1',
 	songs: [
-		{id: 1, name: 'song1', text: 'text1'},
-		{id: 2, name: 'song2', text: 'text2'},
+		{id: '1', name: 'song1', text: 'text1'},
+		{id: '2', name: 'song2', text: 'text2'},
 	],
 });
 
