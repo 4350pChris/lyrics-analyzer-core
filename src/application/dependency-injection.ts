@@ -18,7 +18,7 @@ import {TriggerWorkflow} from '@/application/usecases/analyze-lyrics/trigger-wor
 import {ConcreteArtistFactory} from '@/domain/factories/artist.factory';
 import {ConcreteStatisticsCalculator} from '@/domain/services/concrete-statistics-calculator.service';
 
-type Queues = 'fetchSongsQueueUrl' | 'parseLyricsQueueUrl';
+type Queues = 'fetchSongsQueueUrl' | 'parseLyricsQueueUrl' | 'analysisQueueUrl';
 
 export type Cradle = {
 	geniusAccessToken: string;
@@ -72,6 +72,7 @@ container.register({
 	queueUrls: asValue<Record<Queues, string>>({
 		fetchSongsQueueUrl: getEnv('FETCH_SONGS_QUEUE_URL'),
 		parseLyricsQueueUrl: getEnv('PARSE_LYRICS_QUEUE_URL'),
+		analysisQueueUrl: getEnv('ANALYSIS_QUEUE_URL'),
 	}),
 	geniusBaseUrl: asValue('https://api.genius.com'),
 	// Models

@@ -9,6 +9,7 @@ export class SqsQueueService implements QueueService {
 		private readonly sqs: SQSClient,
 		private readonly fetchSongsQueueUrl: string,
 		private readonly parseLyricsQueueUrl: string,
+		private readonly analysisQueueUrl: string,
 	) {}
 
 	async sendToFetchQueue(dto: WorkflowTriggerDto): Promise<void> {
@@ -17,6 +18,10 @@ export class SqsQueueService implements QueueService {
 
 	async sendToParseQueue(dto: FetchSongsDto): Promise<void> {
 		await this.publish(this.parseLyricsQueueUrl, JSON.stringify(dto));
+	}
+
+	async sendToAnalysisQueue(dto: FetchSongsDto): Promise<void> {
+		await this.publish(this.analysisQueueUrl, JSON.stringify(dto));
 	}
 
 	private async publish(queueUrl: string, message: string): Promise<void> {
