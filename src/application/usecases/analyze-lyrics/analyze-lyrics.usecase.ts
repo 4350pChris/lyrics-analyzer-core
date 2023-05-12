@@ -17,6 +17,6 @@ export class AnalyzeLyrics implements UseCase {
 
 		artist.calculateStats();
 
-		await this.artistRepository.save(artist);
+		await this.artistRepository.update(artist);
 	}
 }

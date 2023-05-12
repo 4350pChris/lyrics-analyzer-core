@@ -47,6 +47,6 @@ export class ParseLyrics implements UseCase {
 			artist.addSong(song.id, song.title, song.text);
 		}
 
-		await this.artistRepository.save(artist);
+		await this.artistRepository.update(artist);
 	}
 }

@@ -44,6 +44,21 @@ test('Save artist', async t => {
 	t.is(td.explain(mapper.toDomain).callCount, 1);
 });
 
+test('Update artist', async t => {
+	const {artistModel, mapper} = setupMocks();
+	const repo = new DynamooseArtistRepository(mapper, artistModel);
+
+	td.when(artistModel.update(td.matchers.anything() as Partial<AnyItem>)).thenResolve(td.object<AnyItem>());
+	td.when(mapper.toModel(td.matchers.anything() as ArtistAggregate)).thenReturn(td.object<AnyItem>());
+	td.when(mapper.toDomain(td.matchers.anything() as AnyItem)).thenReturn(td.object<ArtistAggregate>());
+
+	await repo.update(td.object());
+
+	t.is(td.explain(artistModel.create).callCount, 1);
+	t.is(td.explain(mapper.toModel).callCount, 1);
+	t.is(td.explain(mapper.toDomain).callCount, 1);
+});
+
 test('Get artist by id', async t => {
 	const {artistModel, mapper} = setupMocks();
 	const repo = new DynamooseArtistRepository(mapper, artistModel);

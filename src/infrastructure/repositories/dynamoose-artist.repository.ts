@@ -19,6 +19,11 @@ export class DynamooseArtistRepository implements ArtistRepository {
 		return this.artistMapper.toDomain(model);
 	}
 
+	async update(artist: ArtistAggregate): Promise<ArtistAggregate> {
+		const model = await this.artistModel.update(this.artistMapper.toModel(artist));
+		return this.artistMapper.toDomain(model);
+	}
+
 	async getById(artistId: number): Promise<ArtistAggregate> {
 		const result = await this.artistModel.get(artistId.toString());
 		return this.artistMapper.toDomain(result);
