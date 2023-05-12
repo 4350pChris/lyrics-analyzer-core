@@ -51,7 +51,10 @@ const serverlessConfiguration: AWS & Lift = {
 				Type: 'AWS::DynamoDB::Table',
 				Properties: {
 					TableName: '${self:service}-Artist-${sls:stage}',
-					BillingMode: 'PAY_PER_REQUEST',
+					ProvisionedThroughput: {
+						ReadCapacityUnits: 1,
+						WriteCapacityUnits: 1,
+					},
 					AttributeDefinitions: [
 						{
 							AttributeName: 'id',
@@ -70,7 +73,10 @@ const serverlessConfiguration: AWS & Lift = {
 				Type: 'AWS::DynamoDB::Table',
 				Properties: {
 					TableName: '${self:service}-Process-${sls:stage}',
-					BillingMode: 'PAY_PER_REQUEST',
+					ProvisionedThroughput: {
+						ReadCapacityUnits: 1,
+						WriteCapacityUnits: 1,
+					},
 					AttributeDefinitions: [
 						{
 							AttributeName: 'id',
