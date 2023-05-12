@@ -25,7 +25,7 @@ export class DynamooseArtistRepository implements ArtistRepository {
 	}
 
 	async getById(artistId: number): Promise<ArtistAggregate> {
-		const result = await this.artistModel.get(artistId.toString());
+		const result = await this.artistModel.get(artistId);
 		return this.artistMapper.toDomain(result);
 	}
 }

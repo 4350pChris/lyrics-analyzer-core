@@ -58,7 +58,7 @@ const serverlessConfiguration: AWS & Lift = {
 					AttributeDefinitions: [
 						{
 							AttributeName: 'id',
-							AttributeType: 'S',
+							AttributeType: 'N',
 						},
 					],
 					KeySchema: [
@@ -80,7 +80,7 @@ const serverlessConfiguration: AWS & Lift = {
 					AttributeDefinitions: [
 						{
 							AttributeName: 'id',
-							AttributeType: 'S',
+							AttributeType: 'N',
 						},
 					],
 					KeySchema: [

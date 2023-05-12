@@ -8,7 +8,7 @@ import {type TriggerWorkflow} from '@/application/usecases/analyze-lyrics/trigge
 const handler = withDependencies<ValidatedEventAPIGatewayProxyEvent<typeof schema>>((
 	triggerWorkflowUseCase: TriggerWorkflow,
 ) => async event => {
-	await triggerWorkflowUseCase.execute(event.body.artistId.toString());
+	await triggerWorkflowUseCase.execute(event.body.artistId);
 
 	return formatJSONResponse({
 		message: `Lyrics for artist ${event.body.artistId} are being analyzed`,

@@ -63,12 +63,12 @@ test('Get artist by id', async t => {
 	const {artistModel, mapper} = setupMocks();
 	const repo = new DynamooseArtistRepository(mapper, artistModel);
 
-	td.when(artistModel.get('1')).thenResolve(td.object<AnyItem>());
+	td.when(artistModel.get(1)).thenResolve(td.object<AnyItem>());
 	td.when(mapper.toDomain(td.matchers.anything() as AnyItem)).thenReturn(td.object<ArtistAggregate>());
 
 	await repo.getById(1);
 
 	t.is(td.explain(artistModel.get).callCount, 1);
-	t.is(td.explain(artistModel.get).calls[0].args[0], '1');
+	t.is(td.explain(artistModel.get).calls[0].args[0], 1);
 	t.is(td.explain(mapper.toDomain).callCount, 1);
 });

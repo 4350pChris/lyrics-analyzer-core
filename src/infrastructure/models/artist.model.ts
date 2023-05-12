@@ -3,7 +3,7 @@ import dynamoose from 'dynamoose';
 const artistSchema = new dynamoose.Schema(
 	{
 		id: {
-			type: String,
+			type: Number,
 			hashKey: true,
 		},
 		name: {
@@ -23,7 +23,7 @@ const artistSchema = new dynamoose.Schema(
 				type: Object,
 				schema: {
 					id: {
-						type: String,
+						type: Number,
 					},
 					name: {
 						type: String,

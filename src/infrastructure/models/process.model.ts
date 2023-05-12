@@ -4,7 +4,7 @@ import {Item} from 'dynamoose/dist/Item';
 const processSchema = new dynamoose.Schema(
 	{
 		id: {
-			type: String,
+			type: Number,
 			hashKey: true,
 		},
 		total: {
@@ -18,7 +18,7 @@ const processSchema = new dynamoose.Schema(
 );
 
 export class ProcessModelItem extends Item {
-	id!: string;
+	id!: number;
 	total!: number;
 }
 

@@ -9,14 +9,14 @@ const setupMocks = () => ({
 });
 
 test('Should start process tracker', async t => {
-	const artistId = '1';
+	const artistId = 1;
 	const songsCount = 10;
 
 	const {processModel} = setupMocks();
 
 	const processTracker = new DynamooseProcessRepository(processModel);
 
-	td.when(processModel.create({id: artistId.toString(), total: songsCount})).thenResolve({});
+	td.when(processModel.create({id: artistId, total: songsCount})).thenResolve({});
 
 	await processTracker.start(artistId, songsCount);
 
@@ -24,7 +24,7 @@ test('Should start process tracker', async t => {
 });
 
 test('Should decrement process tracker', async t => {
-	const artistId = '1';
+	const artistId = 1;
 	const decrementValue = 1;
 
 	const {processModel} = setupMocks();
@@ -40,7 +40,7 @@ test('Should decrement process tracker', async t => {
 });
 
 test('Should check if process is running', async t => {
-	const artistId = '1';
+	const artistId = 1;
 	const songsCount = 10;
 
 	const {processModel} = setupMocks();
@@ -55,7 +55,7 @@ test('Should check if process is running', async t => {
 });
 
 test('Should declare process as not running when it is not found', async t => {
-	const artistId = '1';
+	const artistId = 1;
 
 	const {processModel} = setupMocks();
 

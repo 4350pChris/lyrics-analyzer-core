@@ -1,5 +1,5 @@
 export type ProcessTrackerRepository = {
-	start(processId: string, total: number): Promise<void>;
-	decrement(processId: string, value: number): Promise<void>;
-	isRunning(processId: string,): Promise<boolean>;
+	start(processId: number, total: number): Promise<void>;
+	decrement(processId: number, value: number): Promise<void>;
+	isRunning(processId: number): Promise<boolean>;
 };

@@ -27,22 +27,22 @@ export class ParseLyrics implements UseCase {
 			}
 		}
 
-		await this.handleSuccessfulSongs(artistId, successfulSongs);
+		await this.handleSuccessfulSongs(Number.parseInt(artistId), successfulSongs);
 	}
 
-	private async handleSuccessfulSongs(artistId: string, songs: Array<SongDto & {text: string}>): Promise<void> {
+	private async handleSuccessfulSongs(artistId: number, songs: Array<SongDto & {text: string}>): Promise<void> {
 		await this.saveSongsToArtist(artistId, songs);
 
 		await this.processTrackerRepository.decrement(artistId, songs.length);
 
 		const running = await this.processTrackerRepository.isRunning(artistId);
 		if (!running) {
-			await this.queueService.sendToAnalysisQueue({artistId});
+			await this.queueService.sendToAnalysisQueue({artistId: artistId.toString()});
 		}
 	}
 
-	private async saveSongsToArtist(artistId: string, songs: Array<SongDto & {text: string}>): Promise<void> {
-		const artist = await this.artistRepository.getById(Number.parseInt(artistId));
+	private async saveSongsToArtist(artistId: number, songs: Array<SongDto & {text: string}>): Promise<void> {
+		const artist = await this.artistRepository.getById(artistId);
 		for (const song of songs) {
 			artist.addSong(song.id, song.title, song.text);
 		}
