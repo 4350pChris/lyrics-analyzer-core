@@ -54,7 +54,7 @@ test('Update artist', async t => {
 
 	await repo.update(td.object());
 
-	t.is(td.explain(artistModel.create).callCount, 1);
+	t.is(td.explain(artistModel.update).callCount, 1);
 	t.is(td.explain(mapper.toModel).callCount, 1);
 	t.is(td.explain(mapper.toDomain).callCount, 1);
 });
