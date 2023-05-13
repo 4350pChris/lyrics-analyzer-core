@@ -40,6 +40,7 @@ export class GeniusApiClient implements GeniusApi {
 	async getSongsForArtist(artistId: number, page: number): Promise<ArtistSongsResponse> {
 		return this.client<ArtistSongsResponse>(`/artists/${artistId}/songs`, {
 			params: {
+				sort: 'popularity',
 				page,
 			},
 		});
