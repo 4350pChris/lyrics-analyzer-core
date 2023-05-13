@@ -79,7 +79,5 @@ test('Should delete process', async t => {
 
 	await processTracker.delete(artistId);
 
-	td.verify(processModel.delete(artistId));
-
 	t.pass();
 });

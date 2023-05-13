@@ -2,7 +2,7 @@ import type {Mapper} from '../interfaces/mapper.interface';
 import {type ArtistModelType} from '../models/artist.model';
 import {type ArtistAggregate} from '@/domain/entities/artist.aggregate';
 import {Song} from '@/domain/entities/song.entity';
-import {type ArtistFactory} from '@/domain/interfaces/concrete-artist.factory.interface';
+import {type ArtistFactory} from '@/domain/interfaces/artist.factory.interface';
 import {Stats} from '@/domain/entities/stats.value-object';
 
 export class ArtistMapper implements Mapper<ArtistAggregate, ArtistModelType> {

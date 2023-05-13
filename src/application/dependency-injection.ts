@@ -16,7 +16,7 @@ import {FetchSongs} from '@/application/usecases/analyze-lyrics/fetch-songs.usec
 import {ParseLyrics} from '@/application/usecases/analyze-lyrics/parse-lyrics.usecase';
 import {ListArtists} from '@/application/usecases/artist/list-artists.usecase';
 import {TriggerWorkflow} from '@/application/usecases/analyze-lyrics/trigger-workflow.usecase';
-import {ConcreteArtistFactory} from '@/domain/factories/artist.factory';
+import {ConcreteArtistFactory} from '@/domain/factories/concrete-artist.factory';
 import {ConcreteStatisticsCalculator} from '@/domain/services/concrete-statistics-calculator.service';
 
 export type Queues = 'fetchSongsQueueUrl' | 'parseLyricsQueueUrl' | 'analysisQueueUrl';

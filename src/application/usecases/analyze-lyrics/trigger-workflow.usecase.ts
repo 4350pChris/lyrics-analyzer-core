@@ -1,7 +1,7 @@
 import type {UseCase} from '../../interfaces/usecase';
 import {type QueueService} from '@/application/interfaces/queue.service.interface';
 import {type ArtistRepository} from '@/application/interfaces/artist-repository.interface';
-import {type ArtistFactory} from '@/domain/interfaces/concrete-artist.factory.interface';
+import {type ArtistFactory} from '@/domain/interfaces/artist.factory.interface';
 import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface';
 import {type ProcessTrackerRepository} from '@/application/interfaces/process-tracker.repository.interface';
 

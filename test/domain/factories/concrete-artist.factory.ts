@@ -1,6 +1,6 @@
 import test from 'ava';
 import td from 'testdouble';
-import {ConcreteArtistFactory} from '@/domain/factories/artist.factory';
+import {ConcreteArtistFactory} from '@/domain/factories/concrete-artist.factory';
 import {type ArtistProps} from '@/domain/interfaces/artist-props.interface';
 import {type StatisticsCalculator} from '@/domain/interfaces/statistics-calculator.interface';
 
@@ -28,5 +28,10 @@ test('Should set statistics calculator', t => {
 	const statsCalculator = td.object<StatisticsCalculator>();
 	const factory = new ConcreteArtistFactory(statsCalculator);
 	const artist = factory.createArtist(expected);
-	t.is(artist.statisticsCalculator, statsCalculator);
+
+	artist.calculateStats();
+
+	td.verify(statsCalculator.calculateStats([]));
+
+	t.pass();
 });

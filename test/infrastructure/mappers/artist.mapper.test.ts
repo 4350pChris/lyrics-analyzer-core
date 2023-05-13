@@ -1,6 +1,6 @@
 import test from 'ava';
 import td from 'testdouble';
-import {type ArtistFactory} from '../../../src/domain/interfaces/concrete-artist.factory.interface';
+import {type ArtistFactory} from '@/domain/interfaces/artist.factory.interface';
 import {ArtistMapper} from '@/infrastructure/mappers/artist.mapper';
 import {ArtistAggregate} from '@/domain/entities/artist.aggregate';
 import {Song} from '@/domain/entities/song.entity';

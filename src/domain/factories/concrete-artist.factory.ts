@@ -1,6 +1,6 @@
 import {ArtistAggregate} from '../entities/artist.aggregate';
 import {type ArtistProps} from '../interfaces/artist-props.interface';
-import {type ArtistFactory} from '../interfaces/concrete-artist.factory.interface';
+import {type ArtistFactory} from '../interfaces/artist.factory.interface';
 import {type StatisticsCalculator} from '../interfaces/statistics-calculator.interface';
 
 export class ConcreteArtistFactory implements ArtistFactory {

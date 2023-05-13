@@ -35,6 +35,10 @@ const makeSong = (id: number) => ({
 	url: `https://genius.com/${id}`,
 });
 
+test.afterEach.always('Reset mocks', () => {
+	td.reset();
+});
+
 test('Should parse lyrics and push the result to a queue', async t => {
 	const {usecase, lyricsApiService, processTrackerRepository} = setupUsecase();
 
@@ -67,7 +71,7 @@ test('Should decrement process tracker with count of all songs', async t => {
 	const {usecase, processTrackerRepository, lyricsApiService} = setupUsecase();
 
 	td.when(lyricsApiService.parseLyrics(td.matchers.anything() as URL)).thenReject('error');
-	await usecase.execute({artistId: '1', songs: [makeSong(1)]});
+	await usecase.execute({artistId: 1, songs: [makeSong(1)]});
 
 	td.verify(processTrackerRepository.decrement(1, 1));
 	t.pass();
@@ -75,7 +79,7 @@ test('Should decrement process tracker with count of all songs', async t => {
 
 test('Should delete process from tracker when all songs are processed', async t => {
 	const {usecase, processTrackerRepository} = setupUsecase();
-	await usecase.execute({artistId: '1', songs: [makeSong(1)]});
+	await usecase.execute({artistId: 1, songs: [makeSong(1)]});
 
 	td.verify(processTrackerRepository.delete(1));
 	t.pass();
