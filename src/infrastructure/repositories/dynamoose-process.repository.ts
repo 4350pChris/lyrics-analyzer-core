@@ -7,6 +7,10 @@ export class DynamooseProcessRepository implements ProcessTrackerRepository {
 		private readonly processModel: ModelType<ProcessModelItem>,
 	) {}
 
+	async delete(processId: number): Promise<void> {
+		await this.processModel.delete(processId);
+	}
+
 	async start(processId: number, total: number): Promise<void> {
 		await this.processModel.create({id: processId, total});
 	}

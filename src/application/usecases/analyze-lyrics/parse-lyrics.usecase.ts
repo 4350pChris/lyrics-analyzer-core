@@ -37,6 +37,7 @@ export class ParseLyrics implements UseCase {
 
 		const running = await this.processTrackerRepository.isRunning(artistId);
 		if (!running) {
+			await this.processTrackerRepository.delete(artistId);
 			await this.queueService.sendToAnalysisQueue({artistId: artistId.toString()});
 		}
 	}

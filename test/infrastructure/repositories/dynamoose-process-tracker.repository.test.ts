@@ -68,3 +68,18 @@ test('Should declare process as not running when it is not found', async t => {
 	t.false(isRunning);
 });
 
+test('Should delete process', async t => {
+	const artistId = 1;
+
+	const {processModel} = setupMocks();
+
+	const processTracker = new DynamooseProcessRepository(processModel);
+
+	td.when(processModel.delete(artistId)).thenResolve();
+
+	await processTracker.delete(artistId);
+
+	td.verify(processModel.delete(artistId));
+
+	t.pass();
+});
