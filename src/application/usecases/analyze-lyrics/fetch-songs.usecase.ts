@@ -12,10 +12,6 @@ export class FetchSongs implements UseCase {
 	) {}
 
 	async execute(artistId: number): Promise<void> {
-		if (await this.processTrackerRepository.isRunning(artistId)) {
-			throw new Error('Artist is currently being processed');
-		}
-
 		const songs = await this.lyricsApiService.retrieveSongsForArtist(artistId);
 		const chunks = this.chunkSongs(songs);
 

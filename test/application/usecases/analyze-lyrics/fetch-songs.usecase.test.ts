@@ -28,14 +28,3 @@ test('Should retrieve all songs from genius API then push to SQS queue in chunks
 	t.is(td.explain(lyricsApiService.retrieveSongsForArtist).callCount, 1);
 	t.is(td.explain(queueService.sendToParseQueue).callCount, 10);
 });
-
-test('Should reject when artist is being processed already', async t => {
-	const {lyricsApiService, queueService, processTrackerRepository} = setupMocks();
-
-	const artistId = 1;
-	td.when(processTrackerRepository.isRunning(artistId)).thenResolve(true);
-
-	const fetchSongs = new FetchSongs(lyricsApiService, queueService, processTrackerRepository);
-
-	await t.throwsAsync(fetchSongs.execute(artistId), {message: 'Artist is currently being processed'});
-});

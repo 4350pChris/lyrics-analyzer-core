@@ -3,6 +3,7 @@ import {type QueueService} from '@/application/interfaces/queue.service.interfac
 import {type ArtistRepository} from '@/application/interfaces/artist-repository.interface';
 import {type ArtistFactory} from '@/domain/interfaces/concrete-artist.factory.interface';
 import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface';
+import {type ProcessTrackerRepository} from '@/application/interfaces/process-tracker.repository.interface';
 
 export class TriggerWorkflow implements UseCase {
 	constructor(
@@ -10,9 +11,14 @@ export class TriggerWorkflow implements UseCase {
 		private readonly artistRepository: ArtistRepository,
 		private readonly artistFactory: ArtistFactory,
 		private readonly lyricsApiService: LyricsApiService,
+		private readonly processTrackerRepository: ProcessTrackerRepository,
 	) {}
 
 	async execute(artistId: number): Promise<void> {
+		if (await this.processTrackerRepository.isRunning(artistId)) {
+			throw new Error('Artist is currently being processed');
+		}
+
 		await this.createArtistFromApi(artistId);
 		await this.queueService.sendToFetchQueue({artistId});
 	}
