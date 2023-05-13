@@ -14,7 +14,7 @@ export class DynamooseArtistRepository implements ArtistRepository {
 		return result.map(item => this.artistMapper.toDomain(item));
 	}
 
-	async save(artist: ArtistAggregate): Promise<ArtistAggregate> {
+	async create(artist: ArtistAggregate): Promise<ArtistAggregate> {
 		const model = await this.artistModel.create(this.artistMapper.toModel(artist));
 		return this.artistMapper.toDomain(model);
 	}

@@ -37,7 +37,7 @@ test('Save artist', async t => {
 	td.when(mapper.toModel(td.matchers.anything() as ArtistAggregate)).thenReturn(td.object<AnyItem>());
 	td.when(mapper.toDomain(td.matchers.anything() as AnyItem)).thenReturn(td.object<ArtistAggregate>());
 
-	await repo.save(td.object());
+	await repo.create(td.object());
 
 	t.is(td.explain(artistModel.create).callCount, 1);
 	t.is(td.explain(mapper.toModel).callCount, 1);

@@ -31,13 +31,13 @@ test('Should create artist from API if it is not found', async t => {
 	const {queueService, artistRepository, artistFactory, lyricsApiService} = setupMocks();
 
 	td.when(artistRepository.getById(td.matchers.anything() as number)).thenReject('Artist does not exist');
-	td.when(artistRepository.save(td.matchers.anything() as ArtistAggregate)).thenResolve({});
+	td.when(artistRepository.create(td.matchers.anything() as ArtistAggregate)).thenResolve({});
 
 	const usecase = new TriggerWorkflow(queueService, artistRepository, artistFactory, lyricsApiService);
 
 	await usecase.execute(123);
 
-	t.is(td.explain(artistRepository.save).calls.length, 1);
+	t.is(td.explain(artistRepository.create).calls.length, 1);
 });
 
 test('Should not create artist if already exists', async t => {
@@ -49,5 +49,5 @@ test('Should not create artist if already exists', async t => {
 
 	await usecase.execute(123);
 
-	t.is(td.explain(artistRepository.save).calls.length, 0);
+	t.is(td.explain(artistRepository.create).calls.length, 0);
 });
