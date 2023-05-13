@@ -63,7 +63,7 @@ export type ArtistModelType = {
 	stats?: Stats;
 };
 
-class ArtistModelItem extends Item implements ArtistModelType {
+export class ArtistModelItem extends Item implements ArtistModelType {
 	id!: number;
 	name!: string;
 	description!: string;

@@ -1,15 +1,15 @@
 
 import test from 'ava';
 import td from 'testdouble';
-import type {AnyItem} from 'dynamoose/dist/Item';
 import {type ScanResponse} from 'dynamoose/dist/ItemRetriever';
+import {type ModelType} from 'dynamoose/dist/General';
 import {DynamooseArtistRepository} from '@/infrastructure/repositories/dynamoose-artist.repository';
-import {type getArtistModel} from '@/infrastructure/models/artist.model';
+import {type ArtistModelItem} from '@/infrastructure/models/artist.model';
 import {ArtistMapper} from '@/infrastructure/mappers/artist.mapper';
 import {type ArtistAggregate} from '@/domain/entities/artist.aggregate';
 
 const setupMocks = () => ({
-	artistModel: td.object<ReturnType<typeof getArtistModel>>(),
+	artistModel: td.object<ModelType<ArtistModelItem>>(),
 	mapper: td.instance(ArtistMapper),
 });
 
@@ -18,10 +18,10 @@ test('List all', async t => {
 	const repo = new DynamooseArtistRepository(mapper, artistModel);
 
 	td.when(artistModel.scan()).thenReturn({
-		exec: async () => [1, 2, 3] as unknown as ScanResponse<AnyItem>,
+		exec: async () => [1, 2, 3] as unknown as ScanResponse<ArtistModelItem>,
 	});
 
-	td.when(mapper.toDomain(td.matchers.anything() as AnyItem)).thenReturn(td.object<ArtistAggregate>());
+	td.when(mapper.toDomain(td.matchers.anything() as ArtistModelItem)).thenReturn(td.object<ArtistAggregate>());
 
 	await repo.list();
 
@@ -33,9 +33,9 @@ test('Save artist', async t => {
 	const {artistModel, mapper} = setupMocks();
 	const repo = new DynamooseArtistRepository(mapper, artistModel);
 
-	td.when(artistModel.create(td.matchers.anything() as Partial<AnyItem>)).thenResolve(td.object<AnyItem>());
-	td.when(mapper.toModel(td.matchers.anything() as ArtistAggregate)).thenReturn(td.object<AnyItem>());
-	td.when(mapper.toDomain(td.matchers.anything() as AnyItem)).thenReturn(td.object<ArtistAggregate>());
+	td.when(artistModel.create(td.matchers.anything() as Partial<ArtistModelItem>)).thenResolve(td.object<ArtistModelItem>());
+	td.when(mapper.toModel(td.matchers.anything() as ArtistAggregate)).thenReturn(td.object<ArtistModelItem>());
+	td.when(mapper.toDomain(td.matchers.anything() as ArtistModelItem)).thenReturn(td.object<ArtistAggregate>());
 
 	await repo.create(td.object());
 
@@ -48,9 +48,9 @@ test('Update artist', async t => {
 	const {artistModel, mapper} = setupMocks();
 	const repo = new DynamooseArtistRepository(mapper, artistModel);
 
-	td.when(artistModel.update(td.matchers.anything() as Partial<AnyItem>)).thenResolve(td.object<AnyItem>());
-	td.when(mapper.toModel(td.matchers.anything() as ArtistAggregate)).thenReturn(td.object<AnyItem>());
-	td.when(mapper.toDomain(td.matchers.anything() as AnyItem)).thenReturn(td.object<ArtistAggregate>());
+	td.when(artistModel.update(td.matchers.anything() as Partial<ArtistModelItem>)).thenResolve(td.object<ArtistModelItem>());
+	td.when(mapper.toModel(td.matchers.anything() as ArtistAggregate)).thenReturn(td.object<ArtistModelItem>());
+	td.when(mapper.toDomain(td.matchers.anything() as ArtistModelItem)).thenReturn(td.object<ArtistAggregate>());
 
 	await repo.update(td.object());
 
@@ -63,8 +63,8 @@ test('Get artist by id', async t => {
 	const {artistModel, mapper} = setupMocks();
 	const repo = new DynamooseArtistRepository(mapper, artistModel);
 
-	td.when(artistModel.get(1)).thenResolve(td.object<AnyItem>());
-	td.when(mapper.toDomain(td.matchers.anything() as AnyItem)).thenReturn(td.object<ArtistAggregate>());
+	td.when(artistModel.get(1)).thenResolve(td.object<ArtistModelItem>());
+	td.when(mapper.toDomain(td.matchers.anything() as ArtistModelItem)).thenReturn(td.object<ArtistAggregate>());
 
 	await repo.getById(1);
 
