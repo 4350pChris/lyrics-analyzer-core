@@ -1,4 +1,6 @@
 import dynamoose from 'dynamoose';
+import {Item} from 'dynamoose/dist/Item';
+import {type Stats} from '@/domain/entities/stats.value-object';
 
 const artistSchema = new dynamoose.Schema(
 	{
@@ -46,7 +48,33 @@ const artistSchema = new dynamoose.Schema(
 	},
 );
 
-export const getArtistModel = (artistTableName: string) => dynamoose.model(artistTableName, artistSchema, {
+type SongsItem = {
+	id: number;
+	name: string;
+	text: string;
+};
+
+export type ArtistModelType = {
+	id: number;
+	name: string;
+	description: string;
+	imageUrl?: string;
+	songs: SongsItem[];
+	stats?: Stats;
+};
+
+class ArtistModelItem extends Item implements ArtistModelType {
+	id!: number;
+	name!: string;
+	description!: string;
+	imageUrl?: string;
+	songs!: SongsItem[];
+	stats?: Stats;
+	createdAt!: Date;
+	updatedAt!: Date;
+}
+
+export const getArtistModel = (artistTableName: string) => dynamoose.model<ArtistModelItem>(artistTableName, artistSchema, {
 	create: false,
 	waitForActive: false,
 });
