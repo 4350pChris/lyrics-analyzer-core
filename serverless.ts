@@ -115,6 +115,7 @@ const serverlessConfiguration: AWS & Lift = {
 			worker: {
 				handler: analyzeLyrics.handler,
 				logRetentionInDays: 14,
+				timeout: 30,
 			},
 		},
 	},
