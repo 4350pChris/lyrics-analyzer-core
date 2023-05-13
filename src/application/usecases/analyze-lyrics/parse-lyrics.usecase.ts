@@ -27,14 +27,14 @@ export class ParseLyrics implements UseCase {
 			}
 		}
 
+		await this.saveSongsToArtist(artistId, successfulSongs);
+
 		await this.processTrackerRepository.decrement(artistId, songs.length);
 
-		await this.handleSuccessfulSongs(artistId, successfulSongs);
+		await this.triggerAnalysis(artistId);
 	}
 
-	private async handleSuccessfulSongs(artistId: number, songs: Array<SongDto & {text: string}>): Promise<void> {
-		await this.saveSongsToArtist(artistId, songs);
-
+	private async triggerAnalysis(artistId: number): Promise<void> {
 		const running = await this.processTrackerRepository.isRunning(artistId);
 		if (!running) {
 			await this.processTrackerRepository.delete(artistId);
