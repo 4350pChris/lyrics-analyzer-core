@@ -12,9 +12,6 @@
       "args": [
         "${file}"
       ],
-      "env": {
-        "NODE_OPTIONS": "--loader=tsx --no-warnings"
-      },
       "outputCapture": "std",
       "console": "integratedTerminal", // optional
       "skipFiles": [
