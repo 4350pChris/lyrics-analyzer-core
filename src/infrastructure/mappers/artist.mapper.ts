@@ -14,8 +14,8 @@ export class ArtistMapper implements Mapper<ArtistAggregate, ArtistModelType> {
 		const songs = model.songs.map(s => new Song(s.id, s.name, s.text));
 		let stats;
 		if (model.stats) {
-			const {averageLength, medianLength, uniqueWords, wordList} = model.stats;
-			stats = new Stats(uniqueWords, averageLength, medianLength, wordList);
+			const {averageLength, medianLength, uniqueWords} = model.stats;
+			stats = new Stats(uniqueWords, averageLength, medianLength);
 		}
 
 		const artist = this.artistFactory.createArtist({
@@ -33,8 +33,8 @@ export class ArtistMapper implements Mapper<ArtistAggregate, ArtistModelType> {
 		const songs = artist.songs.map(s => ({id: s.id, name: s.name, text: s.text}));
 		let stats;
 		if (artist.stats) {
-			const {averageLength, medianLength, uniqueWords, wordList} = artist.stats;
-			stats = {averageLength, medianLength, uniqueWords, wordList};
+			const {averageLength, medianLength, uniqueWords} = artist.stats;
+			stats = {averageLength, medianLength, uniqueWords};
 		}
 
 		return {

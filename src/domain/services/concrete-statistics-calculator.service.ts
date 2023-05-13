@@ -9,7 +9,6 @@ export class ConcreteStatisticsCalculator implements StatisticsCalculator {
 			this.calculateUniqueWords(wordList),
 			this.calculateAverageLengthOfWords(wordList),
 			this.calculateMedianLengthOfWords(wordList),
-			wordList,
 		);
 	}
 

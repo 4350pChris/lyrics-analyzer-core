@@ -40,7 +40,6 @@ test('Get stats for artist calls on statistics calculator', t => {
 		averageLength: 1,
 		uniqueWords: 2,
 		medianLength: 3,
-		wordList: {text: 1},
 	};
 
 	td.when(calculator.calculateStats(artist.songs)).thenReturn(expectedStats);
