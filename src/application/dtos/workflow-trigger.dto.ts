@@ -1,3 +1,3 @@
 export type WorkflowTriggerDto = {
-	artistId: string;
+	artistId: number;
 };

@@ -1,3 +1,3 @@
 export type ParsedSongsDto = {
-	artistId: string;
+	artistId: number;
 };

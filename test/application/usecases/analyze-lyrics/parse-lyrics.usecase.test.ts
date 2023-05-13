@@ -32,14 +32,14 @@ const setupUsecase = () => {
 const makeSong = (id: number) => ({
 	id,
 	title: 'title',
-	url: `https://genius.com/${1}`,
+	url: `https://genius.com/${id}`,
 });
 
 test('Should parse lyrics and push the result to a queue', async t => {
 	const {usecase, lyricsApiService, processTrackerRepository} = setupUsecase();
 
 	await usecase.execute({
-		artistId: '1',
+		artistId: 1,
 		songs: [makeSong(1), makeSong(2)],
 	});
 
@@ -50,7 +50,7 @@ test('Should parse lyrics and push the result to a queue', async t => {
 test('Should add songs to artist', async t => {
 	const {usecase, artist} = setupUsecase();
 
-	await usecase.execute({artistId: '1', songs: [makeSong(1)]});
+	await usecase.execute({artistId: 1, songs: [makeSong(1)]});
 
 	t.is(td.explain(artist.addSong).callCount, 1);
 });
@@ -58,7 +58,7 @@ test('Should add songs to artist', async t => {
 test('Should update artist model with new songs', async t => {
 	const {usecase, artistRepository} = setupUsecase();
 
-	await usecase.execute({artistId: '1', songs: [makeSong(1)]});
+	await usecase.execute({artistId: 1, songs: [makeSong(1)]});
 
 	t.is(td.explain(artistRepository.update).callCount, 1);
 });

@@ -21,6 +21,6 @@ const macro = async <T extends keyof SqsQueueService> (t: ExecutionContext, meth
 
 macro.title = (title: string | undefined, method: string) => `${title ?? 'sqs-queue-service'} ${method}`;
 
-test('publish to fetch queue', macro, 'sendToFetchQueue', {artistId: '1'});
-test('publish to parse queue', macro, 'sendToParseQueue', {artistId: '1', songs: []});
-test('publish to analysis queue', macro, 'sendToAnalysisQueue', {artistId: '1'});
+test('publish to fetch queue', macro, 'sendToFetchQueue', {artistId: 1});
+test('publish to parse queue', macro, 'sendToParseQueue', {artistId: 1, songs: []});
+test('publish to analysis queue', macro, 'sendToAnalysisQueue', {artistId: 1});

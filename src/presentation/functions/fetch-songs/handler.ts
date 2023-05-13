@@ -8,7 +8,7 @@ import {type ValidatedEventSQSEvent} from '@/presentation/libs/sqs';
 const handler = withDependencies<ValidatedEventSQSEvent<typeof schema>>((
 	fetchSongsUseCase: FetchSongs,
 ) => async event => {
-	const jobs = event.Records.map(async ({body}) => fetchSongsUseCase.execute(Number.parseInt(body.artistId)));
+	const jobs = event.Records.map(async ({body}) => fetchSongsUseCase.execute(body.artistId));
 
 	await Promise.all(jobs);
 });

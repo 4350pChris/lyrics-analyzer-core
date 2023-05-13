@@ -8,7 +8,7 @@ import {type AnalyzeLyrics} from '@/application/usecases/analyze-lyrics/analyze-
 const handler = withDependencies<ValidatedEventSQSEvent<typeof schema>>((
 	analyzeLyricsUseCase: AnalyzeLyrics,
 ) => async event => {
-	const jobs = event.Records.map(async ({body}) => analyzeLyricsUseCase.execute(Number.parseInt(body.artistId)));
+	const jobs = event.Records.map(async ({body}) => analyzeLyricsUseCase.execute(body.artistId));
 
 	await Promise.all(jobs);
 });

@@ -27,9 +27,9 @@ export class ParseLyrics implements UseCase {
 			}
 		}
 
-		await this.processTrackerRepository.decrement(Number.parseInt(artistId), songs.length);
+		await this.processTrackerRepository.decrement(artistId, songs.length);
 
-		await this.handleSuccessfulSongs(Number.parseInt(artistId), successfulSongs);
+		await this.handleSuccessfulSongs(artistId, successfulSongs);
 	}
 
 	private async handleSuccessfulSongs(artistId: number, songs: Array<SongDto & {text: string}>): Promise<void> {
@@ -38,7 +38,7 @@ export class ParseLyrics implements UseCase {
 		const running = await this.processTrackerRepository.isRunning(artistId);
 		if (!running) {
 			await this.processTrackerRepository.delete(artistId);
-			await this.queueService.sendToAnalysisQueue({artistId: artistId.toString()});
+			await this.queueService.sendToAnalysisQueue({artistId});
 		}
 	}
 

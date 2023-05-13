@@ -2,7 +2,7 @@ export default {
 	type: 'object',
 	properties: {
 		artistId: {
-			type: 'string',
+			type: 'number',
 		},
 	},
 	required: ['artistId'],

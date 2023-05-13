@@ -19,12 +19,12 @@ export class FetchSongs implements UseCase {
 		const songs = await this.lyricsApiService.retrieveSongsForArtist(artistId);
 		const chunks = this.chunkSongs(songs);
 
-		await this.publishChunks(artistId.toString(), chunks);
+		await this.publishChunks(artistId, chunks);
 
 		await this.processTrackerRepository.start(artistId, songs.length);
 	}
 
-	private async publishChunks(artistId: string, chunks: SongDto[][]): Promise<void[]> {
+	private async publishChunks(artistId: number, chunks: SongDto[][]): Promise<void[]> {
 		return Promise.all(chunks.map(async chunk => this.queueService.sendToParseQueue({artistId, songs: chunk})));
 	}
 

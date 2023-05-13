@@ -14,7 +14,7 @@ export class TriggerWorkflow implements UseCase {
 
 	async execute(artistId: number): Promise<void> {
 		await this.createArtistFromApi(artistId);
-		await this.queueService.sendToFetchQueue({artistId: artistId.toString()});
+		await this.queueService.sendToFetchQueue({artistId});
 	}
 
 	private async createArtistFromApi(artistId: number): Promise<void> {

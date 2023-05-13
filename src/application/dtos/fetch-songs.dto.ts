@@ -1,6 +1,6 @@
 import {type SongDto} from './song.dto';
 
 export type FetchSongsDto = {
-	artistId: string;
+	artistId: number;
 	songs: SongDto[];
 };
