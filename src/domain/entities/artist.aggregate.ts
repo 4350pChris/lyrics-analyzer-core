@@ -10,7 +10,7 @@ export class ArtistAggregate implements AggregateRoot {
 	readonly description!: string;
 	readonly imageUrl?: string;
 	readonly songs!: Song[];
-	statisticsCalculator?: StatisticsCalculator;
+	private statisticsCalculator?: StatisticsCalculator;
 
 	private _stats: Stats | undefined;
 	get stats(): Stats | undefined {
@@ -23,6 +23,10 @@ export class ArtistAggregate implements AggregateRoot {
 
 	constructor(props: ArtistProps) {
 		Object.assign(this, props);
+	}
+
+	setStatisticsCalculator(calculator: StatisticsCalculator): void {
+		this.statisticsCalculator = calculator;
 	}
 
 	addSong(id: number, name: string, text: string): void {

@@ -33,7 +33,8 @@ test('Add songs to artist', t => {
 
 test('Get stats for artist calls on statistics calculator', t => {
 	const artist = makeArtist();
-	artist.statisticsCalculator = td.object<StatisticsCalculator>();
+	const calculator = td.object<StatisticsCalculator>();
+	artist.setStatisticsCalculator(calculator);
 
 	const expectedStats: Stats = {
 		averageLength: 1,
@@ -42,7 +43,7 @@ test('Get stats for artist calls on statistics calculator', t => {
 		wordList: {text: 1},
 	};
 
-	td.when(artist.statisticsCalculator.calculateStats(artist.songs)).thenReturn(expectedStats);
+	td.when(calculator.calculateStats(artist.songs)).thenReturn(expectedStats);
 	artist.calculateStats();
 
 	t.deepEqual(artist.stats, expectedStats);

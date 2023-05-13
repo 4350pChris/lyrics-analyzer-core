@@ -10,7 +10,7 @@ export class ConcreteArtistFactory implements ArtistFactory {
 
 	createArtist(props: ArtistProps): ArtistAggregate {
 		const artist = new ArtistAggregate(props);
-		artist.statisticsCalculator = this.statisticsCalculator;
+		artist.setStatisticsCalculator(this.statisticsCalculator);
 		return artist;
 	}
 }
