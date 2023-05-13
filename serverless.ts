@@ -52,8 +52,8 @@ const serverlessConfiguration: AWS & Lift = {
 				Properties: {
 					TableName: '${self:service}-Artist-${sls:stage}',
 					ProvisionedThroughput: {
-						ReadCapacityUnits: 1,
-						WriteCapacityUnits: 1,
+						ReadCapacityUnits: 3,
+						WriteCapacityUnits: 3,
 					},
 					AttributeDefinitions: [
 						{
