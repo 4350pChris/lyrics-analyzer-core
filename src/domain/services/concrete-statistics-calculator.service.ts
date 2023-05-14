@@ -2,6 +2,8 @@ import {type Song} from '../entities/song.entity';
 import {Stats} from '../entities/stats.value-object';
 import {type StatisticsCalculator} from '../interfaces/statistics-calculator.interface';
 
+type WordList = Array<[string, number]>;
+
 export class ConcreteStatisticsCalculator implements StatisticsCalculator {
 	calculateStats(songs: Song[]): Stats {
 		const wordList = this.getCombinedWordList(songs);
@@ -12,7 +14,7 @@ export class ConcreteStatisticsCalculator implements StatisticsCalculator {
 		);
 	}
 
-	getCombinedWordList(songs: Song[]): Record<string, number> {
+	getCombinedWordList(songs: Song[]): WordList {
 		const wordList: Record<string, number> = {};
 		for (const song of songs) {
 			const split = song.text.split(/\s+/);
@@ -22,24 +24,28 @@ export class ConcreteStatisticsCalculator implements StatisticsCalculator {
 			}
 		}
 
-		return Object.fromEntries(this.sortedWordList(wordList));
+		return this.sortedWordList(wordList);
 	}
 
-	calculateUniqueWords(wordList: Record<string, number>): number {
-		return Object.keys(wordList).length;
+	calculateUniqueWords(wordList: WordList): number {
+		return wordList.length;
 	}
 
-	calculateAverageLengthOfWords(wordList: Record<string, number>): number {
-		const totalLength = Object.entries(wordList)
-			.reduce((acc, [word, count]) => acc + (word.length * count), 0);
-		const totalWords = Object.values(wordList).reduce((acc, count) => acc + count, 0);
+	calculateAverageLengthOfWords(wordList: WordList): number {
+		let totalLength = 0;
+		let totalWords = 0;
+
+		for (const [word, count] of wordList) {
+			totalLength += word.length * count;
+			totalWords += count;
+		}
+
 		return totalLength / totalWords;
 	}
 
-	calculateMedianLengthOfWords(wordList: Record<string, number>): number {
-		const sorted = this.sortedWordList(wordList);
-		const middle = Math.floor(sorted.length / 2);
-		return middle % 2 === 0 ? (sorted[middle][0].length + sorted[middle - 1][0].length) / 2 : sorted[middle][0].length;
+	calculateMedianLengthOfWords(wordList: WordList): number {
+		const middle = Math.floor(wordList.length / 2);
+		return middle % 2 === 0 ? (wordList[middle][0].length + wordList[middle - 1][0].length) / 2 : wordList[middle][0].length;
 	}
 
 	sortedWordList(wordList: Record<string, number>): Array<[string, number]> {
