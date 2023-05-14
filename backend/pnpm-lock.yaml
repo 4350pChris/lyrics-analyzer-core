@@ -57,6 +57,9 @@ devDependencies:
   serverless-esbuild:
     specifier: ^1.44.0
     version: 1.44.0(esbuild@0.17.18)
+  serverless-finch:
+    specifier: ^4.0.3
+    version: 4.0.3
   serverless-lift:
     specifier: ^1.26.0
     version: 1.26.0(serverless@3.30.1)
@@ -5837,6 +5840,10 @@ packages:
       is-docker: 2.2.1
     dev: true
 
+  /is_js@0.9.0:
+    resolution: {integrity: sha512-8Y5EHSH+TonfUHX2g3pMJljdbGavg55q4jmHzghJCdqYDbdNROC8uw/YFQwIRCRqRJT1EY3pJefz+kglw+o7sg==}
+    dev: true
+
   /isarray@1.0.0:
     resolution: {integrity: sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==}
     dev: true
@@ -6377,6 +6384,12 @@ packages:
   /mime@2.6.0:
     resolution: {integrity: sha512-USPkMeET31rOMiarsBNIHZKLGgvKc/LrjofAnBlOttf5ajRvqiRA8QsenbcooctK6d6Ts6aqZXBA+XbkKthiQg==}
     engines: {node: '>=4.0.0'}
+    hasBin: true
+    dev: true
+
+  /mime@3.0.0:
+    resolution: {integrity: sha512-jSCU7/VB1loIWBZe14aEYHU/+1UMEHoaO7qxCOVJOw9GgH72VAWppxNcjU+x9a2k3GSIBXNKxXQFqRvvZ7vr3A==}
+    engines: {node: '>=10.0.0'}
     hasBin: true
     dev: true
 
@@ -7510,6 +7523,18 @@ packages:
       p-map: 4.0.0
       ramda: 0.28.0
       semver: 7.5.0
+    dev: true
+
+  /serverless-finch@4.0.3:
+    resolution: {integrity: sha512-w27qMmF+jeCthrmzMIeb1ffg6czJVIBVY+5FtKfG0c15dBVDSMnNPJbhdjKTT6q27VwfyjJ92rNuT4JG9BKQUg==}
+    engines: {node: '>=14.15.5'}
+    dependencies:
+      '@serverless/utils': 6.11.1
+      is_js: 0.9.0
+      mime: 3.0.0
+      minimatch: 5.1.6
+    transitivePeerDependencies:
+      - encoding
     dev: true
 
   /serverless-lift@1.26.0(serverless@3.30.1):

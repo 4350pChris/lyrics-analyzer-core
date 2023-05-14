@@ -2,7 +2,7 @@
 /* eslint-disable no-template-curly-in-string */
 import type {AWS} from '@serverless/typescript';
 import type {Lift} from 'serverless-lift';
-import {triggerWorkflow, parseLyrics, fetchSongs, analyzeLyrics} from './backend/src/presentation/functions/index';
+import {triggerWorkflow, parseLyrics, fetchSongs, analyzeLyrics} from './src/presentation/functions/index';
 
 const serverlessConfiguration: AWS & Lift = {
 	org: '4350pchris',
@@ -14,6 +14,7 @@ const serverlessConfiguration: AWS & Lift = {
 		'serverless-esbuild',
 		'serverless-lift',
 		'serverless-offline',
+		'serverless-finch',
 	],
 	provider: {
 		name: 'aws',
@@ -140,6 +141,12 @@ const serverlessConfiguration: AWS & Lift = {
 				patterns: ['src/**/*.ts'],
 				ignore: ['test/**/*', 'dist/**/*'],
 			},
+		},
+		client: {
+			bucketName: '${self:service}-frontend-${sls:stage}',
+			distributionFolder: '../frontend/dist',
+			indexDocument: 'index.html',
+			errorDocument: 'index.html',
 		},
 	},
 };
