@@ -2,7 +2,7 @@
 /* eslint-disable no-template-curly-in-string */
 import type {AWS} from '@serverless/typescript';
 import type {Lift} from 'serverless-lift';
-import {triggerWorkflow, parseLyrics, fetchSongs, analyzeLyrics} from './src/presentation/functions/index';
+import {triggerWorkflow, parseLyrics, fetchSongs, analyzeLyrics, pingEndpoint} from './src/presentation/functions/index';
 
 const serverlessConfiguration: AWS & Lift = {
 	org: '4350pchris',
@@ -126,6 +126,11 @@ const serverlessConfiguration: AWS & Lift = {
 			...triggerWorkflow,
 			memorySize: 512,
 			logRetentionInDays: 14,
+		},
+		ping: {
+			...pingEndpoint,
+			memorySize: 256,
+			logRetentionInDays: 1,
 		},
 	},
 	package: {individually: true},
