@@ -9,14 +9,13 @@ export class GeniusLyricsParser implements LyricsParser {
 
 	getLyricsBlock(html: string) {
 		const dom = parseDocument(html);
-		const found = DomUtils.findOne(
-			element =>
-				element.attribs.class === 'lyrics' || element.attribs.class?.startsWith('Lyrics__Container'),
+		const found = DomUtils.findAll(
+			element => element.attribs?.['data-lyrics-container'] === 'true',
 			dom.childNodes,
 		);
-		if (found) {
-			const text = DomUtils.getText(found).trim();
-			return text;
+		if (found.length > 0) {
+			const text = found.map(element => DomUtils.getText(element));
+			return text.join(' ');
 		}
 
 		throw new Error('Lyrics not found');

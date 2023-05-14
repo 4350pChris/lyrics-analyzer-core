@@ -1,7 +1,6 @@
 import {readFileSync} from 'node:fs';
-import {fileURLToPath} from 'node:url';
 import {resolve} from 'node:path';
-import test, {type Macro, type ExecutionContext} from 'ava';
+import test, {type Macro} from 'ava';
 import {GeniusLyricsParser} from '@/infrastructure/services/genius-lyrics-parser.service';
 
 const parser = new GeniusLyricsParser();
@@ -13,7 +12,7 @@ const loadLyricsFile = (filename: string) => {
 };
 
 const sanitizedMacro: Macro<[string]> = {
-	exec(t, filename) {
+	async exec(t, filename) {
 		const html = loadLyricsFile(filename);
 		const lyrics = parser.parse(html);
 
@@ -29,7 +28,7 @@ test(sanitizedMacro, 'no_downtime');
 test(sanitizedMacro, 'accordion');
 
 const getLyricsBlockMacro: Macro<[string]> = {
-	exec(t, filename) {
+	async exec(t, filename) {
 		const html = loadLyricsFile(filename);
 		const lyrics = parser.getLyricsBlock(html);
 
