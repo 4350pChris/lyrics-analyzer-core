@@ -18,7 +18,7 @@ const serverlessConfiguration: AWS & Lift = {
 	],
 	provider: {
 		name: 'aws',
-		runtime: 'nodejs16.x',
+		runtime: 'nodejs18.x',
 		deploymentMethod: 'direct',
 		apiGateway: {
 			minimumCompressionSize: 1024,
