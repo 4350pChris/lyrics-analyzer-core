@@ -4,7 +4,6 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
 
 permissions:
   contents: read
@@ -25,6 +24,7 @@ jobs:
         with:
           node-version: "18.x"
           cache: "pnpm"
+      - run: cd backend
       - run: pnpm install --frozen-lockfile
       - run: pnpm test
       - name: Upload coverage reports to Codecov
@@ -68,6 +68,7 @@ jobs:
         with:
           node-version: "18.x"
           cache: "pnpm"
+      - run: cd backend
       - run: pnpm install --frozen-lockfile
       - name: serverless deploy
         uses: serverless/github-action@v3.2
