@@ -1,12 +1,13 @@
-import {handlerPath} from '../../libs/handler-resolver';
+import {handlerPath} from '../../../libs/handler-resolver';
 
 const functionObject = {
 	handler: `${handlerPath(__dirname)}/handler.main`,
 	events: [
 		{
-			httpApi: {
-				method: 'POST',
-				path: '/artists',
+			http: {
+				method: 'get',
+				path: 'ping',
+				cors: true,
 			},
 		},
 	],

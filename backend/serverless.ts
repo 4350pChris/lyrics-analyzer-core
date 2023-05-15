@@ -2,7 +2,8 @@
 /* eslint-disable no-template-curly-in-string */
 import type {AWS} from '@serverless/typescript';
 import type {Lift} from 'serverless-lift';
-import {triggerWorkflow, parseLyrics, fetchSongs, analyzeLyrics, pingEndpoint, listArtists} from './src/presentation/functions/index';
+import {parseLyrics, fetchSongs, analyzeLyrics} from './src/presentation/functions/sqs';
+import {listArtists, pingEndpoint, triggerWorkflow} from './src/presentation/functions/http';
 
 const serverlessConfiguration: AWS & Lift = {
 	org: '4350pchris',
