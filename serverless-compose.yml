@@ -1,0 +1,7 @@
+services:
+  backend:
+    path: backend
+  frontend:
+    path: frontend
+    params:
+      apiGatewayUrl: ${backend.ServiceEndpoint}

@@ -6,15 +6,14 @@ import {triggerWorkflow, parseLyrics, fetchSongs, analyzeLyrics, pingEndpoint} f
 
 const serverlessConfiguration: AWS & Lift = {
 	org: '4350pchris',
-	app: 'lyrics-backend',
-	service: 'lyrics-backend',
+	app: 'lyrics-analyzer',
+	service: 'backend',
 	frameworkVersion: '3',
 	useDotenv: true,
 	plugins: [
 		'serverless-esbuild',
 		'serverless-lift',
 		'serverless-offline',
-		'serverless-finch',
 	],
 	provider: {
 		name: 'aws',
@@ -146,12 +145,6 @@ const serverlessConfiguration: AWS & Lift = {
 				patterns: ['src/**/*.ts'],
 				ignore: ['test/**/*', 'dist/**/*'],
 			},
-		},
-		client: {
-			bucketName: '${self:service}-frontend-${sls:stage}',
-			distributionFolder: '../frontend/dist',
-			indexDocument: 'index.html',
-			errorDocument: 'index.html',
 		},
 	},
 };

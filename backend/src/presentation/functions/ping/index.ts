@@ -7,6 +7,7 @@ const functionObject = {
 			http: {
 				method: 'get',
 				path: 'ping',
+				cors: true,
 			},
 		},
 	],
