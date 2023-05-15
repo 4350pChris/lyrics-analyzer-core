@@ -1,5 +1,6 @@
 import middy from '@middy/core';
 import sqsJsonBodyParser from '@middy/sqs-json-body-parser';
+import cors from '@middy/http-cors';
 import type schema from './schema';
 import {withDependencies} from '@/presentation/libs/with-dependencies';
 import {type ValidatedEventSQSEvent} from '@/presentation/libs/sqs';
@@ -13,4 +14,4 @@ const handler = withDependencies<ValidatedEventSQSEvent<typeof schema>>((
 	await Promise.all(jobs);
 });
 
-export const main = middy(handler).use(sqsJsonBodyParser());
+export const main = middy(handler).use(sqsJsonBodyParser()).use(cors());

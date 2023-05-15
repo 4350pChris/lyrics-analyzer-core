@@ -1,0 +1,20 @@
+org: 4350pchris
+app: lyrics-analyzer
+service: frontend
+frameworkVersion: '3'
+plugins:
+  - serverless-finch
+  - serverless-build-client
+provider:
+  name: aws
+  runtime: nodejs18.x
+  environment:
+    VITE_API_BASE_URL: ${param:apiGatewayUrl}
+custom:
+  client:
+    bucketName: '${self:app}-${self:service}-${sls:stage}'
+    distributionFolder: dist
+    indexDocument: index.html
+    errorDocument: index.html
+  buildClient:
+    packager: npm

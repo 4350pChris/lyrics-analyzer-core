@@ -26,6 +26,7 @@
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.332.0",
     "@middy/core": "^4.4.0",
+    "@middy/http-cors": "^4.4.1",
     "@middy/http-json-body-parser": "^4.4.0",
     "@middy/sqs-json-body-parser": "^2.5.7",
     "awilix": "^8.0.1",
@@ -44,7 +45,6 @@
     "json-schema-to-ts": "^2.8.0",
     "rimraf": "^5.0.0",
     "serverless-esbuild": "^1.44.0",
-    "serverless-finch": "^4.0.3",
     "serverless-lift": "^1.26.0",
     "serverless-offline": "^12.0.4",
     "testdouble": "^3.18.0",

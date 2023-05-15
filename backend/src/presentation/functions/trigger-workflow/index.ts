@@ -14,6 +14,7 @@ const functionObject = {
 						'application/json': schema,
 					},
 				},
+				cors: true,
 			},
 		},
 	],
