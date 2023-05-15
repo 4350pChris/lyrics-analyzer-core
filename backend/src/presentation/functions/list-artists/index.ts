@@ -5,7 +5,7 @@ const functionObject = {
 	events: [
 		{
 			httpApi: {
-				method: 'POST',
+				method: 'GET',
 				path: '/artists',
 			},
 		},

@@ -2,7 +2,7 @@
 /* eslint-disable no-template-curly-in-string */
 import type {AWS} from '@serverless/typescript';
 import type {Lift} from 'serverless-lift';
-import {triggerWorkflow, parseLyrics, fetchSongs, analyzeLyrics, pingEndpoint} from './src/presentation/functions/index';
+import {triggerWorkflow, parseLyrics, fetchSongs, analyzeLyrics, pingEndpoint, listArtists} from './src/presentation/functions/index';
 
 const serverlessConfiguration: AWS & Lift = {
 	org: '4350pchris',
@@ -19,6 +19,9 @@ const serverlessConfiguration: AWS & Lift = {
 		name: 'aws',
 		runtime: 'nodejs18.x',
 		deploymentMethod: 'direct',
+		httpApi: {
+			cors: true,
+		},
 		apiGateway: {
 			minimumCompressionSize: 1024,
 			shouldStartNameWithService: true,
@@ -130,6 +133,11 @@ const serverlessConfiguration: AWS & Lift = {
 			...pingEndpoint,
 			memorySize: 256,
 			logRetentionInDays: 1,
+		},
+		listArtists: {
+			...listArtists,
+			memorySize: 512,
+			logRetentionInDays: 14,
 		},
 	},
 	package: {individually: true},

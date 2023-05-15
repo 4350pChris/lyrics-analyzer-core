@@ -1,9 +1,15 @@
 export default {
 	type: 'object',
 	properties: {
-		artistId: {
-			type: 'number',
+		body: {
+			type: 'object',
+			properties: {
+				artistId: {
+					type: 'number',
+				},
+			},
+			required: ['artistId'],
 		},
 	},
-	required: ['artistId'],
+	required: ['body'],
 } as const;

@@ -29,6 +29,7 @@
     "@middy/http-cors": "^4.4.1",
     "@middy/http-json-body-parser": "^4.4.0",
     "@middy/sqs-json-body-parser": "^2.5.7",
+    "@middy/validator": "^4.4.2",
     "awilix": "^8.0.1",
     "dynamoose": "^3.2.0",
     "htmlparser2": "^8.0.2",
