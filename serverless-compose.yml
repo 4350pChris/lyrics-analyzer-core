@@ -4,4 +4,4 @@ services:
   frontend:
     path: frontend
     params:
-      apiGatewayUrl: ${backend.ServiceEndpoint}
+      apiGatewayUrl: ${backend.HttpApiUrl}
