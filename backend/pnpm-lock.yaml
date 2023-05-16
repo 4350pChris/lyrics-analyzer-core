@@ -7,9 +7,6 @@ dependencies:
   '@middy/core':
     specifier: ^4.4.0
     version: 4.4.0
-  '@middy/http-cors':
-    specifier: ^4.4.1
-    version: 4.4.1
   '@middy/http-json-body-parser':
     specifier: ^4.4.0
     version: 4.4.0
@@ -2336,13 +2333,6 @@ packages:
     engines: {node: '>=16'}
     dev: false
 
-  /@middy/http-cors@4.4.1:
-    resolution: {integrity: sha512-LqsycWWW5EAme1uLvlAf05yLJ7xDS3t9x/j+QPBrYsxjhEqmddfr7MUBvH+KeXYAu6fxNYSp2lMiljqARptMQg==}
-    engines: {node: '>=16'}
-    dependencies:
-      '@middy/util': 4.4.1
-    dev: false
-
   /@middy/http-json-body-parser@4.4.0:
     resolution: {integrity: sha512-UOuMpUBR5H3j6brCbVgADh3FeRltNaDNkyTUokLw/7VIwQQQMOvK4CVllaVJBNbBP9jgtKrR48Z+P3d1+V8CTw==}
     engines: {node: '>=16'}
@@ -2364,11 +2354,6 @@ packages:
 
   /@middy/util@4.4.0:
     resolution: {integrity: sha512-aIfBlw2ydpp4vh1907j8LP96ulVJrdlx5RWlFKTQOVxPDocziMWDDN3zct8FU4D4YMR6UIYj83sIXWVeCzw4ew==}
-    engines: {node: '>=16'}
-    dev: false
-
-  /@middy/util@4.4.1:
-    resolution: {integrity: sha512-MFft2JJJ/j0ajjVB8jICAKd7pCZN4wq8JCSX07ztXr2ln6qBi8ag06cc9BMFkvNLGf7+B6I8ufxWebXWqXwNbw==}
     engines: {node: '>=16'}
     dev: false
 

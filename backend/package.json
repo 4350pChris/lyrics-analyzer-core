@@ -26,7 +26,6 @@
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.332.0",
     "@middy/core": "^4.4.0",
-    "@middy/http-cors": "^4.4.1",
     "@middy/http-json-body-parser": "^4.4.0",
     "@middy/sqs-json-body-parser": "^2.5.7",
     "@middy/validator": "^4.4.2",
@@ -75,7 +74,8 @@
         "as-needed"
       ],
       "import/extensions": "off",
-      "unicorn/prefer-module": "off"
+      "unicorn/prefer-module": "off",
+      "n/file-extension-in-import": "off"
     }
   },
   "pnpm": {

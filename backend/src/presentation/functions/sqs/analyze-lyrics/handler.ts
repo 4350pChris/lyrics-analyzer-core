@@ -1,17 +1,12 @@
-import middy from '@middy/core';
-import sqsJsonBodyParser from '@middy/sqs-json-body-parser';
-import cors from '@middy/http-cors';
+import {type FromSchema} from 'json-schema-to-ts';
 import type schema from './schema';
-import {withDependencies} from '@/presentation/libs/with-dependencies';
-import {type ValidatedEventSQSEvent} from '@/presentation/libs/sqs';
-import {type AnalyzeLyrics} from '@/application/usecases/analyze-lyrics/analyze-lyrics.usecase';
+import {middyfySqsHandler, type ValidatedEventSQSEvent} from '@/presentation/libs/sqs';
 
-const handler = withDependencies<ValidatedEventSQSEvent<typeof schema>>((
-	analyzeLyricsUseCase: AnalyzeLyrics,
-) => async event => {
+const handler: ValidatedEventSQSEvent<FromSchema<typeof schema>> = async (event, context) => {
+	const {analyzeLyricsUseCase} = context.container.cradle;
 	const jobs = event.Records.map(async ({body}) => analyzeLyricsUseCase.execute(body.artistId));
 
 	await Promise.all(jobs);
-});
+};
 
-export const main = middy(handler).use(sqsJsonBodyParser()).use(cors());
+export const main = middyfySqsHandler(handler);

@@ -1,21 +1,15 @@
-import middy from '@middy/core';
-import httpJsonBodyParser from '@middy/http-json-body-parser';
-import {type ValidatedEventAPIGatewayProxyEvent, formatJSONResponse} from '../../../libs/api-gateway';
-import {withDependencies} from '@/presentation/libs/with-dependencies';
-import type {ListArtists} from '@/application/usecases/artist/list-artists.usecase';
-import {type ArtistMapper} from '@/infrastructure/mappers/artist.mapper';
+import {type ValidatedEventAPIGatewayProxyEvent, formatJSONResponse, middyfyGatewayHandler} from '../../../libs/api-gateway';
 
-const handler = withDependencies<ValidatedEventAPIGatewayProxyEvent<never>>((
-	listArtistsUseCase: ListArtists,
-	artistMapper: ArtistMapper,
-) => async () => {
+const handler: ValidatedEventAPIGatewayProxyEvent<never> = async (_, context) => {
+	const {artistMapper, listArtistsUseCase} = context.container.cradle;
 	const artists = await listArtistsUseCase.execute();
 
 	const serialized = artists.map(artist => artistMapper.toModel(artist));
+
 	return formatJSONResponse({
 		artists: serialized,
 	});
-});
+};
 
-export const main = middy(handler).use(httpJsonBodyParser());
+export const main = middyfyGatewayHandler(handler);
 

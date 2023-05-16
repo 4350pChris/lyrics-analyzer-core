@@ -1,6 +1,40 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import type {FromSchema, JSONSchema} from 'json-schema-to-ts';
-import {type Handler, type SQSRecord} from 'aws-lambda';
+import {type SQSRecord} from 'aws-lambda';
+import middy from '@middy/core';
+import validator from '@middy/validator';
+import {transpileSchema} from '@middy/validator/transpile';
+import sqsJsonBodyParser from '@middy/sqs-json-body-parser';
+import {type DependencyAwareContext, withDependencies} from './with-dependencies';
 
-type ValidatedSQSEvent<S extends JSONSchema> = {Records: Array<Omit<SQSRecord, 'body'> & {body: FromSchema<S>}>};
-export type ValidatedEventSQSEvent<S extends JSONSchema> = Handler<ValidatedSQSEvent<S>, void>;
+type ValidatedSQSEvent<S> = {Records: Array<Omit<SQSRecord, 'body'> & {body: S}>};
+export type ValidatedEventSQSEvent<S> = (event: ValidatedSQSEvent<S>, context: DependencyAwareContext) => Promise<void>;
+
+export const middyfySqsHandler = <Schema, Body>(handler: ValidatedEventSQSEvent<Body>, requestSchema?: Schema) => {
+	const wrapper = middy(handler).use(sqsJsonBodyParser()).use(withDependencies());
+
+	if (requestSchema) {
+		wrapper.use(
+			validator({
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+				eventSchema: transpileSchema({
+					type: 'object',
+					properties: {
+						Records: {
+							type: 'array',
+							items: {
+								type: 'object',
+								properties: {
+									body: requestSchema,
+								},
+								required: ['body'],
+							},
+						},
+					},
+					required: ['Records'],
+				}),
+			}),
+		);
+	}
+
+	return wrapper;
+};

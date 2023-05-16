@@ -4,10 +4,9 @@ const functionObject = {
 	handler: `${handlerPath(__dirname)}/handler.main`,
 	events: [
 		{
-			http: {
-				method: 'get',
-				path: 'ping',
-				cors: true,
+			httpApi: {
+				method: 'GET',
+				path: '/ping',
 			},
 		},
 	],
