@@ -54,6 +54,20 @@ test('Should check if process is running', async t => {
 	t.true(isRunning);
 });
 
+test('Should declare process as not running when its total is 0', async t => {
+	const artistId = 1;
+
+	const {processModel} = setupMocks();
+
+	const processTracker = new DynamooseProcessRepository(processModel);
+
+	td.when(processModel.get(artistId)).thenResolve({total: 0});
+
+	const isRunning = await processTracker.isRunning(artistId);
+
+	t.false(isRunning);
+});
+
 test('Should declare process as not running when it is not found', async t => {
 	const artistId = 1;
 
@@ -61,7 +75,7 @@ test('Should declare process as not running when it is not found', async t => {
 
 	const processTracker = new DynamooseProcessRepository(processModel);
 
-	td.when(processModel.get(artistId)).thenResolve({});
+	td.when(processModel.get(artistId)).thenReject('error');
 
 	const isRunning = await processTracker.isRunning(artistId);
 
