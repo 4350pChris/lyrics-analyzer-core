@@ -1,10 +1,10 @@
-import type {ArtistDetailResponse} from '../dtos/artist-detail-response.dto';
-import type {ArtistSongsResponse} from '../dtos/artist-songs-response.dto';
-import type {SearchResponse} from '../dtos/search-response.dto';
+import type {GeniusArtistDetailResponse} from '../dtos/genius-artist-detail.dto';
+import type {GeniusArtistSongsResponse} from '../dtos/genius-artist-songs.dto';
+import type {GeniusSearchResponse} from '../dtos/genius-search.dto';
 
 export type GeniusApi = {
-	search(query: string): Promise<SearchResponse>;
-	getSongsForArtist(artistId: number, page: number): Promise<ArtistSongsResponse>;
+	search(query: string): Promise<GeniusSearchResponse>;
+	getSongsForArtist(artistId: number, page: number): Promise<GeniusArtistSongsResponse>;
 	getSong(url: URL): Promise<string>;
-	getArtist(artistId: number): Promise<ArtistDetailResponse>;
+	getArtist(artistId: number): Promise<GeniusArtistDetailResponse>;
 };

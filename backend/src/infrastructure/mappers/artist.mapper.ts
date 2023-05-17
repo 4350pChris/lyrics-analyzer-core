@@ -4,8 +4,9 @@ import {type ArtistAggregate} from '@/domain/entities/artist.aggregate';
 import {Song} from '@/domain/entities/song.entity';
 import {type ArtistFactory} from '@/domain/interfaces/artist.factory.interface';
 import {Stats} from '@/domain/entities/stats.value-object';
+import {type ArtistDetailDto} from '@/application/dtos/artist-detail.dto';
 
-export class ArtistMapper implements Mapper<ArtistAggregate, ArtistModelType> {
+export class ArtistMapper implements Mapper<ArtistAggregate, ArtistModelType, ArtistDetailDto> {
 	constructor(
 		private readonly artistFactory: ArtistFactory,
 	) {}
@@ -44,6 +45,15 @@ export class ArtistMapper implements Mapper<ArtistAggregate, ArtistModelType> {
 			imageUrl: artist.imageUrl,
 			songs,
 			stats,
+		};
+	}
+
+	toDto(item: ArtistAggregate): ArtistDetailDto {
+		return {
+			id: item.id,
+			name: item.name,
+			description: item.description,
+			imageUrl: item.imageUrl,
 		};
 	}
 }

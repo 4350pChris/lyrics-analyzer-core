@@ -6,7 +6,7 @@ import type {ArtistRepository} from '@/application/interfaces/artist-repository.
 
 export class DynamooseArtistRepository implements ArtistRepository {
 	constructor(
-		private readonly artistMapper: Mapper<ArtistAggregate, ArtistModelType>,
+		private readonly artistMapper: Mapper<ArtistAggregate, ArtistModelType, unknown>,
 		private readonly artistModel: ModelType<ArtistModelItem>,
 	) {}
 

@@ -1,8 +1,8 @@
 import {type $Fetch, ofetch} from 'ofetch';
 import {type GeniusApi} from '../interfaces/genius-api.interface';
-import {type ArtistSongsResponse} from '../dtos/artist-songs-response.dto';
-import {type SearchResponse} from '../dtos/search-response.dto';
-import {type ArtistDetailResponse} from '../dtos/artist-detail-response.dto';
+import {type GeniusArtistSongsResponse} from '../dtos/genius-artist-songs.dto';
+import {type GeniusSearchResponse} from '../dtos/genius-search.dto';
+import {type GeniusArtistDetailResponse} from '../dtos/genius-artist-detail.dto';
 
 export class GeniusApiClient implements GeniusApi {
 	private readonly client: $Fetch;
@@ -20,8 +20,8 @@ export class GeniusApiClient implements GeniusApi {
 		});
 	}
 
-	async getArtist(artistId: number): Promise<ArtistDetailResponse> {
-		return this.client<ArtistDetailResponse>(`/artists/${artistId}`, {
+	async getArtist(artistId: number): Promise<GeniusArtistDetailResponse> {
+		return this.client<GeniusArtistDetailResponse>(`/artists/${artistId}`, {
 			params: {
 				// eslint-disable-next-line @typescript-eslint/naming-convention
 				text_format: 'plain',
@@ -29,16 +29,16 @@ export class GeniusApiClient implements GeniusApi {
 		});
 	}
 
-	async search(query: string): Promise<SearchResponse> {
-		return this.client<SearchResponse>('/search', {
+	async search(query: string): Promise<GeniusSearchResponse> {
+		return this.client<GeniusSearchResponse>('/search', {
 			params: {
 				q: query,
 			},
 		});
 	}
 
-	async getSongsForArtist(artistId: number, page: number): Promise<ArtistSongsResponse> {
-		return this.client<ArtistSongsResponse>(`/artists/${artistId}/songs`, {
+	async getSongsForArtist(artistId: number, page: number): Promise<GeniusArtistSongsResponse> {
+		return this.client<GeniusArtistSongsResponse>(`/artists/${artistId}/songs`, {
 			params: {
 				sort: 'popularity',
 				page,

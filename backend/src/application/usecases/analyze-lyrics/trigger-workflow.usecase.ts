@@ -35,7 +35,7 @@ export class TriggerWorkflow implements UseCase {
 
 		const apiArtist = await this.lyricsApiService.getArtist(artistId);
 
-		const artist = this.artistFactory.createArtist({id: artistId, ...apiArtist, songs: []});
+		const artist = this.artistFactory.createArtist({...apiArtist, songs: []});
 		await this.artistRepository.create(artist);
 	}
 }

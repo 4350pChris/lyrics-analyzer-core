@@ -3,7 +3,7 @@ import test from 'ava';
 import td from 'testdouble';
 import {GeniusService} from '@/infrastructure/services/genius.service';
 import type {GeniusApi} from '@/infrastructure/interfaces/genius-api.interface';
-import {type SearchResponse} from '@/infrastructure/dtos/search-response.dto';
+import {type GeniusSearchResponse} from '@/infrastructure/dtos/genius-search.dto';
 import {type GeniusSongDto} from '@/infrastructure/dtos/genius-song.dto';
 import {type LyricsParser} from '@/infrastructure/interfaces/lyrics-parser.interface';
 
@@ -83,7 +83,7 @@ test('Search artists should consolidate artists from songs', async t => {
 				},
 			],
 		},
-	} satisfies SearchResponse);
+	} satisfies GeniusSearchResponse);
 	const geniusService = new GeniusService(client, lyricsParser);
 	const artists = await geniusService.searchArtists('MF DOOM');
 	t.is(artists.length, 2);
