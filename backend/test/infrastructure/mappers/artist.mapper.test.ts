@@ -5,6 +5,8 @@ import {ArtistMapper} from '@/infrastructure/mappers/artist.mapper';
 import {ArtistAggregate} from '@/domain/entities/artist.aggregate';
 import {Song} from '@/domain/entities/song.entity';
 import {type ArtistProps} from '@/domain/interfaces/artist-props.interface';
+import {type ArtistModelType} from '@/infrastructure/models/artist.model';
+import {type ArtistDetailDto} from '@/application/dtos/artist-detail.dto';
 
 const setupMocks = () => ({
 	artistFactory: td.object<ArtistFactory>(),
@@ -20,7 +22,7 @@ const makeArtist = () => new ArtistAggregate({
 	],
 });
 
-const makeModel = () => ({
+const makeModel: () => ArtistModelType = () => ({
 	id: 1,
 	description: 'description1',
 	name: 'artist1',
@@ -28,6 +30,12 @@ const makeModel = () => ({
 		{id: 1, name: 'song1', text: 'text1'},
 		{id: 2, name: 'song2', text: 'text2'},
 	],
+});
+
+const makeDto: () => ArtistDetailDto = () => ({
+	id: 1,
+	description: 'description1',
+	name: 'artist1',
 });
 
 test('Domain to model', t => {
@@ -47,4 +55,12 @@ test('Model to domain uses factory', t => {
 
 	const artist = mapper.toDomain(model);
 	t.deepEqual(artist, makeArtist());
+});
+
+test('Domain to DTO', t => {
+	const {artistFactory} = setupMocks();
+	const mapper = new ArtistMapper(artistFactory);
+	const dto = mapper.toDto(makeArtist());
+
+	t.like(dto, makeDto());
 });

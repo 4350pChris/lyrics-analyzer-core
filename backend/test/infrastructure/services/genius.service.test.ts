@@ -40,6 +40,7 @@ test('get artist should return artist from response', async t => {
 	const responseArtist = await geniusService.getArtist(150);
 
 	t.deepEqual(responseArtist, {
+		id: artist.id,
 		name: artist.name,
 		description: artist.description.plain,
 		imageUrl: artist.image_url,
