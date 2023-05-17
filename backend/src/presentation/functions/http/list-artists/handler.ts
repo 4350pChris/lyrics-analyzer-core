@@ -4,7 +4,7 @@ const handler: ValidatedEventAPIGatewayProxyEvent<never> = async (_, context) =>
 	const {artistMapper, listArtistsUseCase} = context.container.cradle;
 	const artists = await listArtistsUseCase.execute();
 
-	const serialized = artists.map(artist => artistMapper.toModel(artist));
+	const serialized = artists.map(artist => artistMapper.toDto(artist));
 
 	return formatJSONResponse({
 		artists: serialized,
