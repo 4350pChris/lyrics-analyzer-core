@@ -48,7 +48,7 @@ test('Should parse lyrics and push the result to a queue', async t => {
 	});
 
 	t.is(td.explain(lyricsApiService.parseLyrics).callCount, 2);
-	t.is(td.explain(processTrackerRepository.decrement).callCount, 1);
+	t.is(td.explain(processTrackerRepository.decrementTotal).callCount, 1);
 });
 
 test('Should add songs to artist', async t => {
@@ -73,7 +73,7 @@ test('Should decrement process tracker with count of all songs', async t => {
 	td.when(lyricsApiService.parseLyrics(td.matchers.anything() as URL)).thenReject('error');
 	await usecase.execute({artistId: 1, songs: [makeSong(1)]});
 
-	td.verify(processTrackerRepository.decrement(1, 1));
+	td.verify(processTrackerRepository.decrementTotal(1, 1));
 	t.pass();
 });
 
