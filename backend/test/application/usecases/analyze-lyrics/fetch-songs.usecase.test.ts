@@ -1,30 +1,55 @@
 import test from 'ava';
 import td from 'testdouble';
 import {type LyricsApiService} from '@/application/interfaces/lyrics-api.interface';
-import {type QueueService} from '@/application/interfaces/queue.service.interface';
 import {FetchSongs} from '@/application/usecases/analyze-lyrics/fetch-songs.usecase';
-import {type ProcessTrackerRepository} from '@/application/interfaces/process-tracker.repository.interface';
-import {type FetchSongsDto} from '@/application/dtos/fetch-songs.dto';
+import {type IntegrationEventBus} from '@/application/interfaces/integration-event-bus.service.interface';
+import {type FetchedSongsEvent} from '@/application/events/fetched-songs.event';
 
-const setupMocks = () => ({
-	lyricsApiService: td.object<LyricsApiService>(),
-	queueService: td.object<QueueService>(),
-	processTrackerRepository: td.object<ProcessTrackerRepository>(),
+const setupMocks = () => {
+	const lyricsApiService = td.object<LyricsApiService>();
+	const integrationEventBus = td.object<IntegrationEventBus>();
+
+	const artistId = 1;
+	const songs = Array.from({length: 10}, (_, i) => ({id: i, title: 'title', url: 'url'}));
+
+	const fetchSongs = new FetchSongs(lyricsApiService, integrationEventBus);
+
+	td.when(lyricsApiService.retrieveSongsForArtist(artistId)).thenResolve(songs);
+	td.when(lyricsApiService.getArtist(artistId)).thenResolve({name: 'name', description: 'description', imageUrl: 'imageUrl'});
+
+	return {
+		lyricsApiService,
+		integrationEventBus,
+		fetchSongs,
+		artistId,
+		songs,
+	};
+};
+
+test.afterEach.always('Reset mocks', () => {
+	td.reset();
 });
 
-test('Should retrieve all songs from genius API then push to SQS queue in chunks of 10', async t => {
-	const {lyricsApiService, queueService, processTrackerRepository} = setupMocks();
-	const artistId = 1;
+test('Should retrieve all songs from genius API', async t => {
+	const {artistId, fetchSongs} = setupMocks();
 
-	td.when(processTrackerRepository.isRunning(artistId)).thenResolve(false);
-	td.when(lyricsApiService.retrieveSongsForArtist(artistId)).thenResolve(Array.from({length: 100}, (_, i) => ({id: i, title: 'title', url: 'url'})));
-	td.when(lyricsApiService.getArtist(artistId)).thenResolve({name: 'name', description: 'description', imageUrl: 'imageUrl'});
-	td.when(queueService.sendToParseQueue(td.matchers.anything() as FetchSongsDto)).thenResolve();
+	const songs = await fetchSongs.execute(artistId);
 
-	const fetchSongs = new FetchSongs(lyricsApiService, queueService, processTrackerRepository);
+	t.is(songs.length, 10);
+});
 
-	await fetchSongs.execute(1);
+test('Should publish integration event containing songs', async t => {
+	const {integrationEventBus, fetchSongs, artistId, songs} = setupMocks();
 
-	t.is(td.explain(lyricsApiService.retrieveSongsForArtist).callCount, 1);
-	t.is(td.explain(queueService.sendToParseQueue).callCount, 10);
+	await fetchSongs.execute(artistId);
+
+	const event: FetchedSongsEvent = {
+		artistId,
+		eventType: 'fetchedSongs',
+		songs,
+	};
+
+	td.verify(integrationEventBus.publishIntegrationEvent(event));
+
+	t.pass();
 });

@@ -8,9 +8,7 @@ import {GeniusService} from '@/infrastructure/services/genius.service';
 import {ArtistMapper} from '@/infrastructure/mappers/artist.mapper';
 import {type ArtistModelItem, getArtistModel} from '@/infrastructure/models/artist.model';
 import {GeniusApiClient} from '@/infrastructure/clients/genius-api.client';
-import {SqsQueueService} from '@/infrastructure/services/sqs-queue.service';
-import {DynamooseProcessRepository} from '@/infrastructure/repositories/dynamoose-process.repository';
-import {type ProcessModelItem, getProcessModel} from '@/infrastructure/models/process.model';
+import {SqsIntegrationEventBus} from '@/infrastructure/services/sqs-integration-event-bus.service';
 import {SearchArtists} from '@/application/usecases/artist/search-artists.usecase';
 import {FetchSongs} from '@/application/usecases/analyze-lyrics/fetch-songs.usecase';
 import {ParseLyrics} from '@/application/usecases/analyze-lyrics/parse-lyrics.usecase';
@@ -19,30 +17,26 @@ import {TriggerWorkflow} from '@/application/usecases/analyze-lyrics/trigger-wor
 import {ConcreteArtistFactory} from '@/domain/factories/concrete-artist.factory';
 import {ConcreteStatisticsCalculator} from '@/domain/services/concrete-statistics-calculator.service';
 
-export type Queues = 'fetchSongsQueueUrl' | 'parseLyricsQueueUrl' | 'analysisQueueUrl';
-
 export type Cradle = {
 	geniusAccessToken: string;
 	artistTableName: string;
 	processTableName: string;
-	queueUrls: Record<Queues, string>;
+	integrationEventQueueUrl: string;
 	geniusBaseUrl?: string;
 	// Models
 	artistModel: ModelType<ArtistModelItem>;
-	processModel: ModelType<ProcessModelItem>;
 	// Mappers
 	artistMapper: ArtistMapper;
 	// Factories
 	artistFactory: ConcreteArtistFactory;
 	// Repositories
 	artistRepository: DynamooseArtistRepository;
-	processTrackerRepository: DynamooseProcessRepository;
 	// Services
 	statisticsCalculator: ConcreteStatisticsCalculator;
 	geniusApiClient: GeniusApiClient;
 	lyricsApiService: GeniusService;
 	sqs: SQSClient;
-	queueService: SqsQueueService;
+	integrationEventBus: SqsIntegrationEventBus;
 	// Use cases
 	searchArtistsUseCase: SearchArtists;
 	listArtistsUseCase: ListArtists;
@@ -69,29 +63,22 @@ container.register({
 	// Environment variables
 	geniusAccessToken: asValue(getEnv('GENIUS_ACCESS_TOKEN')),
 	artistTableName: asValue(getEnv('ARTIST_TABLE_NAME')),
-	processTableName: asValue(getEnv('PROCESS_TABLE_NAME')),
-	queueUrls: asValue<Record<Queues, string>>({
-		fetchSongsQueueUrl: getEnv('FETCH_SONGS_QUEUE_URL'),
-		parseLyricsQueueUrl: getEnv('PARSE_LYRICS_QUEUE_URL'),
-		analysisQueueUrl: getEnv('ANALYSIS_QUEUE_URL'),
-	}),
+	integrationEventQueueUrl: asValue(getEnv('INTEGRATION_EVENT_QUEUE_URL')),
 	geniusBaseUrl: asValue('https://api.genius.com'),
 	// Models
 	artistModel: asFunction(getArtistModel).singleton(),
-	processModel: asFunction(getProcessModel).singleton(),
 	// Mappers
 	artistMapper: asClass(ArtistMapper),
 	// Factories
 	artistFactory: asClass(ConcreteArtistFactory),
 	// Repositories
 	artistRepository: asClass(DynamooseArtistRepository),
-	processTrackerRepository: asClass(DynamooseProcessRepository),
 	// Services
 	statisticsCalculator: asClass(ConcreteStatisticsCalculator),
 	geniusApiClient: asClass(GeniusApiClient),
 	lyricsApiService: asClass(GeniusService),
 	sqs: asFunction(() => new SQSClient({})),
-	queueService: asClass(SqsQueueService),
+	integrationEventBus: asClass(SqsIntegrationEventBus),
 	// Use cases
 	searchArtistsUseCase: asClass(SearchArtists),
 	listArtistsUseCase: asClass(ListArtists),

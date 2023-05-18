@@ -45,7 +45,6 @@
     "json-schema-to-ts": "^2.8.0",
     "rimraf": "^5.0.0",
     "serverless-esbuild": "^1.44.0",
-    "serverless-lift": "^1.26.0",
     "serverless-offline": "^12.0.4",
     "testdouble": "^3.18.0",
     "ts-node": "^10.9.1",

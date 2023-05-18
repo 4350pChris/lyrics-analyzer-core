@@ -4,7 +4,7 @@ import {middyfySqsHandler, type ValidatedEventSQSEvent} from '@/presentation/lib
 
 const handler: ValidatedEventSQSEvent<FromSchema<typeof schema>> = async (event, context) => {
 	const {parseLyricsUseCase} = context.container.cradle;
-	const jobs = event.Records.map(async ({body}) => parseLyricsUseCase.execute(body));
+	const jobs = event.Records.map(async ({body}) => parseLyricsUseCase.execute(body.artistId, body.songs));
 
 	await Promise.all(jobs);
 };
