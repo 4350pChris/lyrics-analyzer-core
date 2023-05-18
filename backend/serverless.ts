@@ -5,6 +5,7 @@ import {parseLyrics, fetchSongs, analyzeLyrics} from './src/presentation/functio
 import {listArtists, pingEndpoint, triggerWorkflow} from './src/presentation/functions/http';
 import {type TriggerWorkflowEvent} from '@/application/events/trigger-workflow.event';
 import {type FetchedSongsEvent} from '@/application/events/fetched-songs.event';
+import {type ParsedLyricsEvent} from '@/application/events/parsed-lyrics.event';
 
 const serverlessConfiguration: AWS = {
 	org: '4350pchris',
@@ -166,6 +167,30 @@ const serverlessConfiguration: AWS = {
 									eventType: [
 										{exists: true},
 										{prefix: 'fetchedSongs' satisfies FetchedSongsEvent['eventType']},
+									],
+								},
+							},
+						],
+					},
+				},
+			],
+		},
+		analyzeLyrics: {
+			...analyzeLyrics,
+			memorySize: 512,
+			logRetentionInDays: 14,
+			events: [
+				{
+					sqs: {
+						arn: {
+							'Fn::GetAtt': ['IntegrationEventQueue', 'Arn'],
+						},
+						filterPatterns: [
+							{
+								body: {
+									eventType: [
+										{exists: true},
+										{prefix: 'parsedLyrics' satisfies ParsedLyricsEvent['eventType']},
 									],
 								},
 							},
