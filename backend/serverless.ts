@@ -2,7 +2,7 @@
 /* eslint-disable no-template-curly-in-string */
 import type {AWS} from '@serverless/typescript';
 import {parseLyrics, fetchSongs, analyzeLyrics} from './src/presentation/functions/sqs';
-import {listArtists, pingEndpoint, triggerWorkflow} from './src/presentation/functions/http';
+import {listArtists, pingEndpoint, triggerWorkflow, searchArtists} from './src/presentation/functions/http';
 import {type TriggerWorkflowEvent} from '@/application/events/trigger-workflow.event';
 import {type FetchedSongsEvent} from '@/application/events/fetched-songs.event';
 import {type ParsedLyricsEvent} from '@/application/events/parsed-lyrics.event';
@@ -126,6 +126,11 @@ const serverlessConfiguration: AWS = {
 			...listArtists,
 			memorySize: 512,
 			logRetentionInDays: 14,
+		},
+		searchArtists: {
+			...searchArtists,
+			memorySize: 256,
+			logRetentionInDays: 1,
 		},
 		fetchSongs: {
 			...fetchSongs,
