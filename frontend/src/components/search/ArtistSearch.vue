@@ -1,11 +1,14 @@
 <script lang="ts" setup>
 import { type ArtistSearchResult, searchArtists } from '@/api/artists'
 
+const error = ref(false)
 const query = ref('')
 const selectedArtist = defineModel<ArtistSearchResult>()
 const searchResults = ref<ArtistSearchResult[]>([])
 
 const search = async (q: string) => {
+  error.value = false
+
   if (!q) {
     searchResults.value = []
     return
@@ -14,7 +17,7 @@ const search = async (q: string) => {
   try {
     searchResults.value = await searchArtists(q)
   } catch (e) {
-    console.error(e)
+    error.value = true
   }
 }
 
@@ -51,14 +54,14 @@ watchDebounced(query, (q) => search(q), { debounce: 250 })
         max-h-60
       >
         <div
-          v-if="searchResults.length === 0 && query !== ''"
+          v-if="error || (searchResults.length === 0 && query !== '')"
           relative
           cursor="default"
           select="none"
           p="y-2 px-4"
           text="gray-700"
         >
-          Nothing found.
+          {{ error ? 'Error while searching.' : 'Nothing found.' }}
         </div>
         <ComboboxOption
           v-for="artist in searchResults"

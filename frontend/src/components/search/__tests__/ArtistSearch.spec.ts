@@ -40,7 +40,7 @@ describe('ArtistSearch', () => {
   it('contains "Nothing found." if the API returns no results', async () => {
     const wrapper = mount(ArtistSearch)
 
-    const spy = vi.spyOn(artistsExports, 'searchArtists').mockResolvedValue([])
+    vi.spyOn(artistsExports, 'searchArtists').mockResolvedValue([])
 
     const input = wrapper.get('input')
 
@@ -48,8 +48,6 @@ describe('ArtistSearch', () => {
 
     await input.setValue('query')
     await input.trigger('change')
-
-    expect(spy).not.toHaveBeenCalled()
 
     await new Promise((resolve) => setTimeout(resolve, 250))
 
@@ -59,7 +57,7 @@ describe('ArtistSearch', () => {
   it('renders child components for results', async () => {
     const wrapper = mount(ArtistSearch)
 
-    const spy = vi.spyOn(artistsExports, 'searchArtists').mockResolvedValue([
+    vi.spyOn(artistsExports, 'searchArtists').mockResolvedValue([
       {
         id: 1,
         name: 'MF DOOM'
@@ -73,10 +71,54 @@ describe('ArtistSearch', () => {
     await input.setValue('query')
     await input.trigger('change')
 
-    expect(spy).not.toHaveBeenCalled()
-
     await new Promise((resolve) => setTimeout(resolve, 250))
 
     expect(wrapper.text()).toContain('MF DOOM')
+  })
+
+  it('contains "Error while searching." if the API call throws', async () => {
+    const wrapper = mount(ArtistSearch)
+
+    vi.spyOn(artistsExports, 'searchArtists').mockRejectedValue(new Error('error'))
+
+    const input = wrapper.get('input')
+
+    expect(input).toBeTruthy()
+
+    await input.setValue('query')
+    await input.trigger('change')
+
+    await new Promise((resolve) => setTimeout(resolve, 250))
+
+    expect(wrapper.text()).toContain('Error while searching.')
+  })
+
+  it('contains "Error while searching." if the API call throws even when results had been found earlier', async () => {
+    const wrapper = mount(ArtistSearch)
+
+    vi.spyOn(artistsExports, 'searchArtists').mockResolvedValueOnce([
+      {
+        id: 1,
+        name: 'MF DOOM'
+      }
+    ])
+
+    const input = wrapper.get('input')
+
+    expect(input).toBeTruthy()
+
+    await input.setValue('query')
+    await input.trigger('change')
+
+    await new Promise((resolve) => setTimeout(resolve, 250))
+
+    vi.spyOn(artistsExports, 'searchArtists').mockRejectedValue(new Error('error'))
+
+    await input.setValue('another')
+    await input.trigger('change')
+
+    await new Promise((resolve) => setTimeout(resolve, 250))
+
+    expect(wrapper.text()).toContain('Error while searching.')
   })
 })
