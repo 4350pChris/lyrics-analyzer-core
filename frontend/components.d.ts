@@ -13,6 +13,7 @@ declare module '@vue/runtime-core' {
     ArtistSearchItem: typeof import('./src/components/search/ArtistSearchItem.vue')['default']
     Combobox: typeof import('@headlessui/vue')['Combobox']
     ComboboxInput: typeof import('@headlessui/vue')['ComboboxInput']
+    ComboboxOption: typeof import('@headlessui/vue')['ComboboxOption']
     ComboboxOptions: typeof import('@headlessui/vue')['ComboboxOptions']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

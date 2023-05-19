@@ -10,7 +10,7 @@ import { HeadlessUiResolver } from 'unplugin-vue-components/resolvers'
 export default defineConfig({
   plugins: [
     AutoImport({
-      imports: ['vue', 'vue-router', 'vitest'],
+      imports: ['vue', 'vue-router', 'vitest', '@vueuse/core'],
       dts: true,
       eslintrc: {
         enabled: true

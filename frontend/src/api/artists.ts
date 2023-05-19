@@ -5,19 +5,16 @@ export type ArtistSearchResult = {
 }
 
 export type ArtistListResult = {
-  artists: {
-    id: number
-    name: string
-    description: string
-    imageUrl?: string
-  }
+  id: number
+  name: string
+  description: string
+  imageUrl?: string
 }
 
 const makeUrl = (path: string) => new URL(`/artists${path}`, import.meta.env.VITE_API_BASE_URL)
 
-const fetchGet = async <T>(path: string) => {
-  const url = makeUrl(path)
-  const result = await fetch(url)
+const fetchAndParse = async <T>(url: URL, init?: RequestInit) => {
+  const result = await fetch(url, init)
   const data = await result.json()
 
   if (!result.ok) throw new Error(data.message)
@@ -25,10 +22,19 @@ const fetchGet = async <T>(path: string) => {
   return data as T
 }
 
-export const searchArtists = () => fetchGet<ArtistSearchResult>('/search')
+export const searchArtists = async (query: string) => {
+  const url = makeUrl('/search')
+  url.searchParams.append('query', query)
+
+  const { artists } = await fetchAndParse<{ artists: ArtistSearchResult[] }>(url)
+
+  return artists
+}
 
 export const listArtists = async () => {
-  const data = await fetchGet<ArtistListResult>('/')
+  const url = makeUrl('')
 
-  return data.artists
+  const { artists } = await fetchAndParse<{ artists: ArtistListResult[] }>(url)
+
+  return artists
 }
