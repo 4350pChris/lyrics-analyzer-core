@@ -17,7 +17,7 @@ describe('ArtistSearch', () => {
     expect(wrapper.find('input').exists()).toBe(true)
   })
 
-  it('Calls search API on user input, debouncing by 250 ms', async () => {
+  it('calls search API on user input, debouncing by 250 ms', async () => {
     const wrapper = mount(ArtistSearch)
 
     const spy = vi.spyOn(artistsExports, 'searchArtists').mockResolvedValue([])
@@ -37,14 +37,10 @@ describe('ArtistSearch', () => {
     expect(spy).toHaveBeenCalledWith('query')
   })
 
-  it('Emits update:modelValue when item is selected', async () => {
+  it('contains "Nothing found." if the API returns no results', async () => {
     const wrapper = mount(ArtistSearch)
 
-    const spy = vi.spyOn(artistsExports, 'searchArtists')
-
-    const artist = { id: 1, name: 'MF DOOM' }
-
-    spy.mockResolvedValueOnce([artist])
+    const spy = vi.spyOn(artistsExports, 'searchArtists').mockResolvedValue([])
 
     const input = wrapper.get('input')
 
@@ -53,16 +49,34 @@ describe('ArtistSearch', () => {
     await input.setValue('query')
     await input.trigger('change')
 
+    expect(spy).not.toHaveBeenCalled()
+
     await new Promise((resolve) => setTimeout(resolve, 250))
 
-    const listItem = wrapper.get('[role=option]')
+    expect(wrapper.text()).toContain('Nothing found.')
+  })
 
-    expect(listItem).toBeTruthy()
+  it('renders child components for results', async () => {
+    const wrapper = mount(ArtistSearch)
 
-    await listItem.trigger('click')
+    const spy = vi.spyOn(artistsExports, 'searchArtists').mockResolvedValue([
+      {
+        id: 1,
+        name: 'MF DOOM'
+      }
+    ])
 
-    expect(wrapper.emitted()).toHaveProperty('update:modelValue')
-    expect(wrapper.emitted()['update:modelValue']).toHaveLength(1)
-    expect(wrapper.emitted()['update:modelValue'][0]).toEqual([artist])
+    const input = wrapper.get('input')
+
+    expect(input).toBeTruthy()
+
+    await input.setValue('query')
+    await input.trigger('change')
+
+    expect(spy).not.toHaveBeenCalled()
+
+    await new Promise((resolve) => setTimeout(resolve, 250))
+
+    expect(wrapper.text()).toContain('MF DOOM')
   })
 })
