@@ -8,7 +8,10 @@ const makeArtist: () => ArtistSearchResult = () => ({
   imageUrl: 'http://localhost'
 })
 
-const renderComponent = () => mount(ArtistSearchItem, { props: { artist: makeArtist() } })
+const renderComponent = () =>
+  mount(ArtistSearchItem, {
+    props: { artist: makeArtist(), active: false, selected: false }
+  })
 
 describe('ArtistSearchItem', () => {
   it('renders properly', () => {

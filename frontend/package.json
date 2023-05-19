@@ -20,6 +20,7 @@
     "vue-router": "^4.2.0"
   },
   "devDependencies": {
+    "@iconify-json/heroicons": "^1.1.10",
     "@playwright/test": "^1.33.0",
     "@rushstack/eslint-patch": "^1.2.0",
     "@tsconfig/node18": "^2.0.1",
@@ -27,6 +28,7 @@
     "@types/node": "^18.16.8",
     "@typescript-eslint/parser": "^5.59.6",
     "@unocss/preset-attributify": "^0.51.13",
+    "@unocss/preset-icons": "^0.51.13",
     "@unocss/preset-typography": "^0.51.13",
     "@unocss/preset-uno": "^0.51.13",
     "@unocss/preset-web-fonts": "^0.51.13",
