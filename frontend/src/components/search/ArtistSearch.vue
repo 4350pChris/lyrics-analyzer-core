@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { type ArtistSearchResult, searchArtists } from '@/api/artists'
+import { type ArtistSearchResult, searchArtists, addArtist } from '@/api/artists'
 
 const error = ref(false)
 const query = ref('')
-const selectedArtist = defineModel<ArtistSearchResult>()
+const selectedArtist = ref<number>()
 const searchResults = ref<ArtistSearchResult[]>([])
 
 const search = async (q: string) => {
@@ -22,6 +22,15 @@ const search = async (q: string) => {
 }
 
 watchDebounced(query, (q) => search(q), { debounce: 250 })
+
+whenever(selectedArtist, async (artistId) => {
+  try {
+    await addArtist(artistId)
+  } catch (e) {
+    // TODO: add notification or something
+    console.error(e)
+  }
+})
 </script>
 
 <template>
@@ -38,41 +47,48 @@ watchDebounced(query, (q) => search(q), { debounce: 250 })
         @change="query = $event.target.value"
         :displayValue="(artist: ArtistSearchResult) => artist.name"
       />
-      <ComboboxOptions
-        absolute
-        m="t-1"
-        w="full"
-        overflow="auto"
-        list="none"
-        rounded="md"
-        bg="white"
-        p="y-1"
-        text="base sm:sm"
-        outline="focus:none"
-        shadow="lg"
-        ring="1 black opacity-5"
-        max-h-60
+      <TransitionRoot
+        leave="transition ease-in duration-100"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+        @after-leave="query = ''"
       >
-        <div
-          v-if="error || (searchResults.length === 0 && query !== '')"
-          relative
-          cursor="default"
-          select="none"
-          p="y-2 px-4"
-          text="gray-700"
+        <ComboboxOptions
+          absolute
+          m="t-1"
+          w="full"
+          overflow="auto"
+          list="none"
+          rounded="md"
+          bg="white"
+          p="y-1"
+          text="base sm:sm"
+          outline="focus:none"
+          shadow="lg"
+          ring="1 black opacity-5"
+          max-h-60
         >
-          {{ error ? 'Error while searching.' : 'Nothing found.' }}
-        </div>
-        <ComboboxOption
-          v-for="artist in searchResults"
-          :key="artist.id"
-          :value="artist"
-          as="template"
-          v-slot="{ active, selected }"
-        >
-          <ArtistSearchItem :artist="artist" :active="active" :selected="selected" />
-        </ComboboxOption>
-      </ComboboxOptions>
+          <div
+            v-if="error || (searchResults.length === 0 && query !== '')"
+            relative
+            cursor="default"
+            select="none"
+            p="y-2 px-4"
+            text="gray-700"
+          >
+            {{ error ? 'Error while searching.' : 'Nothing found.' }}
+          </div>
+          <ComboboxOption
+            v-for="artist in searchResults"
+            :key="artist.id"
+            :value="artist.id"
+            as="template"
+            v-slot="{ active, selected }"
+          >
+            <ArtistSearchItem :artist="artist" :active="active" :selected="selected" />
+          </ComboboxOption>
+        </ComboboxOptions>
+      </TransitionRoot>
     </div>
   </Combobox>
 </template>

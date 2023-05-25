@@ -3,7 +3,7 @@ import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div text="lg" prose>
+  <div container mx-auto>
     <RouterView />
   </div>
 </template>

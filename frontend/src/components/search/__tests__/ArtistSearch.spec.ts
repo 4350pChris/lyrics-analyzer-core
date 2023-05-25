@@ -1,6 +1,18 @@
-import { mount } from '@vue/test-utils'
+import { DOMWrapper, mount } from '@vue/test-utils'
 import * as artistsExports from '@/api/artists'
 import ArtistSearch from '../ArtistSearch.vue'
+
+const changeInputValue = async (
+  input: Omit<DOMWrapper<HTMLInputElement>, 'exists'>,
+  value: string
+) => {
+  await input.setValue(value)
+  await input.trigger('change')
+}
+
+const waitForDebounce = async () => {
+  await new Promise((resolve) => setTimeout(resolve, 250))
+}
 
 describe('ArtistSearch', () => {
   afterEach(() => {
@@ -26,12 +38,11 @@ describe('ArtistSearch', () => {
 
     expect(input).toBeTruthy()
 
-    await input.setValue('query')
-    await input.trigger('change')
+    await changeInputValue(input, 'query')
 
     expect(spy).not.toHaveBeenCalled()
 
-    await new Promise((resolve) => setTimeout(resolve, 250))
+    await waitForDebounce()
 
     expect(spy).toHaveBeenCalledOnce()
     expect(spy).toHaveBeenCalledWith('query')
@@ -46,10 +57,9 @@ describe('ArtistSearch', () => {
 
     expect(input).toBeTruthy()
 
-    await input.setValue('query')
-    await input.trigger('change')
+    await changeInputValue(input, 'query')
 
-    await new Promise((resolve) => setTimeout(resolve, 250))
+    await waitForDebounce()
 
     expect(wrapper.text()).toContain('Nothing found.')
   })
@@ -68,10 +78,9 @@ describe('ArtistSearch', () => {
 
     expect(input).toBeTruthy()
 
-    await input.setValue('query')
-    await input.trigger('change')
+    await changeInputValue(input, 'query')
 
-    await new Promise((resolve) => setTimeout(resolve, 250))
+    await waitForDebounce()
 
     expect(wrapper.text()).toContain('MF DOOM')
   })
@@ -85,10 +94,9 @@ describe('ArtistSearch', () => {
 
     expect(input).toBeTruthy()
 
-    await input.setValue('query')
-    await input.trigger('change')
+    await changeInputValue(input, 'query')
 
-    await new Promise((resolve) => setTimeout(resolve, 250))
+    await waitForDebounce()
 
     expect(wrapper.text()).toContain('Error while searching.')
   })
@@ -107,18 +115,41 @@ describe('ArtistSearch', () => {
 
     expect(input).toBeTruthy()
 
-    await input.setValue('query')
-    await input.trigger('change')
+    await changeInputValue(input, 'query')
 
-    await new Promise((resolve) => setTimeout(resolve, 250))
+    await waitForDebounce()
 
     vi.spyOn(artistsExports, 'searchArtists').mockRejectedValue(new Error('error'))
 
-    await input.setValue('another')
-    await input.trigger('change')
+    await changeInputValue(input, 'another query')
 
-    await new Promise((resolve) => setTimeout(resolve, 250))
+    await waitForDebounce()
 
     expect(wrapper.text()).toContain('Error while searching.')
+  })
+
+  it('Calls api method to add artist when artist is selected', async () => {
+    const wrapper = mount(ArtistSearch)
+
+    vi.spyOn(artistsExports, 'searchArtists').mockResolvedValue([
+      {
+        id: 1,
+        name: 'MF DOOM'
+      }
+    ])
+
+    const spy = vi.spyOn(artistsExports, 'addArtist').mockResolvedValue(undefined)
+
+    const input = wrapper.get('input')
+
+    expect(input).toBeTruthy()
+
+    await changeInputValue(input, 'query')
+
+    await waitForDebounce()
+
+    await wrapper.get('li').trigger('click')
+
+    expect(spy).toHaveBeenCalledOnce()
   })
 })

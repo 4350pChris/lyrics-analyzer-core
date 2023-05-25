@@ -15,7 +15,7 @@ defineProps<Props>()
     relative
     cursor="default"
     select="none"
-    p="y-2 pr-4 l-10"
+    p="y-2 r-4 l-10"
     :class="{
       'bg-teal-600 text-white': active,
       'text-gray-900': !active

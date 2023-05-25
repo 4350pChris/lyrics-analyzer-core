@@ -38,3 +38,9 @@ export const listArtists = async () => {
 
   return artists
 }
+
+export const addArtist = async (artistId: number) => {
+  const url = makeUrl('')
+
+  await fetchAndParse(url, { method: 'POST', body: JSON.stringify({ artistId }) })
+}
