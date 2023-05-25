@@ -11,5 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "@serverless/compose": "^1.3.0"
+  },
+  "dependencies": {
+    "@middy/http-error-handler": "^4.4.3"
   }
 }
