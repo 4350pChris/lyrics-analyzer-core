@@ -14,14 +14,16 @@ type ValidatedAPIGatewayProxyEvent<S> = Omit<APIGatewayProxyEventV2, 'body' | 'q
 };
 export type ValidatedEventAPIGatewayProxyEvent<S> = (event: ValidatedAPIGatewayProxyEvent<S>, context: DependencyAwareContext) => Promise<APIGatewayProxyResultV2>;
 
-export const formatJSONResponse = (response: Record<string, unknown>, statusCode?: number) => ({
+export const formatJSONResponse = (response: Record<string, unknown>, statusCode?: number): APIGatewayProxyResultV2 => ({
 	statusCode: statusCode ?? 200,
 	body: JSON.stringify(response),
+	headers: {
+		'Content-Type': 'application/json',
+	},
 });
 
 export const middyfyGatewayHandler = <Schema, Body>(handler: ValidatedEventAPIGatewayProxyEvent<Body>, requestSchema?: Schema) => {
 	const wrapper = middy(handler)
-		.use(httpErrorHandler())
 		.use(httpJsonBodyParser())
 		.use(httpEventNormalizer())
 		.use(withDependencies());
@@ -40,6 +42,8 @@ export const middyfyGatewayHandler = <Schema, Body>(handler: ValidatedEventAPIGa
 			}),
 		);
 	}
+
+	wrapper.use(httpErrorHandler());
 
 	return wrapper;
 };
