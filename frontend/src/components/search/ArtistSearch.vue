@@ -3,7 +3,7 @@ import { type ArtistSearchResult, searchArtists, addArtist } from '@/api/artists
 
 const error = ref(false)
 const query = ref('')
-const selectedArtist = ref<number>()
+const selectedArtist = ref<ArtistSearchResult>()
 const searchResults = ref<ArtistSearchResult[]>([])
 
 const search = async (q: string) => {
@@ -23,9 +23,9 @@ const search = async (q: string) => {
 
 watchDebounced(query, (q) => search(q), { debounce: 250 })
 
-whenever(selectedArtist, async (artistId) => {
+whenever(selectedArtist, async ({ id }) => {
   try {
-    await addArtist(artistId)
+    await addArtist(id)
   } catch (e) {
     // TODO: add notification or something
     console.error(e)
@@ -37,7 +37,7 @@ whenever(selectedArtist, async (artistId) => {
   <Combobox v-model="selectedArtist" by="id">
     <div relative m="t-1">
       <ComboboxInput
-        p="y-2 l-3 r-10"
+        p="y-2 x-4"
         w="full"
         text="sm gray-900"
         leading="5"
@@ -55,13 +55,14 @@ whenever(selectedArtist, async (artistId) => {
       >
         <ComboboxOptions
           absolute
+          inset-x="0"
           m="t-1"
           w="full"
           overflow="auto"
           list="none"
           rounded="md"
           bg="white"
-          p="y-1"
+          p="1"
           text="base sm:sm"
           outline="focus:none"
           shadow="lg"
@@ -73,7 +74,7 @@ whenever(selectedArtist, async (artistId) => {
             relative
             cursor="default"
             select="none"
-            p="y-2 px-4"
+            p="y-2 x-4"
             text="gray-700"
           >
             {{ error ? 'Error while searching.' : 'Nothing found.' }}
@@ -81,7 +82,7 @@ whenever(selectedArtist, async (artistId) => {
           <ComboboxOption
             v-for="artist in searchResults"
             :key="artist.id"
-            :value="artist.id"
+            :value="artist"
             as="template"
             v-slot="{ active, selected }"
           >
