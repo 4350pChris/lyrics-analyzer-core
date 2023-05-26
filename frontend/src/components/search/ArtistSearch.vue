@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { type ArtistSearchResult, searchArtists, addArtist } from '@/api/artists'
+import { toast } from 'vue3-toastify'
 
 const error = ref(false)
 const query = ref('')
@@ -26,6 +27,7 @@ watchDebounced(query, (q) => search(q), { debounce: 250 })
 whenever(selectedArtist, async ({ id }) => {
   try {
     await addArtist(id)
+    toast.success('Artist added!')
   } catch (e) {
     // TODO: add notification or something
     console.error(e)
