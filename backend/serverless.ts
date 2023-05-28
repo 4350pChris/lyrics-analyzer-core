@@ -136,6 +136,7 @@ const serverlessConfiguration: AWS = {
 			...fetchSongs,
 			memorySize: 512,
 			logRetentionInDays: 14,
+			timeout: 30,
 			events: [
 				{
 					sqs: {
@@ -160,6 +161,7 @@ const serverlessConfiguration: AWS = {
 			...parseLyrics,
 			memorySize: 512,
 			logRetentionInDays: 14,
+			timeout: 30,
 			events: [
 				{
 					sqs: {

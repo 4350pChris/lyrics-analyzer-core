@@ -6,6 +6,8 @@ import validator from '@middy/validator';
 import {transpileSchema} from '@middy/validator/transpile';
 import type {APIGatewayProxyEventQueryStringParameters, APIGatewayProxyEventV2, APIGatewayProxyResultV2} from 'aws-lambda';
 import httpErrorHandler from '@middy/http-error-handler';
+import errorLoggerMiddleware from '@middy/error-logger';
+import inputOutputLoggerMiddleware from '@middy/input-output-logger';
 import {type DependencyAwareContext, withDependencies} from './with-dependencies';
 
 type ValidatedAPIGatewayProxyEvent<S> = Omit<APIGatewayProxyEventV2, 'body' | 'queryStringParameters'> & {
@@ -24,6 +26,8 @@ export const formatJSONResponse = (response: Record<string, unknown>, statusCode
 
 export const middyfyGatewayHandler = <Schema, Body>(handler: ValidatedEventAPIGatewayProxyEvent<Body>, requestSchema?: Schema) => {
 	const wrapper = middy(handler)
+		.use(inputOutputLoggerMiddleware())
+		.use(errorLoggerMiddleware())
 		.use(httpJsonBodyParser())
 		.use(httpEventNormalizer())
 		.use(withDependencies());

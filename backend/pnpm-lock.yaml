@@ -7,12 +7,18 @@ dependencies:
   '@middy/core':
     specifier: ^4.4.0
     version: 4.4.0
+  '@middy/error-logger':
+    specifier: ^4.4.3
+    version: 4.4.3
   '@middy/http-event-normalizer':
     specifier: ^4.4.2
     version: 4.4.2
   '@middy/http-json-body-parser':
     specifier: ^4.4.0
     version: 4.4.0
+  '@middy/input-output-logger':
+    specifier: ^4.4.3
+    version: 4.4.3
   '@middy/sqs-json-body-parser':
     specifier: ^2.5.7
     version: 2.5.7
@@ -2306,6 +2312,11 @@ packages:
     engines: {node: '>=16'}
     dev: false
 
+  /@middy/error-logger@4.4.3:
+    resolution: {integrity: sha512-zBPK2MWRkn+Dvd6LsNwyoQBaMdkFi962kze8dKybDR2Zn9CdFhBq928Ipc+o86OlFAW2ibxkdLrn0UZtv+QGvA==}
+    engines: {node: '>=16'}
+    dev: false
+
   /@middy/http-event-normalizer@4.4.2:
     resolution: {integrity: sha512-pllhZypElMXZD7zpzC9sv2gea9ywcr07SPK8rWNv5S5YK9C5KhChy+tYI4sgZtlUDw8XaP9+L50kzAKb7CdBqA==}
     engines: {node: '>=16'}
@@ -2316,6 +2327,13 @@ packages:
     engines: {node: '>=16'}
     dependencies:
       '@middy/util': 4.4.0
+    dev: false
+
+  /@middy/input-output-logger@4.4.3:
+    resolution: {integrity: sha512-2g2iMv3LlQhyGbRENJDV0BtUTtcDd7dlawITLZax78z5Z+OVe4jsI98cFe/0l/wPzvoi5XvyHrlpJ5Xd9gLJQg==}
+    engines: {node: '>=16'}
+    dependencies:
+      '@middy/util': 4.4.3
     dev: false
 
   /@middy/sqs-json-body-parser@2.5.7:
@@ -2337,6 +2355,11 @@ packages:
 
   /@middy/util@4.4.2:
     resolution: {integrity: sha512-qYlaCF2XXQaYJXzaM8mz4Jjj1pdkSrbF1jzgFdvGwMI7DzNpEPBqkbyw+l1vPWSPdXFXavHLkb6NtbQN/ruX3Q==}
+    engines: {node: '>=16'}
+    dev: false
+
+  /@middy/util@4.4.3:
+    resolution: {integrity: sha512-8qOkmpGKXI02lrW970h7laxTEd9M09w3LgYzoTED44/WuFtCWWCaBCvlHsJgxFy6uDLEDpyyMuTGJrXJXB73rA==}
     engines: {node: '>=16'}
     dev: false
 
