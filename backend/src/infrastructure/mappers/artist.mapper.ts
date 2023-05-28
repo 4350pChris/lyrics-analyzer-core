@@ -54,6 +54,7 @@ export class ArtistMapper implements Mapper<ArtistAggregate, ArtistModelType, Ar
 			name: item.name,
 			description: item.description,
 			imageUrl: item.imageUrl,
+			stats: item.stats,
 		};
 	}
 }
