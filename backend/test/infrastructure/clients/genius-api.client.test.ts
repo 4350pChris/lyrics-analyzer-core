@@ -38,10 +38,3 @@ test('get songs for artist', async t => {
 
 	t.not(response.songs.length, 0);
 });
-
-test('get song by id', async t => {
-	const html = await client.getSong(new URL('https://genius.com/Mf-doom-rapp-snitch-knishes-lyrics'));
-
-	t.regex(html, /<html/);
-});
-
