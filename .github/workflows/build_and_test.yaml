@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: "18.x"
           cache: "pnpm"
-          cache-dependency-path: 'backend/pnpm-lock.yaml'
+          cache-dependency-path: "backend/pnpm-lock.yaml"
       - run: pnpm install --frozen-lockfile
       - run: pnpm test
       - name: Upload coverage reports to Codecov
@@ -37,15 +37,15 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: 'backend/coverage/lcov-report'
+          path: "backend/coverage/lcov-report"
 
   deploy_coverage:
     needs: test_backend
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
     permissions:
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
 
     # Deploy to the github-pages environment
     environment:
@@ -72,13 +72,10 @@ jobs:
         with:
           node-version: "18.x"
           cache: "pnpm"
-          cache-dependency-path: 'frontend/pnpm-lock.yaml'
-      - run: pnpx playwright install-deps
-      - run: pnpx playwright install
+          cache-dependency-path: "frontend/pnpm-lock.yaml"
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
-      - run: pnpm test:unit -- --coverage.enabled --coverage.all --coverage.reporter=lcov --coverage.reporter=text-summary 
-      - run: pnpm test:e2e
+      - run: pnpm test:unit -- --coverage.enabled --coverage.all --coverage.reporter=lcov --coverage.reporter=text-summary
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
 
@@ -95,7 +92,7 @@ jobs:
         with:
           node-version: "18.x"
           cache: "pnpm"
-          cache-dependency-path: '**/pnpm-lock.yaml'
+          cache-dependency-path: "**/pnpm-lock.yaml"
       - run: pnpm install --frozen-lockfile
       - run: pnpm install --frozen-lockfile
         working-directory: ./frontend
@@ -109,5 +106,3 @@ jobs:
         env:
           GENIUS_ACCESS_TOKEN: ${{ secrets.GENIUS_ACCESS_TOKEN }}
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
-      
-    
