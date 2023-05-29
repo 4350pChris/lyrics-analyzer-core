@@ -11,6 +11,11 @@ export type ArtistListResult = {
   name: string
   description: string
   imageUrl?: string
+  stats: {
+    uniqueWords: number
+    averageLength: number
+    medianLength: number
+  }
 }
 
 const artistFetch = ofetch.create({ baseURL: import.meta.env.VITE_API_BASE_URL + '/artists' })

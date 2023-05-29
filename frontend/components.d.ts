@@ -17,6 +17,9 @@ declare module '@vue/runtime-core' {
     ComboboxOptions: typeof import('@headlessui/vue')['ComboboxOptions']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    StatsChart: typeof import('./src/components/stats/StatsChart.vue')['default']
+    StatsList: typeof import('./src/components/stats/StatsList.vue')['default']
+    'StatsList.spec': typeof import('./src/components/stats/__tests__/StatsList.spec.vue')['default']
     TransitionRoot: typeof import('@headlessui/vue')['TransitionRoot']
   }
 }

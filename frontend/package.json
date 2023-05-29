@@ -16,8 +16,10 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.13",
     "@vueuse/core": "^10.1.2",
+    "chart.js": "^4.3.0",
     "ofetch": "^1.0.1",
     "vue": "^3.3.2",
+    "vue-chartjs": "^5.2.0",
     "vue-router": "^4.2.0",
     "vue3-toastify": "^0.1.11"
   },
