@@ -1,10 +1,5 @@
 lockfileVersion: '6.0'
 
-dependencies:
-  '@middy/http-error-handler':
-    specifier: ^4.4.3
-    version: 4.4.3
-
 devDependencies:
   '@serverless/compose':
     specifier: ^1.3.0
@@ -1013,18 +1008,6 @@ packages:
     dependencies:
       tslib: 2.5.0
     dev: true
-
-  /@middy/http-error-handler@4.4.3:
-    resolution: {integrity: sha512-Yzc0PAS4B7gMp5QR9F2FKPT48rFFYQ61oYKcBp2XjGUR0RNT5IMDkJqJgYgvHXap8M5k9iR75OB1Il2n65apVw==}
-    engines: {node: '>=16'}
-    dependencies:
-      '@middy/util': 4.4.3
-    dev: false
-
-  /@middy/util@4.4.3:
-    resolution: {integrity: sha512-8qOkmpGKXI02lrW970h7laxTEd9M09w3LgYzoTED44/WuFtCWWCaBCvlHsJgxFy6uDLEDpyyMuTGJrXJXB73rA==}
-    engines: {node: '>=16'}
-    dev: false
 
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}

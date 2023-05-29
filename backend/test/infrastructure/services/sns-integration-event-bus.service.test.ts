@@ -1,17 +1,17 @@
 import test from 'ava';
 import td from 'testdouble';
-import {SQSClient, SendMessageCommand} from '@aws-sdk/client-sqs';
-import {SqsIntegrationEventBus} from '@/infrastructure/services/sqs-integration-event-bus.service';
+import {SNSClient, PublishCommand} from '@aws-sdk/client-sns';
+import {SnsIntegrationEventBus} from '@/infrastructure/services/sns-integration-event-bus.service';
 import {type IntegrationEvent} from '@/application/events/integration.event';
 
 const setupMocks = () => ({
-	queueUrl: 'queue',
-	sqs: td.instance(SQSClient),
+	topicArn: 'arn:aws:sns:us-east-1:123456789012:MyTopic',
+	sns: td.instance(SNSClient),
 });
 
 test('Should publish to provided queue url without failing', async t => {
-	const {sqs, queueUrl} = setupMocks();
-	const eventBus = new SqsIntegrationEventBus(sqs, queueUrl);
+	const {sns, topicArn} = setupMocks();
+	const eventBus = new SnsIntegrationEventBus(sns, topicArn);
 
 	const event: IntegrationEvent<'test'> = {
 		artistId: 1,
@@ -24,8 +24,8 @@ test('Should publish to provided queue url without failing', async t => {
 });
 
 test('Message body should contain stringified event', async t => {
-	const {sqs, queueUrl} = setupMocks();
-	const eventBus = new SqsIntegrationEventBus(sqs, queueUrl);
+	const {sns, topicArn} = setupMocks();
+	const eventBus = new SnsIntegrationEventBus(sns, topicArn);
 
 	const event = {
 		artistId: 1,
@@ -33,7 +33,7 @@ test('Message body should contain stringified event', async t => {
 		data: 'data',
 	};
 
-	td.when(sqs.send(td.matchers.isA(SendMessageCommand) as SendMessageCommand)).thenResolve({});
+	td.when(sns.send(td.matchers.isA(PublishCommand) as PublishCommand)).thenResolve({});
 
 	await eventBus.publishIntegrationEvent(event);
 

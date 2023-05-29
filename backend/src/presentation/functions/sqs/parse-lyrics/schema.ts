@@ -1,8 +1,13 @@
+import {type FetchedSongsEvent} from '@/application/events/fetched-songs.event';
+
 export default {
 	type: 'object',
 	properties: {
 		artistId: {
 			type: 'number',
+		},
+		eventType: {
+			const: 'fetchedSongs' satisfies FetchedSongsEvent['eventType'],
 		},
 		songs: {
 			type: 'array',
@@ -18,11 +23,8 @@ export default {
 					url: {
 						type: 'string',
 					},
-					text: {
-						type: 'string',
-					},
 				},
-				required: ['id', 'title', 'url', 'text'],
+				required: ['id', 'title', 'url'],
 			},
 		},
 	},

@@ -24,18 +24,21 @@
     "test:watch": "xo && ava --watch"
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.332.0",
-    "@middy/core": "^4.4.0",
+    "@aws-sdk/client-sns": "^3.341.0",
+    "@middy/core": "^4.4.3",
     "@middy/error-logger": "^4.4.3",
-    "@middy/http-event-normalizer": "^4.4.2",
-    "@middy/http-json-body-parser": "^4.4.0",
+    "@middy/event-normalizer": "^4.4.3",
+    "@middy/http-error-handler": "^4.4.3",
+    "@middy/http-event-normalizer": "^4.4.3",
+    "@middy/http-json-body-parser": "^4.4.3",
     "@middy/input-output-logger": "^4.4.3",
     "@middy/sqs-json-body-parser": "^2.5.7",
-    "@middy/validator": "^4.4.2",
+    "@middy/validator": "^4.4.3",
     "awilix": "^8.0.1",
     "dynamoose": "^3.2.0",
     "htmlparser2": "^8.0.2",
-    "ofetch": "^1.0.1"
+    "ofetch": "^1.0.1",
+    "serverless-lift": "^1.26.1"
   },
   "devDependencies": {
     "@serverless/typescript": "^3.30.1",

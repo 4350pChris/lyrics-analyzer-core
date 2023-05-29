@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-template-curly-in-string */
 import type {AWS} from '@serverless/typescript';
+import type {Lift} from 'serverless-lift';
 import {parseLyrics, fetchSongs, analyzeLyrics} from './src/presentation/functions/sqs';
 import {listArtists, pingEndpoint, triggerWorkflow, searchArtists} from './src/presentation/functions/http';
 import {type TriggerWorkflowEvent} from '@/application/events/trigger-workflow.event';
 import {type FetchedSongsEvent} from '@/application/events/fetched-songs.event';
 import {type ParsedLyricsEvent} from '@/application/events/parsed-lyrics.event';
 
-const serverlessConfiguration: AWS = {
+const serverlessConfiguration: AWS & Lift = {
 	org: '4350pchris',
 	app: 'lyrics-analyzer',
 	service: 'backend',
@@ -16,6 +17,7 @@ const serverlessConfiguration: AWS = {
 	plugins: [
 		'serverless-esbuild',
 		'serverless-offline',
+		'serverless-lift',
 	],
 	provider: {
 		name: 'aws',
@@ -33,8 +35,8 @@ const serverlessConfiguration: AWS = {
 			NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
 			GENIUS_ACCESS_TOKEN: '${env:GENIUS_ACCESS_TOKEN}',
 			ARTIST_TABLE_NAME: '${self:service}-Artist-${sls:stage}',
-			INTEGRATION_EVENT_QUEUE_URL: {
-				'Fn::GetAtt': ['IntegrationEventQueue', 'QueueUrl'],
+			INTEGRATION_EVENT_TOPIC_ARN: {
+				Ref: 'IntegrationEventTopic',
 			},
 		},
 		iam: {
@@ -47,16 +49,9 @@ const serverlessConfiguration: AWS = {
 					},
 					{
 						Effect: 'Allow',
-						Action: ['sqs:*'],
+						Action: ['sns:Publish'],
 						Resource: {
-							'Fn::GetAtt': ['IntegrationEventQueue', 'Arn'],
-						},
-					},
-					{
-						Effect: 'Allow',
-						Action: ['sqs:*'],
-						Resource: {
-							'Fn::GetAtt': ['IntegrationEventDeadLetterQueue', 'Arn'],
+							Ref: 'IntegrationEventTopic',
 						},
 					},
 				],
@@ -87,26 +82,103 @@ const serverlessConfiguration: AWS = {
 					],
 				},
 			},
-			IntegrationEventQueue: {
-				Type: 'AWS::SQS::Queue',
+			IntegrationEventTopic: {
+				Type: 'AWS::SNS::Topic',
 				Properties: {
-					QueueName: '${self:service}-IntegrationEventQueue-${sls:stage}',
-					MessageRetentionPeriod: 1_209_600,
-					VisibilityTimeout: 60,
-					RedrivePolicy: {
-						deadLetterTargetArn: {
-							'Fn::GetAtt': ['IntegrationEventDeadLetterQueue', 'Arn'],
-						},
-						maxReceiveCount: 10,
+					TopicName: '${self:service}-IntegrationEvent-${sls:stage}',
+				},
+			},
+			FetchSongsSubscription: {
+				Type: 'AWS::SNS::Subscription',
+				Properties: {
+					Endpoint: '${construct:fetchSongsQueue.queueArn}',
+					Protocol: 'sqs',
+					TopicArn: {
+						Ref: 'IntegrationEventTopic',
+					},
+					FilterPolicy: {
+						eventType: ['triggerWorkflow' satisfies TriggerWorkflowEvent['eventType']],
 					},
 				},
 			},
-			IntegrationEventDeadLetterQueue: {
-				Type: 'AWS::SQS::Queue',
+			ParseLyricsSubscription: {
+				Type: 'AWS::SNS::Subscription',
 				Properties: {
-					QueueName: '${self:service}-IntegrationEventDeadLetterQueue-${sls:stage}',
-					MessageRetentionPeriod: 1_209_600,
+					Endpoint: '${construct:parseLyricsQueue.queueArn}',
+					Protocol: 'sqs',
+					TopicArn: {
+						Ref: 'IntegrationEventTopic',
+					},
+					FilterPolicy: {
+						eventType: ['fetchedSongs' satisfies FetchedSongsEvent['eventType']],
+					},
 				},
+			},
+			AnalyzeSongsSubscription: {
+				Type: 'AWS::SNS::Subscription',
+				Properties: {
+					Endpoint: '${construct:analysisQueue.queueArn}',
+					Protocol: 'sqs',
+					TopicArn: {
+						Ref: 'IntegrationEventTopic',
+					},
+					FilterPolicy: {
+						eventType: ['parsedLyrics' satisfies ParsedLyricsEvent['eventType']],
+					},
+				},
+			},
+			IntegrationEventPublishPermission: {
+				Type: 'AWS::SQS::QueuePolicy',
+				Properties: {
+					PolicyDocument: {
+						Version: '2012-10-17',
+						Statement: [
+							{
+								Effect: 'Allow',
+								Principal: {
+									Service: 'sns.amazonaws.com',
+								},
+								Action: 'sqs:SendMessage',
+								Resource: '*',
+								Condition: {
+									ArnEquals: {
+										'aws:SourceArn': {Ref: 'IntegrationEventTopic'},
+									},
+								},
+							},
+						],
+					},
+					Queues: [
+						'${construct:fetchSongsQueue.queueUrl}',
+						'${construct:parseLyricsQueue.queueUrl}',
+						'${construct:analysisQueue.queueUrl}',
+					],
+				},
+			},
+		},
+	},
+	constructs: {
+		fetchSongsQueue: {
+			type: 'queue',
+			worker: {
+				handler: fetchSongs.handler,
+				timeout: 30,
+				logRetentionInDays: 14,
+			},
+		},
+		parseLyricsQueue: {
+			type: 'queue',
+			worker: {
+				handler: parseLyrics.handler,
+				timeout: 30,
+				logRetentionInDays: 14,
+			},
+		},
+		analysisQueue: {
+			type: 'queue',
+			worker: {
+				handler: analyzeLyrics.handler,
+				logRetentionInDays: 14,
 			},
 		},
 	},
@@ -131,80 +203,6 @@ const serverlessConfiguration: AWS = {
 			...searchArtists,
 			memorySize: 256,
 			logRetentionInDays: 1,
-		},
-		fetchSongs: {
-			...fetchSongs,
-			memorySize: 512,
-			logRetentionInDays: 14,
-			timeout: 30,
-			events: [
-				{
-					sqs: {
-						arn: {
-							'Fn::GetAtt': ['IntegrationEventQueue', 'Arn'],
-						},
-						filterPatterns: [
-							{
-								body: {
-									eventType: [
-										{exists: true},
-										{prefix: 'triggerWorkflow' satisfies TriggerWorkflowEvent['eventType']},
-									],
-								},
-							},
-						],
-					},
-				},
-			],
-		},
-		parseLyrics: {
-			...parseLyrics,
-			memorySize: 512,
-			logRetentionInDays: 14,
-			timeout: 30,
-			events: [
-				{
-					sqs: {
-						arn: {
-							'Fn::GetAtt': ['IntegrationEventQueue', 'Arn'],
-						},
-						filterPatterns: [
-							{
-								body: {
-									eventType: [
-										{exists: true},
-										{prefix: 'fetchedSongs' satisfies FetchedSongsEvent['eventType']},
-									],
-								},
-							},
-						],
-					},
-				},
-			],
-		},
-		analyzeLyrics: {
-			...analyzeLyrics,
-			memorySize: 512,
-			logRetentionInDays: 14,
-			events: [
-				{
-					sqs: {
-						arn: {
-							'Fn::GetAtt': ['IntegrationEventQueue', 'Arn'],
-						},
-						filterPatterns: [
-							{
-								body: {
-									eventType: [
-										{exists: true},
-										{prefix: 'parsedLyrics' satisfies ParsedLyricsEvent['eventType']},
-									],
-								},
-							},
-						],
-					},
-				},
-			],
 		},
 	},
 	package: {individually: true},

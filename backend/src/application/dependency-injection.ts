@@ -1,6 +1,6 @@
 import process from 'node:process';
 import {createContainer, asClass, asValue, asFunction, InjectionMode} from 'awilix';
-import {SQSClient} from '@aws-sdk/client-sqs';
+import {SNSClient} from '@aws-sdk/client-sns';
 import {type ModelType} from 'dynamoose/dist/General';
 import {AnalyzeLyrics} from './usecases/analyze-lyrics/analyze-lyrics.usecase';
 import {DynamooseArtistRepository} from '@/infrastructure/repositories/dynamoose-artist.repository';
@@ -8,7 +8,7 @@ import {GeniusService} from '@/infrastructure/services/genius.service';
 import {ArtistMapper} from '@/infrastructure/mappers/artist.mapper';
 import {type ArtistModelItem, getArtistModel} from '@/infrastructure/models/artist.model';
 import {GeniusApiClient} from '@/infrastructure/clients/genius-api.client';
-import {SqsIntegrationEventBus} from '@/infrastructure/services/sqs-integration-event-bus.service';
+import {SnsIntegrationEventBus} from '@/infrastructure/services/sns-integration-event-bus.service';
 import {SearchArtists} from '@/application/usecases/artist/search-artists.usecase';
 import {FetchSongs} from '@/application/usecases/analyze-lyrics/fetch-songs.usecase';
 import {ParseLyrics} from '@/application/usecases/analyze-lyrics/parse-lyrics.usecase';
@@ -21,7 +21,7 @@ export type Cradle = {
 	geniusAccessToken: string;
 	artistTableName: string;
 	processTableName: string;
-	integrationEventQueueUrl: string;
+	integrationEventTopicArn: string;
 	geniusBaseUrl?: string;
 	// Models
 	artistModel: ModelType<ArtistModelItem>;
@@ -35,8 +35,8 @@ export type Cradle = {
 	statisticsCalculator: ConcreteStatisticsCalculator;
 	geniusApiClient: GeniusApiClient;
 	lyricsApiService: GeniusService;
-	sqs: SQSClient;
-	integrationEventBus: SqsIntegrationEventBus;
+	sns: SNSClient;
+	integrationEventBus: SnsIntegrationEventBus;
 	// Use cases
 	searchArtistsUseCase: SearchArtists;
 	listArtistsUseCase: ListArtists;
@@ -63,7 +63,7 @@ container.register({
 	// Environment variables
 	geniusAccessToken: asValue(getEnv('GENIUS_ACCESS_TOKEN')),
 	artistTableName: asValue(getEnv('ARTIST_TABLE_NAME')),
-	integrationEventQueueUrl: asValue(getEnv('INTEGRATION_EVENT_QUEUE_URL')),
+	integrationEventTopicArn: asValue(getEnv('INTEGRATION_EVENT_TOPIC_ARN')),
 	geniusBaseUrl: asValue('https://api.genius.com'),
 	// Models
 	artistModel: asFunction(getArtistModel).singleton(),
@@ -77,8 +77,8 @@ container.register({
 	statisticsCalculator: asClass(ConcreteStatisticsCalculator),
 	geniusApiClient: asClass(GeniusApiClient),
 	lyricsApiService: asClass(GeniusService),
-	sqs: asFunction(() => new SQSClient({})),
-	integrationEventBus: asClass(SqsIntegrationEventBus),
+	sns: asFunction(() => new SNSClient({})),
+	integrationEventBus: asClass(SnsIntegrationEventBus),
 	// Use cases
 	searchArtistsUseCase: asClass(SearchArtists),
 	listArtistsUseCase: asClass(ListArtists),
