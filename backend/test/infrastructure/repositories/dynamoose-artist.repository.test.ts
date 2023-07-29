@@ -18,7 +18,15 @@ test('List all', async t => {
 	const {artistModel, mapper} = setupMocks();
 	const repo = new DynamooseArtistRepository(mapper, artistModel);
 
+	type MockType = ReturnType<typeof artistModel['scan']>;
+
 	td.when(artistModel.scan()).thenReturn({
+		all() {
+			return this as MockType;
+		},
+		attributes() {
+			return this as MockType;
+		},
 		exec: async () => [1, 2, 3] as unknown as ScanResponse<ArtistModelItem>,
 	});
 
