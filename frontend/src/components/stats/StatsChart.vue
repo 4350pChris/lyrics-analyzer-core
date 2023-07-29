@@ -1,6 +1,16 @@
 <script lang="ts" setup>
 import { type ArtistListResult } from '@/api/artists'
-import { Chart as ChartJS, LinearScale, PointElement, LineElement, Tooltip, Legend } from 'chart.js'
+import {
+  Chart as ChartJS,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend,
+  type ChartData,
+  type Point,
+  type ChartOptions
+} from 'chart.js'
 import { Scatter } from 'vue-chartjs'
 
 interface Props {
@@ -11,27 +21,25 @@ ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend)
 
 const props = defineProps<Props>()
 
-const chartData = computed(() => ({
+const chartData = computed<ChartData<'scatter', (number | Point | null)[], unknown>>(() => ({
   labels: props.artists.map(({ name }) => name),
-  datasets: props.artists.map(({ stats, imageUrl }) => {
-    return {
+  datasets: [
+    {
       hitRadius: 25,
-      pointStyle: () => {
+      pointStyle: (ctx) => {
         const img = new Image(52, 52)
-        img.src = imageUrl ?? ''
+        img.src = props.artists[ctx.dataIndex]?.imageUrl ?? ''
         return img
       },
-      data: [
-        {
-          x: stats.uniqueWords,
-          y: stats.medianLength
-        }
-      ]
+      data: props.artists.map(({ stats }) => ({
+        x: stats.uniqueWords,
+        y: stats.medianLength
+      }))
     }
-  })
+  ]
 }))
 
-const options = ref({
+const options = ref<ChartOptions<'scatter'>>({
   plugins: {
     legend: {
       display: false
@@ -62,8 +70,7 @@ const options = ref({
 </script>
 
 <template>
-  <div w="full">
-    <h2>Statistics</h2>
+  <div px="4" w="full">
     <Scatter :data="chartData" :options="options" />
   </div>
 </template>
