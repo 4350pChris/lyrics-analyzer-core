@@ -3,16 +3,23 @@ import type {Mapper} from '../interfaces/mapper.interface';
 import type {ArtistModelItem, ArtistModelType} from '../models/artist.model';
 import type {ArtistAggregate} from '@/domain/entities/artist.aggregate';
 import type {ArtistRepository} from '@/application/interfaces/artist-repository.interface';
+import type {ArtistDetailDto} from '@/application/dtos/artist-detail.dto';
 
 export class DynamooseArtistRepository implements ArtistRepository {
 	constructor(
-		private readonly artistMapper: Mapper<ArtistAggregate, ArtistModelType, unknown>,
+		private readonly artistMapper: Mapper<ArtistAggregate, ArtistModelType, ArtistDetailDto>,
 		private readonly artistModel: ModelType<ArtistModelItem>,
 	) {}
 
-	async list(): Promise<ArtistAggregate[]> {
-		const result = await this.artistModel.scan().exec();
-		return result.map(item => this.artistMapper.toDomain(item));
+	async list(): Promise<ArtistDetailDto[]> {
+		const result = await this.artistModel.scan().attributes([
+			'id',
+			'name',
+			'description',
+			'imageUrl',
+			'stats',
+		]).exec();
+		return result.map(item => this.artistMapper.toDto(item));
 	}
 
 	async create(artist: ArtistAggregate): Promise<ArtistAggregate> {

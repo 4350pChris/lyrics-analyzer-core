@@ -48,7 +48,7 @@ export class ArtistMapper implements Mapper<ArtistAggregate, ArtistModelType, Ar
 		};
 	}
 
-	toDto(item: ArtistAggregate): ArtistDetailDto {
+	toDto(item: ArtistAggregate | ArtistModelType): ArtistDetailDto {
 		return {
 			id: item.id,
 			name: item.name,

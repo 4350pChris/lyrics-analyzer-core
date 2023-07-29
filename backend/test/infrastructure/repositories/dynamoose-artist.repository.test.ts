@@ -7,6 +7,7 @@ import {DynamooseArtistRepository} from '@/infrastructure/repositories/dynamoose
 import {type ArtistModelItem} from '@/infrastructure/models/artist.model';
 import {ArtistMapper} from '@/infrastructure/mappers/artist.mapper';
 import {type ArtistAggregate} from '@/domain/entities/artist.aggregate';
+import {type ArtistDetailDto} from '@/application/dtos/artist-detail.dto';
 
 const setupMocks = () => ({
 	artistModel: td.object<ModelType<ArtistModelItem>>(),
@@ -21,12 +22,12 @@ test('List all', async t => {
 		exec: async () => [1, 2, 3] as unknown as ScanResponse<ArtistModelItem>,
 	});
 
-	td.when(mapper.toDomain(td.matchers.anything() as ArtistModelItem)).thenReturn(td.object<ArtistAggregate>());
+	td.when(mapper.toDto(td.matchers.anything() as ArtistModelItem)).thenReturn(td.object<ArtistDetailDto>());
 
 	await repo.list();
 
 	t.is(td.explain(artistModel.scan).callCount, 1);
-	t.is(td.explain(mapper.toDomain).callCount, 3);
+	t.is(td.explain(mapper.toDto).callCount, 3);
 });
 
 test('Save artist', async t => {

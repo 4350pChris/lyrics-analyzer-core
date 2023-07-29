@@ -1,13 +1,11 @@
 import {type ValidatedEventAPIGatewayProxyEvent, formatJSONResponse, middyfyGatewayHandler} from '../../../libs/api-gateway';
 
 const handler: ValidatedEventAPIGatewayProxyEvent<never> = async (_, context) => {
-	const {artistMapper, listArtistsUseCase} = context.container.cradle;
+	const {listArtistsUseCase} = context.container.cradle;
 	const artists = await listArtistsUseCase.execute();
 
-	const serialized = artists.map(artist => artistMapper.toDto(artist));
-
 	return formatJSONResponse({
-		artists: serialized,
+		artists,
 	});
 };
 
