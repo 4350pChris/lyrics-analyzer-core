@@ -62,7 +62,7 @@ const options = ref<ChartOptions<'scatter'>>({
       offset: true,
       title: {
         display: true,
-        text: 'Median song length'
+        text: 'Median word length'
       }
     }
   }
