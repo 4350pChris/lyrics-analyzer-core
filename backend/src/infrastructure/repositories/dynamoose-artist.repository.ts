@@ -18,7 +18,7 @@ export class DynamooseArtistRepository implements ArtistRepository {
 			'description',
 			'imageUrl',
 			'stats',
-		]).exec();
+		]).all().exec();
 		return result.map(item => this.artistMapper.toDto(item));
 	}
 
