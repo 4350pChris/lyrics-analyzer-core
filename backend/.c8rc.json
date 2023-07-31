@@ -3,7 +3,7 @@
   "exclude": [
     "{dist,test,coverage}/**",
     "src/presentation/**",
-    "src/{application,domain,infrastructure}/{interfaces,dtos,models}/**",
+    "src/{application,domain,infrastructure}/{interfaces,dtos,models,events}/**",
     "src/application/dependency-injection.ts",
     "*.d.*(c|m)ts",
     "serverless.ts"

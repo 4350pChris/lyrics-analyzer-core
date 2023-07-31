@@ -20,6 +20,11 @@ const makeArtist = () => new ArtistAggregate({
 		new Song(1, 'song1', 'text1'),
 		new Song(2, 'song2', 'text2'),
 	],
+	stats: {
+		averageLength: 5,
+		medianLength: 4.5,
+		uniqueWords: 3000,
+	},
 });
 
 const makeModel: () => ArtistModelType = () => ({
@@ -30,6 +35,11 @@ const makeModel: () => ArtistModelType = () => ({
 		{id: 1, name: 'song1', text: 'text1'},
 		{id: 2, name: 'song2', text: 'text2'},
 	],
+	stats: {
+		averageLength: 5,
+		medianLength: 4.5,
+		uniqueWords: 3000,
+	},
 });
 
 const makeDto: () => ArtistDetailDto = () => ({
